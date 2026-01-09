@@ -17,9 +17,38 @@
 package org.typelevel.otel4s.sdk.logs.scalacheck
 
 import org.scalacheck.Gen
+import org.typelevel.otel4s.logs.Severity
 import org.typelevel.otel4s.sdk.logs.data.LogRecordData
 
-trait Gens extends org.typelevel.otel4s.sdk.scalacheck.Gens with org.typelevel.otel4s.logs.scalacheck.Gens {
+trait Gens extends org.typelevel.otel4s.sdk.scalacheck.Gens {
+
+  val severity: Gen[Severity] =
+    Gen.oneOf(
+      Severity.trace,
+      Severity.trace2,
+      Severity.trace3,
+      Severity.trace4,
+      Severity.debug,
+      Severity.debug2,
+      Severity.debug3,
+      Severity.debug4,
+      Severity.info,
+      Severity.info2,
+      Severity.info3,
+      Severity.info4,
+      Severity.warn,
+      Severity.warn2,
+      Severity.warn3,
+      Severity.warn4,
+      Severity.error,
+      Severity.error2,
+      Severity.error3,
+      Severity.error4,
+      Severity.fatal,
+      Severity.fatal2,
+      Severity.fatal3,
+      Severity.fatal4,
+    )
 
   val logRecordData: Gen[LogRecordData] =
     for {

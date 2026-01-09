@@ -29,10 +29,37 @@ import org.typelevel.otel4s.sdk.trace.samplers.SamplingResult
 import org.typelevel.otel4s.trace.SpanContext
 import org.typelevel.otel4s.trace.SpanKind
 import org.typelevel.otel4s.trace.StatusCode
+import org.typelevel.otel4s.trace.TraceFlags
+import org.typelevel.otel4s.trace.TraceState
 
 import scala.concurrent.duration.FiniteDuration
 
-trait Cogens extends org.typelevel.otel4s.sdk.scalacheck.Cogens with org.typelevel.otel4s.trace.scalacheck.Cogens {
+trait Cogens extends org.typelevel.otel4s.sdk.scalacheck.Cogens {
+
+  implicit val traceFlagsCogen: Cogen[TraceFlags] =
+    Cogen[Byte].contramap(_.toByte)
+
+  implicit val traceStateCogen: Cogen[TraceState] =
+    Cogen[Map[String, String]].contramap(_.asMap)
+
+  implicit val spanContextCogen: Cogen[SpanContext] =
+    Cogen[(String, String, TraceFlags, TraceState, Boolean, Boolean)]
+      .contramap { c =>
+        (
+          c.traceIdHex,
+          c.spanIdHex,
+          c.traceFlags,
+          c.traceState,
+          c.isRemote,
+          c.isValid
+        )
+      }
+
+  implicit val spanKindCogen: Cogen[SpanKind] =
+    Cogen[String].contramap(_.toString)
+
+  implicit val statusCodeCogen: Cogen[StatusCode] =
+    Cogen[String].contramap(_.toString)
 
   implicit val samplingDecisionCogen: Cogen[SamplingDecision] =
     Cogen[String].contramap(_.toString)

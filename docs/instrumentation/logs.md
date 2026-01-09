@@ -64,7 +64,7 @@ Prefer stable names and values that are easy to aggregate.
 
 Logs become far more valuable when they carry trace and span ids. 
 By default, otel4s uses the current context to propagate trace and span ids, 
-check out the [context propagation logic](../tracing-context-propagation.md) for more details.
+check out the [context propagation logic][context-propagation-logic] for more details.
 
 However, you can also use the `withContext` to inject a specific context into the log record.
 
@@ -271,82 +271,6 @@ As you can see, the log record is automatically correlated with the current trac
 You can acquire a provider from either backend. 
 You typically rely on autoconfiguration or a manual SDK builder that includes the OTLP exporter.
 
-### 5.1. Using `otel4s-oteljava`
-
-The `otel4s-oteljava` uses the [OpenTelemetry Java SDK][opentelemetry-java] under the hood.
-Check out the [overview](../oteljava/overview.md) of the backend for more details. 
-
-@:select(build-tool)
-
-@:choice(sbt)
-
-Add settings to the `build.sbt`:
-
-```scala
-libraryDependencies ++= Seq(
-  "org.typelevel" %% "otel4s-oteljava" % "@VERSION@", // <1>
-  "io.opentelemetry" % "opentelemetry-exporter-otlp" % "@OPEN_TELEMETRY_VERSION@" % Runtime, // <2>
-  "io.opentelemetry" % "opentelemetry-sdk-extension-autoconfigure" % "@OPEN_TELEMETRY_VERSION@" % Runtime // <3>
-)
-javaOptions += "-Dotel.java.global-autoconfigure.enabled=true" // <4>
-```
-
-@:choice(scala-cli)
-
-Add directives to the `*.scala` file:
-
-```scala
-//> using dep "org.typelevel::otel4s-oteljava:@VERSION@" // <1>
-//> using dep "io.opentelemetry:opentelemetry-exporter-otlp:@OPEN_TELEMETRY_VERSION@" // <2>
-//> using dep "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:@OPEN_TELEMETRY_VERSION@" // <3>
-//> using javaOpt "-Dotel.java.global-autoconfigure.enabled=true" // <4>
-```
-
-@:@
-
-1. Add the `otel4s-oteljava` library
-2. Add an OpenTelemetry exporter. Without the exporter, the application will crash
-3. Add an OpenTelemetry autoconfigure extension
-4. Enable OpenTelemetry SDK [autoconfigure mode][opentelemetry-java-autoconfigure]
-
-_______
-
-Then use `OtelJava.autoConfigured` to autoconfigure the SDK:
-```scala mdoc:silent:reset
-import cats.effect.{IO, IOApp}
-import org.typelevel.otel4s.oteljava.context.Context
-import org.typelevel.otel4s.oteljava.OtelJava
-import org.typelevel.otel4s.metrics.MeterProvider
-import org.typelevel.otel4s.trace.TracerProvider
-import org.typelevel.otel4s.logs.LoggerProvider
-
-object TelemetryApp extends IOApp.Simple {
-
-  def run: IO[Unit] =
-    OtelJava
-      .autoConfigured[IO]()
-      .use { sdk =>
-        program(sdk.meterProvider, sdk.tracerProvider, sdk.loggerProvider)
-      }
-
-  def program(
-      meterProvider: MeterProvider[IO], 
-      tracerProvider: TracerProvider[IO],
-      loggerProvider: LoggerProvider[IO, Context],
-  ): IO[Unit] =
-    ???
-}
-```
-
-The `.autoConfigured(...)` relies on the environment variables and system properties to configure the SDK.
-For example, use `export OTEL_SERVICE_NAME=auth-service` to configure the name of the service.
-See the full set of the [supported configuration options][opentelemetry-java-autoconfigure].
-
-### 5.2. Using `otel4s-sdk`
-
-The `otel4s-sdk` is an alternative implementation written in Scala and available for all platforms: JVM, Scala Native, and Scala.js.
-Check out the [overview](../sdk/overview.md) of the backend for more details.
-
 @:select(build-tool)
 
 @:choice(sbt)
@@ -413,5 +337,4 @@ See the full set of the [supported configuration options](../sdk/configuration.m
 
 [scribe]: https://github.com/outr/scribe
 [opentelemetry-logs-spec]: https://opentelemetry.io/docs/specs/otel/logs/api/
-[opentelemetry-java]: https://github.com/open-telemetry/opentelemetry-java
-[opentelemetry-java-autoconfigure]: https://opentelemetry.io/docs/languages/java/configuration/
+[context-propagation-logic]: https://typelevel.org/otel4s/tracing-context-propagation.html

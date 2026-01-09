@@ -216,43 +216,7 @@ Add directives to the `*.scala` file:
 
 ## Registering metrics collectors
 
-`IORuntimeMetrics.register` takes care of the metrics lifecycle management.  
-
-@:select(otel-backend)
-
-@:choice(oteljava)
-
-```scala mdoc:reset:silent
-import cats.effect._
-import org.typelevel.otel4s.instrumentation.ce.IORuntimeMetrics
-import org.typelevel.otel4s.metrics.MeterProvider
-import org.typelevel.otel4s.trace.TracerProvider
-import org.typelevel.otel4s.oteljava.OtelJava
-
-object Main extends IOApp.Simple {
-
-  def run: IO[Unit] =
-    OtelJava.autoConfigured[IO]().use { otel4s =>
-      implicit val mp: MeterProvider[IO] = otel4s.meterProvider
-      IORuntimeMetrics
-        .register[IO](runtime.metrics, IORuntimeMetrics.Config.default)
-        .surround {
-          program(otel4s.meterProvider, otel4s.tracerProvider)
-        }
-    }
-
-  def program(
-      meterProvider: MeterProvider[IO],
-      tracerProvider: TracerProvider[IO]
-  ): IO[Unit] = {
-    val _ = (meterProvider, tracerProvider)
-    IO.unit
-  }
-
-}
-```
-
-@:choice(sdk)
+`IORuntimeMetrics.register` takes care of the metrics lifecycle management.
 
 ```scala mdoc:reset:silent
 import cats.effect._
@@ -284,8 +248,6 @@ object Main extends IOApp.Simple {
 
 }
 ```
-
-@:@
 
 ## Grafana dashboard
 

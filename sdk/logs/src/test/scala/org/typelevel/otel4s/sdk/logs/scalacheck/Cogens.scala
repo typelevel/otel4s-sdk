@@ -27,7 +27,10 @@ import org.typelevel.otel4s.sdk.logs.data.LogRecordData
 
 import scala.concurrent.duration.FiniteDuration
 
-trait Cogens extends org.typelevel.otel4s.sdk.scalacheck.Cogens with org.typelevel.otel4s.logs.scalacheck.Cogens {
+trait Cogens extends org.typelevel.otel4s.sdk.scalacheck.Cogens {
+
+  implicit val severityCogen: Cogen[Severity] =
+    Cogen[Int].contramap(_.value)
 
   implicit val logRecordDataCogen: Cogen[LogRecordData] =
     Cogen[

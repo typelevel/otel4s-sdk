@@ -19,22 +19,6 @@ It extends `Local[F, Baggage]` and can:
 
 ## How to get the `BaggageManager`
 
-@:select(otel-backend)
-
-@:choice(oteljava)
-
-```scala mdoc:silent
-import cats.effect.IO
-import org.typelevel.otel4s.baggage.BaggageManager
-import org.typelevel.otel4s.oteljava.OtelJava
-
-OtelJava.autoConfigured[IO]().use { otel4s =>
-  val baggageManager: BaggageManager[IO] = otel4s.baggageManager
-  IO.println("BaggageManager: " + baggageManager)
-}
-```
-
-@:choice(sdk)
 
 ```scala mdoc:silent
 import cats.effect.IO
@@ -49,8 +33,6 @@ OpenTelemetrySdk
     IO.println("BaggageManager: " + baggageManager)
   }
 ```
-
-@:@
 
 ## How to use `BaggageManager`
 
