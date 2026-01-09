@@ -19,7 +19,8 @@ package org.typelevel.otel4s.sdk.baggage
 import cats.effect.IO
 import cats.effect.IOLocal
 import munit.CatsEffectSuite
-import org.typelevel.otel4s.baggage.{Baggage, BaggageManager}
+import org.typelevel.otel4s.baggage.Baggage
+import org.typelevel.otel4s.baggage.BaggageManager
 import org.typelevel.otel4s.sdk.context.Context
 import org.typelevel.otel4s.sdk.context.LocalContext
 

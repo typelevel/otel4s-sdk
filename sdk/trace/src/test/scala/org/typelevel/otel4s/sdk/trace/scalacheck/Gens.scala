@@ -16,7 +16,8 @@
 
 package org.typelevel.otel4s.sdk.trace.scalacheck
 
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import org.typelevel.otel4s.baggage.Baggage
 import org.typelevel.otel4s.sdk.data.LimitedData
 import org.typelevel.otel4s.sdk.trace.data.EventData
@@ -25,7 +26,11 @@ import org.typelevel.otel4s.sdk.trace.data.SpanData
 import org.typelevel.otel4s.sdk.trace.data.StatusData
 import org.typelevel.otel4s.sdk.trace.samplers.SamplingDecision
 import org.typelevel.otel4s.sdk.trace.samplers.SamplingResult
-import org.typelevel.otel4s.trace.{SpanContext, SpanKind, StatusCode, TraceFlags, TraceState}
+import org.typelevel.otel4s.trace.SpanContext
+import org.typelevel.otel4s.trace.SpanKind
+import org.typelevel.otel4s.trace.StatusCode
+import org.typelevel.otel4s.trace.TraceFlags
+import org.typelevel.otel4s.trace.TraceState
 import scodec.bits.ByteVector
 
 trait Gens extends org.typelevel.otel4s.sdk.scalacheck.Gens {

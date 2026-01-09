@@ -16,38 +16,39 @@
 
 package org.typelevel.otel4s.sdk.metrics
 
-import java.util.concurrent.TimeUnit
-
 import cats.data.NonEmptyVector
 import cats.effect.IO
 import cats.effect.Resource
 import cats.effect.SyncIO
 import cats.effect.testkit.TestControl
 import cats.mtl.Local
-import cats.syntax.traverse.*
-import munit.{CatsEffectSuite, Location, TestOptions}
+import cats.syntax.traverse._
+import munit.CatsEffectSuite
+import munit.Location
+import munit.TestOptions
 import org.typelevel.otel4s.Attributes
 import org.typelevel.otel4s.context.LocalProvider
-import org.typelevel.otel4s.metrics.{BucketBoundaries, MeterProvider}
+import org.typelevel.otel4s.metrics.BucketBoundaries
+import org.typelevel.otel4s.metrics.MeterProvider
 import org.typelevel.otel4s.sdk.TelemetryResource
-import org.typelevel.otel4s.sdk.common.{Diagnostic, InstrumentationScope}
+import org.typelevel.otel4s.sdk.common.Diagnostic
+import org.typelevel.otel4s.sdk.common.InstrumentationScope
 import org.typelevel.otel4s.sdk.context.Context
 import org.typelevel.otel4s.sdk.context.TraceContext
-import org.typelevel.otel4s.sdk.metrics.data.{
-  AggregationTemporality,
-  ExemplarData,
-  MetricData,
-  MetricPoints,
-  PointData,
-  TimeWindow
-}
+import org.typelevel.otel4s.sdk.metrics.data.AggregationTemporality
+import org.typelevel.otel4s.sdk.metrics.data.ExemplarData
+import org.typelevel.otel4s.sdk.metrics.data.MetricData
+import org.typelevel.otel4s.sdk.metrics.data.MetricPoints
+import org.typelevel.otel4s.sdk.metrics.data.PointData
+import org.typelevel.otel4s.sdk.metrics.data.TimeWindow
 import org.typelevel.otel4s.sdk.metrics.exporter.AggregationSelector
 import org.typelevel.otel4s.sdk.metrics.exporter.AggregationTemporalitySelector
 import org.typelevel.otel4s.sdk.metrics.exporter.CardinalityLimitSelector
 import org.typelevel.otel4s.sdk.testkit.metrics.MetricsTestkit
 import scodec.bits.ByteVector
 
-import scala.concurrent.duration.*
+import java.util.concurrent.TimeUnit
+import scala.concurrent.duration._
 
 class SdkMeterSuite extends CatsEffectSuite {
 

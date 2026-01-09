@@ -23,7 +23,9 @@ import org.typelevel.otel4s.sdk.trace.data.SpanData
 import org.typelevel.otel4s.sdk.trace.data.StatusData
 import org.typelevel.otel4s.sdk.trace.samplers.SamplingDecision
 import org.typelevel.otel4s.sdk.trace.samplers.SamplingResult
-import org.typelevel.otel4s.trace.{SpanContext, SpanKind, StatusCode}
+import org.typelevel.otel4s.trace.SpanContext
+import org.typelevel.otel4s.trace.SpanKind
+import org.typelevel.otel4s.trace.StatusCode
 
 trait Arbitraries extends org.typelevel.otel4s.sdk.scalacheck.Arbitraries {
 

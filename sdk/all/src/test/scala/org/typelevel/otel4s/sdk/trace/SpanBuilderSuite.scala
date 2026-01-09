@@ -18,12 +18,18 @@ package org.typelevel.otel4s.sdk.trace
 
 import cats.effect.IO
 import cats.effect.Resource
-import munit.{CatsEffectSuite, Location, TestOptions}
+import munit.CatsEffectSuite
+import munit.Location
+import munit.TestOptions
 import org.typelevel.otel4s.Attribute
 import org.typelevel.otel4s.sdk.testkit.trace.TracesTestkit
-import org.typelevel.otel4s.trace.{SpanBuilder, SpanContext, SpanFinalizer, SpanKind, TracerProvider}
+import org.typelevel.otel4s.trace.SpanBuilder
+import org.typelevel.otel4s.trace.SpanContext
+import org.typelevel.otel4s.trace.SpanFinalizer
+import org.typelevel.otel4s.trace.SpanKind
+import org.typelevel.otel4s.trace.TracerProvider
 
-import scala.concurrent.duration.*
+import scala.concurrent.duration._
 
 class SpanBuilderSuite extends CatsEffectSuite {
 

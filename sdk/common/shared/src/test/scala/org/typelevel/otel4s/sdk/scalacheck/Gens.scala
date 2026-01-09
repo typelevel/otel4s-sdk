@@ -19,7 +19,10 @@ package org.typelevel.otel4s.sdk.scalacheck
 import cats.data.NonEmptyVector
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.typelevel.otel4s.{AnyValue, Attribute, AttributeKey, Attributes}
+import org.typelevel.otel4s.AnyValue
+import org.typelevel.otel4s.Attribute
+import org.typelevel.otel4s.AttributeKey
+import org.typelevel.otel4s.Attributes
 import org.typelevel.otel4s.sdk.TelemetryResource
 import org.typelevel.otel4s.sdk.common.InstrumentationScope
 import org.typelevel.otel4s.sdk.context.TraceContext

@@ -16,22 +16,36 @@
 
 package org.typelevel.otel4s.sdk.trace
 
-import cats.data.{EitherT, IorT, Kleisli, OptionT, WriterT}
-import cats.effect.{IO, MonadCancelThrow, Resource}
+import cats.data.EitherT
+import cats.data.IorT
+import cats.data.Kleisli
+import cats.data.OptionT
+import cats.data.WriterT
+import cats.effect.IO
+import cats.effect.MonadCancelThrow
+import cats.effect.Resource
 import cats.effect.testkit.TestControl
-import cats.~>
 import cats.syntax.all._
-import munit.{CatsEffectSuite, Location, TestOptions}
-import org.typelevel.otel4s.{Attribute, Attributes}
-import org.typelevel.otel4s.context.propagation.{PassThroughPropagator, TextMapPropagator}
+import cats.~>
+import munit.CatsEffectSuite
+import munit.Location
+import munit.TestOptions
+import org.typelevel.otel4s.Attribute
+import org.typelevel.otel4s.Attributes
+import org.typelevel.otel4s.context.propagation.PassThroughPropagator
+import org.typelevel.otel4s.context.propagation.TextMapPropagator
 import org.typelevel.otel4s.sdk.common.InstrumentationScope
 import org.typelevel.otel4s.sdk.context.Context
 import org.typelevel.otel4s.sdk.data.LimitedData
 import org.typelevel.otel4s.sdk.testkit.trace.TracesTestkit
 import org.typelevel.otel4s.sdk.trace.context.propagation.W3CTraceContextPropagator
-import org.typelevel.otel4s.sdk.trace.data.{EventData, StatusData}
+import org.typelevel.otel4s.sdk.trace.data.EventData
+import org.typelevel.otel4s.sdk.trace.data.StatusData
 import org.typelevel.otel4s.sdk.trace.samplers.Sampler
-import org.typelevel.otel4s.trace.{Span, SpanOps, StatusCode, Tracer}
+import org.typelevel.otel4s.trace.Span
+import org.typelevel.otel4s.trace.SpanOps
+import org.typelevel.otel4s.trace.StatusCode
+import org.typelevel.otel4s.trace.Tracer
 
 import scala.concurrent.duration._
 import scala.util.control.NoStackTrace

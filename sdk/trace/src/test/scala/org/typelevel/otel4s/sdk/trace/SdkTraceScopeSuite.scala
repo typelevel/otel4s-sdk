@@ -18,12 +18,14 @@ package org.typelevel.otel4s.sdk.trace
 
 import cats.effect.IO
 import cats.effect.IOLocal
-import munit.{CatsEffectSuite, ScalaCheckEffectSuite}
+import munit.CatsEffectSuite
+import munit.ScalaCheckEffectSuite
 import org.scalacheck.effect.PropF
 import org.typelevel.otel4s.context.Key
 import org.typelevel.otel4s.sdk.context.Context
-import org.typelevel.otel4s.trace.{SpanContext, TraceScope}
 import org.typelevel.otel4s.sdk.trace.scalacheck.Arbitraries._
+import org.typelevel.otel4s.trace.SpanContext
+import org.typelevel.otel4s.trace.TraceScope
 
 class SdkTraceScopeSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
 
