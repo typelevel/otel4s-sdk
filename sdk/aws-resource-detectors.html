@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Typelevel Laika + Helium Theme" />
+  <title>AWS | Resource detectors</title>
+  
+  <meta name="author" content="Ross A. Baker"/>
+  
+  <meta name="author" content="Maksym Ochenashko"/>
+  
+  
+  <meta name="description" content="docs"/>
+  
+  
+  
+  <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
+  
+  <link rel="stylesheet" type="text/css" href="../helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/site/laika-helium.css" />
+  <script src="../helium/site/laika-helium.js"></script>
+  
+  
+  <script> /* for avoiding page load transitions */ </script>
+</head>
+
+  <body>
+
+    <header id="top-bar" class="light-default dark-default">
+
+  <div class="row">
+    <a id="nav-icon">
+      <i class="icofont-laika navigationMenu" title="Navigation">&#xefa2;</i>
+    </a>
+    
+    
+  </div>
+
+  <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
+
+  <div class="row links">
+    
+    <a class="icon-link svg-link" href="https://javadoc.invalid/doc/org.typelevel/otel4s-docs_2.13/0.15-8f959c7-SNAPSHOT/"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/otel4s-sdk"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="svg-shape">
+    <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+  </g>
+</svg></span></a>
+    
+  </div>  
+
+</header>
+    
+    <nav id="sidebar">
+
+  <div class="row">
+    
+    <a class="icon-link svg-link" href="https://javadoc.invalid/doc/org.typelevel/otel4s-docs_2.13/0.15-8f959c7-SNAPSHOT/"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/otel4s-sdk"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="svg-shape">
+    <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+  </g>
+</svg></span></a>
+    
+  </div>
+
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="../">otel4s-sdk</a></li>
+    <li class="level1 nav-leaf"><a href="../modules-structure.html">Modules structure</a></li>
+    <li class="level1 nav-leaf"><a href="../ecosystem.html">Ecosystem</a></li>
+    <li class="level1 nav-header">Instrumentation</li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/metrics-cats-effect-io-runtime.html">Metrics | Cats Effect IO runtime</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/tracing-cross-service-propagation.html">Tracing | Cross-service propagation</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/logs.html">Logs</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/baggage.html">Baggage</a></li>
+    <li class="level1 nav-header">SDK</li>
+    <li class="level2 nav-leaf"><a href="overview.html">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="prometheus-exporter.html">Prometheus Exporter</a></li>
+    <li class="level2 nav-leaf"><a href="testkit.html">Testkit</a></li>
+    <li class="level2 active nav-leaf"><a href="#">AWS | Resource detectors</a></li>
+    <li class="level2 nav-leaf"><a href="aws-xray.html">AWS | X-Ray ID Generator</a></li>
+    <li class="level2 nav-leaf"><a href="aws-xray-propagator.html">AWS | X-Ray propagator</a></li>
+  </ul>
+
+</nav>
+
+    <div id="container">
+
+      
+<nav id="page-nav">
+  <p class="header"><a href="#">AWS | Resource detectors</a></p>
+
+  <ul class="nav-list">
+    <li class="level1 nav-node"><a href="#the-list-of-detectors">The list of detectors</a></li>
+    <li class="level2 nav-leaf"><a href="#_1-aws-lambda">1. aws-lambda</a></li>
+    <li class="level2 nav-leaf"><a href="#_2-aws-ec2">2. aws-ec2</a></li>
+    <li class="level2 nav-leaf"><a href="#_3-aws-ecs">3. aws-ecs</a></li>
+    <li class="level2 nav-leaf"><a href="#_4-aws-beanstalk">4. aws-beanstalk</a></li>
+    <li class="level2 nav-leaf"><a href="#_5-aws-eks">5. aws-eks</a></li>
+    <li class="level1 nav-leaf"><a href="#getting-started">Getting Started</a></li>
+    <li class="level1 nav-leaf"><a href="#configuration">Configuration</a></li>
+  </ul>
+
+  <p class="footer"></p>
+</nav>
+
+
+      <main class="content">
+
+        <h1 id="aws-resource-detectors" class="title">AWS | Resource detectors</h1>
+        <p>Resource detectors can add environment-specific attributes to the telemetry resource.
+        AWS detectors are implemented as a third-party library, and you need to enable them manually.</p>
+        
+        <h2 id="the-list-of-detectors" class="section"><a class="anchor-link left" href="#the-list-of-detectors"><i class="icofont-laika link">&#xef71;</i></a>The list of detectors</h2>
+        
+        <h3 id="_1-aws-lambda" class="section"><a class="anchor-link left" href="#_1-aws-lambda"><i class="icofont-laika link">&#xef71;</i></a>1. aws-lambda</h3>
+        <p>The detector relies on the <code>AWS_REGION</code>, <code>AWS_LAMBDA_FUNCTION_NAME</code>, and <code>AWS_LAMBDA_FUNCTION_VERSION</code> environment variables
+        to configure the telemetry resource.
+        Either <code>AWS_LAMBDA_FUNCTION_NAME</code> or <code>AWS_LAMBDA_FUNCTION_VERSION</code> must be present.</p>
+        <p>Environment: </p>
+        <pre><code>AWS_REGION=eu-west-1
+AWS_LAMBDA_FUNCTION_NAME=function
+AWS_LAMBDA_FUNCTION_VERSION=0.0.1</code></pre>
+        <p>Detected resource: </p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="attribute-name">cloud.platform</span><span>: </span><span class="string-literal">aws_lambda</span><span>
+</span><span class="attribute-name">cloud.provider</span><span>: </span><span class="string-literal">aws</span><span>
+</span><span class="attribute-name">cloud.region</span><span>: </span><span class="string-literal">eu-west-1</span><span>
+</span><span class="attribute-name">faas.name</span><span>: </span><span class="string-literal">function</span><span>
+</span><span class="attribute-name">faas.version</span><span>: </span><span class="number-literal">0.0</span><span>.1</span></code></pre>
+        
+        <h3 id="_2-aws-ec2" class="section"><a class="anchor-link left" href="#_2-aws-ec2"><i class="icofont-laika link">&#xef71;</i></a>2. aws-ec2</h3>
+        <p>The detector fetches instance metadata from the <code>http://169.254.169.254</code> endpoint.
+        See <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html">AWS documentation</a> for more
+        details.</p>
+        <p>The <code>http://169.254.169.254/latest/dynamic/instance-identity/document</code> response: </p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>{
+  </span><span class="attribute-name">&quot;accountId&quot;</span><span> : </span><span class="string-literal">&quot;1234567890&quot;</span><span>,
+  </span><span class="attribute-name">&quot;architecture&quot;</span><span> : </span><span class="string-literal">&quot;x86_64&quot;</span><span>,
+  </span><span class="attribute-name">&quot;availabilityZone&quot;</span><span> : </span><span class="string-literal">&quot;eu-west-1a&quot;</span><span>,
+  </span><span class="attribute-name">&quot;imageId&quot;</span><span> : </span><span class="string-literal">&quot;ami-abc123de&quot;</span><span>,
+  </span><span class="attribute-name">&quot;instanceId&quot;</span><span> : </span><span class="string-literal">&quot;i-abc321de&quot;</span><span>,
+  </span><span class="attribute-name">&quot;instanceType&quot;</span><span> : </span><span class="string-literal">&quot;t3.small&quot;</span><span>,
+  </span><span class="attribute-name">&quot;privateIp&quot;</span><span> : </span><span class="string-literal">&quot;10.0.0.1&quot;</span><span>,
+  </span><span class="attribute-name">&quot;region&quot;</span><span> : </span><span class="string-literal">&quot;eu-west-1&quot;</span><span>,
+  </span><span class="attribute-name">&quot;version&quot;</span><span> : </span><span class="string-literal">&quot;2017-09-30&quot;</span><span>
+}</span></code></pre>
+        <p>The <code>http://169.254.169.254/latest/meta-data/hostname</code> response:</p>
+        <pre><code>ip-10-0-0-1.eu-west-1.compute.internal</code></pre>
+        <p>Detected resource: </p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="attribute-name">cloud.account.id</span><span>: </span><span class="number-literal">1234567890</span><span>
+</span><span class="attribute-name">cloud.availability_zone</span><span>: </span><span class="string-literal">eu-west-1a</span><span>
+</span><span class="attribute-name">cloud.platform</span><span>: </span><span class="string-literal">aws_ec2</span><span>
+</span><span class="attribute-name">cloud.provider</span><span>: </span><span class="string-literal">aws</span><span>
+</span><span class="attribute-name">cloud.region</span><span>: </span><span class="string-literal">eu-west-1</span><span>
+</span><span class="attribute-name">host.id</span><span>: </span><span class="string-literal">i-abc321de</span><span>
+</span><span class="attribute-name">host.image.id</span><span>: </span><span class="string-literal">ami-abc123de</span><span>
+</span><span class="attribute-name">host.name</span><span>: </span><span class="string-literal">ip-10-0-0-1.eu-west-1.compute.internal</span><span>
+</span><span class="attribute-name">host.type</span><span>: </span><span class="string-literal">t3.small</span></code></pre>
+        
+        <h3 id="_3-aws-ecs" class="section"><a class="anchor-link left" href="#_3-aws-ecs"><i class="icofont-laika link">&#xef71;</i></a>3. aws-ecs</h3>
+        <p>The detector fetches ECS container and task metadata.
+        The base URI is obtained from <code>ECS_CONTAINER_METADATA_URI_V4</code> or <code>ECS_CONTAINER_METADATA_URI</code> env variable.</p>
+        <p>See <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-metadata-endpoint-v4.html">AWS documentation</a> for more
+        details.</p>
+        <p>The <code>http://169.254.170.2/v4/5fb8fcdd-29f2-490f-8229-c1269d11a9d9</code> response: </p>
+        <pre><code class="nohighlight"><span>{
+  </span><span class="attribute-name">&quot;DockerId&quot;</span><span> : </span><span class="string-literal">&quot;83b2af5973dc...ee1e1&quot;</span><span>,
+  </span><span class="attribute-name">&quot;Name&quot;</span><span> : </span><span class="string-literal">&quot;server&quot;</span><span>,
+  </span><span class="attribute-name">&quot;DockerName&quot;</span><span> : </span><span class="string-literal">&quot;ecs-service-production-11-server-e4e7efbceda7b7c68601&quot;</span><span>,
+  </span><span class="attribute-name">&quot;Image&quot;</span><span> : </span><span class="string-literal">&quot;1234567890.dkr.ecr.eu-west-1.amazonaws.com/internal/repository:8abab2a5&quot;</span><span>,
+  </span><span class="attribute-name">&quot;ImageID&quot;</span><span> : </span><span class="string-literal">&quot;sha256:7382b7779e6038...11f2d7d522d&quot;</span><span>,
+  </span><span class="attribute-name">&quot;DesiredStatus&quot;</span><span> : </span><span class="string-literal">&quot;RUNNING&quot;</span><span>,
+  </span><span class="attribute-name">&quot;CreatedAt&quot;</span><span> : </span><span class="string-literal">&quot;2024-09-12T18:08:55.593944224Z&quot;</span><span>,
+  </span><span class="attribute-name">&quot;StartedAt&quot;</span><span> : </span><span class="string-literal">&quot;2024-09-12T18:08:56.524454503Z&quot;</span><span>,
+  </span><span class="attribute-name">&quot;Type&quot;</span><span> : </span><span class="string-literal">&quot;NORMAL&quot;</span><span>,
+  </span><span class="attribute-name">&quot;Health&quot;</span><span> : {
+    </span><span class="attribute-name">&quot;status&quot;</span><span> : </span><span class="string-literal">&quot;HEALTHY&quot;</span><span>
+  },
+  </span><span class="attribute-name">&quot;LogDriver&quot;</span><span> : </span><span class="string-literal">&quot;awslogs&quot;</span><span>,
+  </span><span class="attribute-name">&quot;LogOptions&quot;</span><span> : {
+    </span><span class="attribute-name">&quot;awslogs-group&quot;</span><span> : </span><span class="string-literal">&quot;/ecs/production/service&quot;</span><span>,
+    </span><span class="attribute-name">&quot;awslogs-region&quot;</span><span> : </span><span class="string-literal">&quot;eu-west-1&quot;</span><span>,
+    </span><span class="attribute-name">&quot;awslogs-stream&quot;</span><span> : </span><span class="string-literal">&quot;ecs/server/5e1b...86980&quot;</span><span>
+  },
+  </span><span class="attribute-name">&quot;ContainerARN&quot;</span><span> : </span><span class="string-literal">&quot;arn:aws:ecs:eu-west-1:1234567890:task/production/5e1b...86980/1a1c23fe-1718-4eed-9833-c3dc2dad712c&quot;</span><span>
+}</span></code></pre>
+        <p>The <code>http://169.254.170.2/v4/5fb8fcdd-29f2-490f-8229-c1269d11a9d9/task</code> response:</p>
+        <pre><code class="nohighlight"><span>{
+  </span><span class="attribute-name">&quot;Cluster&quot;</span><span> : </span><span class="string-literal">&quot;production&quot;</span><span>,
+  </span><span class="attribute-name">&quot;TaskARN&quot;</span><span> : </span><span class="string-literal">&quot;arn:aws:ecs:eu-west-1:1234567890:task/production/5e1b...86980&quot;</span><span>,
+  </span><span class="attribute-name">&quot;Family&quot;</span><span> : </span><span class="string-literal">&quot;service-production&quot;</span><span>,
+  </span><span class="attribute-name">&quot;Revision&quot;</span><span> : </span><span class="string-literal">&quot;11&quot;</span><span>,
+  </span><span class="attribute-name">&quot;DesiredStatus&quot;</span><span> : </span><span class="string-literal">&quot;RUNNING&quot;</span><span>,
+  </span><span class="attribute-name">&quot;KnownStatus&quot;</span><span> : </span><span class="string-literal">&quot;RUNNING&quot;</span><span>,
+  </span><span class="attribute-name">&quot;PullStartedAt&quot;</span><span> : </span><span class="string-literal">&quot;2024-09-12T18:08:55.307387715Z&quot;</span><span>,
+  </span><span class="attribute-name">&quot;PullStoppedAt&quot;</span><span> : </span><span class="string-literal">&quot;2024-09-12T18:08:55.564707417Z&quot;</span><span>,
+  </span><span class="attribute-name">&quot;AvailabilityZone&quot;</span><span> : </span><span class="string-literal">&quot;eu-west-1a&quot;</span><span>,
+  </span><span class="attribute-name">&quot;LaunchType&quot;</span><span> : </span><span class="string-literal">&quot;EC2&quot;</span><span>,
+  </span><span class="attribute-name">&quot;VPCID&quot;</span><span> : </span><span class="string-literal">&quot;vpc-123&quot;</span><span>,
+  </span><span class="attribute-name">&quot;ServiceName&quot;</span><span> : </span><span class="string-literal">&quot;service&quot;</span><span>
+}</span></code></pre>
+        <p>Detected resource: </p>
+        <pre><code class="nohighlight"><span class="attribute-name">aws.ecs.cluster.arn</span><span>: </span><span class="string-literal">arn:aws:ecs:eu-west-1:1234567890:cluster/production</span><span>
+</span><span class="attribute-name">aws.ecs.container.arn</span><span>: </span><span class="string-literal">arn:aws:ecs:eu-west-1:1234567890:task/production/5e1b...86980/1a1c23fe-1718-4eed-9833-c3dc2dad712c</span><span>
+</span><span class="attribute-name">aws.ecs.container.image.id</span><span>: </span><span class="string-literal">sha256:7382b7779e6038...11f2d7d522d</span><span>
+</span><span class="attribute-name">aws.ecs.launchtype</span><span>: </span><span class="string-literal">EC2</span><span>
+</span><span class="attribute-name">aws.ecs.task.arn</span><span>: </span><span class="string-literal">arn:aws:ecs:eu-west-1:1234567890:task/production/5e1b...86980</span><span>
+</span><span class="attribute-name">aws.ecs.task.family</span><span>: </span><span class="string-literal">service-production</span><span>
+</span><span class="attribute-name">aws.ecs.task.revision</span><span>: </span><span class="number-literal">11</span><span>
+</span><span class="attribute-name">aws.log.group.arns</span><span>: </span><span class="string-literal">List(arn:aws:logs:eu-west-1:1234567890:log-group:/ecs/production/service)</span><span>
+</span><span class="attribute-name">aws.log.group.names</span><span>: </span><span class="string-literal">List(/ecs/production/service)</span><span>
+</span><span class="attribute-name">aws.log.stream.arns</span><span>: </span><span class="string-literal">List(arn:aws:logs:eu-west-1:1234567890:log-group:/ecs/production/service:log-stream:ecs/server/5e1b...86980)</span><span>
+</span><span class="attribute-name">aws.log.stream.names</span><span>: </span><span class="string-literal">List(ecs/server/5e1b...86980)</span><span>
+</span><span class="attribute-name">cloud.account.id</span><span>: </span><span class="number-literal">1234567890</span><span>
+</span><span class="attribute-name">cloud.availability_zone</span><span>: </span><span class="string-literal">eu-west-1a</span><span>
+</span><span class="attribute-name">cloud.platform</span><span>: </span><span class="string-literal">aws_ecs</span><span>
+</span><span class="attribute-name">cloud.provider</span><span>: </span><span class="string-literal">aws</span><span>
+</span><span class="attribute-name">cloud.region</span><span>: </span><span class="string-literal">eu-west-1</span><span>
+</span><span class="attribute-name">cloud.resource_id</span><span>: </span><span class="string-literal">arn:aws:ecs:eu-west-1:1234567890:task/production/5e1b...86980/1a1c23fe-1718-4eed-9833-c3dc2dad712c</span><span>
+</span><span class="attribute-name">container.id</span><span>: </span><span class="string-literal">83b2af5973dc...ee1e1</span><span>
+</span><span class="attribute-name">container.image.name</span><span>: </span><span class="number-literal">1234567890</span><span>.dkr.ecr.eu-west-1.amazonaws.com/internal/repository
+</span><span class="attribute-name">container.image.tags</span><span>: </span><span class="string-literal">List(8abab2a5)</span><span>
+</span><span class="attribute-name">container.name</span><span>: </span><span class="string-literal">ecs-service-production-11-server-e4e7efbceda7b7c68601</span></code></pre>
+        
+        <h3 id="_4-aws-beanstalk" class="section"><a class="anchor-link left" href="#_4-aws-beanstalk"><i class="icofont-laika link">&#xef71;</i></a>4. aws-beanstalk</h3>
+        <p>The detector parses environment details from the <code>/var/elasticbeanstalk/xray/environment.conf</code> file to configure the telemetry resource.</p>
+        <p>Expected configuration attributes:</p>
+        <ul>
+          <li><code>deployment_id</code></li>
+          <li><code>version_label</code></li>
+          <li><code>environment_name</code></li>
+        </ul>
+        <p>The content of the <code>/var/elasticbeanstalk/xray/environment.conf</code> file: </p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>{</span><span class="attribute-name">&quot;deployment_id&quot;</span><span>:</span><span class="number-literal">2</span><span>,</span><span class="attribute-name">&quot;version_label&quot;</span><span>:</span><span class="string-literal">&quot;1.1&quot;</span><span>,</span><span class="attribute-name">&quot;environment_name&quot;</span><span>:</span><span class="string-literal">&quot;production-eu-west&quot;</span><span>}</span></code></pre>
+        <p>Detected resource: </p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="attribute-name">cloud.platform</span><span>: </span><span class="string-literal">aws_elastic_beanstalk</span><span>
+</span><span class="attribute-name">cloud.provider</span><span>: </span><span class="string-literal">aws</span><span>
+</span><span class="attribute-name">service.instance.id</span><span>: </span><span class="number-literal">2</span><span>
+</span><span class="attribute-name">service.namespace</span><span>: </span><span class="string-literal">production-eu-west</span><span>
+</span><span class="attribute-name">service.version</span><span>: </span><span class="number-literal">1.1</span></code></pre>
+        
+        <h3 id="_5-aws-eks" class="section"><a class="anchor-link left" href="#_5-aws-eks"><i class="icofont-laika link">&#xef71;</i></a>5. aws-eks</h3>
+        <p>The detector detects if running on AWS EKS and provides EKS-specific resource attributes.
+        The detector checks for Kubernetes service account files and AWS-specific configmaps to determine if running on EKS.</p>
+        <p>The detector:</p>
+        <ul>
+          <li>Reads the Kubernetes service account token from <code>/var/run/secrets/kubernetes.io/serviceaccount/token</code></li>
+          <li>Fetches cluster information from the <code>amazon-cloudwatch</code> ConfigMap at <code>https://kubernetes.default.svc/api/v1/namespaces/amazon-cloudwatch/configmaps/cluster-info</code></li>
+          <li>Extracts container ID from <code>/proc/self/cgroup</code> file</li>
+        </ul>
+        <p>See <a href="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html">AWS EKS documentation</a> for more details.</p>
+        <p>The Kubernetes ConfigMap response: </p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>{
+  </span><span class="attribute-name">&quot;data&quot;</span><span> : {
+    </span><span class="attribute-name">&quot;cluster.name&quot;</span><span> : </span><span class="string-literal">&quot;my-eks-cluster&quot;</span><span>
+  }
+}</span></code></pre>
+        <p>Detected resource: </p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="attribute-name">cloud.platform</span><span>: </span><span class="string-literal">aws_eks</span><span>
+</span><span class="attribute-name">cloud.provider</span><span>: </span><span class="string-literal">aws</span><span>
+</span><span class="attribute-name">k8s.cluster.name</span><span>: </span><span class="string-literal">my-eks-cluster</span></code></pre>
+        
+        <h2 id="getting-started" class="section"><a class="anchor-link left" href="#getting-started"><i class="icofont-laika link">&#xef71;</i></a>Getting Started</h2>
+        <div class="tab-container" data-tab-group="build-tool">
+          <ul class="tab-group">
+            <li class="tab active" data-choice-name="sbt"><a href="#">sbt</a></li>
+            <li class="tab" data-choice-name="scala-cli"><a href="#">Scala CLI</a></li>
+          </ul>
+          <div class="tab-content active" data-choice-name="sbt">
+            <p>Add settings to the <code>build.sbt</code>:</p>
+            <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">libraryDependencies</span><span> ++= </span><span class="type-name">Seq</span><span>(
+  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %%% </span><span class="string-literal">&quot;otel4s-sdk&quot;</span><span> % </span><span class="string-literal">&quot;0.15-8f959c7-SNAPSHOT&quot;</span><span>, </span><span class="comment">// &lt;1&gt;
+</span><span>  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %%% </span><span class="string-literal">&quot;otel4s-sdk-exporter&quot;</span><span> % </span><span class="string-literal">&quot;0.15-8f959c7-SNAPSHOT&quot;</span><span>, </span><span class="comment">// &lt;2&gt;
+</span><span>  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %%% </span><span class="string-literal">&quot;otel4s-sdk-contrib-aws-resource&quot;</span><span> % </span><span class="string-literal">&quot;0.15-8f959c7-SNAPSHOT&quot;</span><span> </span><span class="comment">// &lt;3&gt;
+</span><span>)</span></code></pre>
+          </div>
+          <div class="tab-content" data-choice-name="scala-cli">
+            <p>Add directives to the <code>*.scala</code> file:</p>
+            <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">//&gt; using dep &quot;org.typelevel::otel4s-sdk::0.15-8f959c7-SNAPSHOT&quot; // &lt;1&gt;
+//&gt; using dep &quot;org.typelevel::otel4s-sdk-exporter::0.15-8f959c7-SNAPSHOT&quot; // &lt;2&gt;
+//&gt; using dep &quot;org.typelevel::otel4s-sdk-contrib-aws-resource::0.15-8f959c7-SNAPSHOT&quot; // &lt;3&gt;</span></code></pre>
+          </div>
+        </div>
+        <ol class="arabic">
+          <li>Add the <code>otel4s-sdk</code> library</li>
+          <li>Add the <code>otel4s-sdk-exporter</code> library. Without the exporter, the application will crash</li>
+          <li>Add the <code>otel4s-sdk-contrib-aws-resource</code> library </li>
+        </ol>
+        <hr>
+        <p>Then autoconfigure the SDK:</p>
+        <div class="tab-container" data-tab-group="sdk-entry-point">
+          <ul class="tab-group">
+            <li class="tab active" data-choice-name="sdk"><a href="#">OpenTelemetrySDK</a></li>
+            <li class="tab" data-choice-name="traces"><a href="#">SdkTraces</a></li>
+          </ul>
+          <div class="tab-content active" data-choice-name="sdk">
+            <p><code>OpenTelemetrySdk.autoConfigured</code> configures both <code>MeterProvider</code> and <code>TracerProvider</code>:</p>
+            <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.{</span><span class="type-name">IO</span><span>, </span><span class="type-name">IOApp</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="type-name">MeterProvider</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="type-name">OpenTelemetrySdk</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">contrib</span><span>.</span><span class="identifier">aws</span><span>.</span><span class="identifier">resource</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">exporter</span><span>.</span><span class="identifier">otlp</span><span>.</span><span class="identifier">autoconfigure</span><span>.</span><span class="type-name">OtlpExportersAutoConfigure</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="type-name">TracerProvider</span><span>
+
+</span><span class="keyword">object</span><span> </span><span class="type-name">TelemetryApp</span><span> </span><span class="keyword">extends</span><span> </span><span class="type-name">IOApp</span><span>.</span><span class="type-name">Simple</span><span> {
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">run</span><span>: </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
+    </span><span class="type-name">OpenTelemetrySdk</span><span>
+      .</span><span class="identifier">autoConfigured</span><span>[</span><span class="type-name">IO</span><span>](
+        </span><span class="comment">// register OTLP exporters configurer
+</span><span>        </span><span class="identifier">_</span><span>.</span><span class="identifier">addExportersConfigurer</span><span>(</span><span class="type-name">OtlpExportersAutoConfigure</span><span>[</span><span class="type-name">IO</span><span>])
+        </span><span class="comment">// register AWS Lambda detector
+</span><span>         .</span><span class="identifier">addResourceDetector</span><span>(</span><span class="type-name">AwsLambdaDetector</span><span>[</span><span class="type-name">IO</span><span>])
+        </span><span class="comment">// register AWS EC2 detector
+</span><span>         .</span><span class="identifier">addResourceDetector</span><span>(</span><span class="type-name">AwsEc2Detector</span><span>[</span><span class="type-name">IO</span><span>])
+        </span><span class="comment">// register AWS ECS detector
+</span><span>         .</span><span class="identifier">addResourceDetector</span><span>(</span><span class="type-name">AwsEcsDetector</span><span>[</span><span class="type-name">IO</span><span>])
+        </span><span class="comment">// register AWS EKS detector
+</span><span>         .</span><span class="identifier">addResourceDetector</span><span>(</span><span class="type-name">AwsEksDetector</span><span>[</span><span class="type-name">IO</span><span>])
+        </span><span class="comment">// register AWS Beanstalk detector
+</span><span>         .</span><span class="identifier">addResourceDetector</span><span>(</span><span class="type-name">AwsBeanstalkDetector</span><span>[</span><span class="type-name">IO</span><span>])
+      )
+      .</span><span class="identifier">use</span><span> { </span><span class="identifier">autoConfigured</span><span> =&gt;
+        </span><span class="keyword">val</span><span> </span><span class="identifier">sdk</span><span> = </span><span class="identifier">autoConfigured</span><span>.</span><span class="identifier">sdk</span><span>
+        </span><span class="identifier">program</span><span>(</span><span class="identifier">sdk</span><span>.</span><span class="identifier">meterProvider</span><span>, </span><span class="identifier">sdk</span><span>.</span><span class="identifier">tracerProvider</span><span>)
+      }
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span>(
+      </span><span class="identifier">meterProvider</span><span>: </span><span class="type-name">MeterProvider</span><span>[</span><span class="type-name">IO</span><span>],
+      </span><span class="identifier">tracerProvider</span><span>: </span><span class="type-name">TracerProvider</span><span>[</span><span class="type-name">IO</span><span>]
+  ): </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
+    ???
+}</span></code></pre>
+          </div>
+          <div class="tab-content" data-choice-name="traces">
+            <p><code>SdkTraces</code> configures only <code>TracerProvider</code>:</p>
+            <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.{</span><span class="type-name">IO</span><span>, </span><span class="type-name">IOApp</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">contrib</span><span>.</span><span class="identifier">aws</span><span>.</span><span class="identifier">resource</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">exporter</span><span>.</span><span class="identifier">otlp</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="identifier">autoconfigure</span><span>.</span><span class="type-name">OtlpSpanExporterAutoConfigure</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="type-name">SdkTraces</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="type-name">TracerProvider</span><span>
+
+</span><span class="keyword">object</span><span> </span><span class="type-name">TelemetryApp</span><span> </span><span class="keyword">extends</span><span> </span><span class="type-name">IOApp</span><span>.</span><span class="type-name">Simple</span><span> {
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">run</span><span>: </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
+    </span><span class="type-name">SdkTraces</span><span>
+      .</span><span class="identifier">autoConfigured</span><span>[</span><span class="type-name">IO</span><span>]( 
+        </span><span class="comment">// register OTLP exporters configurer
+</span><span>        </span><span class="identifier">_</span><span>.</span><span class="identifier">addExporterConfigurer</span><span>(</span><span class="type-name">OtlpSpanExporterAutoConfigure</span><span>[</span><span class="type-name">IO</span><span>])
+        </span><span class="comment">// register AWS Lambda detector
+</span><span>         .</span><span class="identifier">addResourceDetector</span><span>(</span><span class="type-name">AwsLambdaDetector</span><span>[</span><span class="type-name">IO</span><span>])
+        </span><span class="comment">// register AWS EC2 detector
+</span><span>         .</span><span class="identifier">addResourceDetector</span><span>(</span><span class="type-name">AwsEc2Detector</span><span>[</span><span class="type-name">IO</span><span>])
+        </span><span class="comment">// register AWS ECS detector
+</span><span>         .</span><span class="identifier">addResourceDetector</span><span>(</span><span class="type-name">AwsEcsDetector</span><span>[</span><span class="type-name">IO</span><span>])
+        </span><span class="comment">// register AWS EKS detector
+</span><span>         .</span><span class="identifier">addResourceDetector</span><span>(</span><span class="type-name">AwsEksDetector</span><span>[</span><span class="type-name">IO</span><span>])
+        </span><span class="comment">// register AWS Beanstalk detector
+</span><span>         .</span><span class="identifier">addResourceDetector</span><span>(</span><span class="type-name">AwsBeanstalkDetector</span><span>[</span><span class="type-name">IO</span><span>])
+      )
+      .</span><span class="identifier">use</span><span> { </span><span class="identifier">autoConfigured</span><span> =&gt;
+        </span><span class="identifier">program</span><span>(</span><span class="identifier">autoConfigured</span><span>.</span><span class="identifier">tracerProvider</span><span>)
+      }
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span>(
+      </span><span class="identifier">tracerProvider</span><span>: </span><span class="type-name">TracerProvider</span><span>[</span><span class="type-name">IO</span><span>]
+  ): </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
+    ???
+}</span></code></pre>
+          </div>
+        </div>
+        
+        <h2 id="configuration" class="section"><a class="anchor-link left" href="#configuration"><i class="icofont-laika link">&#xef71;</i></a>Configuration</h2>
+        <p>The <code>OpenTelemetrySdk.autoConfigured(...)</code> and <code>SdkTraces.autoConfigured(...)</code> rely on the environment variables and system properties to configure the SDK.
+        Check out the <a href="configuration.html#telemetry-resource-detectors">configuration details</a>.</p>
+        <p>There are several ways to configure the options:</p>
+        <div class="tab-container" data-tab-group="sdk-options-source">
+          <ul class="tab-group">
+            <li class="tab active" data-choice-name="sbt"><a href="#">sbt</a></li>
+            <li class="tab" data-choice-name="scala-cli"><a href="#">Scala CLI</a></li>
+            <li class="tab" data-choice-name="shell"><a href="#">Shell</a></li>
+          </ul>
+          <div class="tab-content active" data-choice-name="sbt">
+            <p>Add settings to the <code>build.sbt</code>:</p>
+            <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">javaOptions</span><span> += </span><span class="string-literal">&quot;-Dotel.otel4s.resource.detectors.enabled=aws-lambda,aws-ec2,aws-ecs,aws-eks,aws-beanstalk&quot;</span><span>
+</span><span class="identifier">envVars</span><span> ++= </span><span class="type-name">Map</span><span>(</span><span class="string-literal">&quot;OTEL_OTEL4S_RESOURCE_DETECTORS_ENABLE&quot;</span><span> -&gt; </span><span class="string-literal">&quot;aws-lambda,aws-ec2,aws-ecs,aws-eks,aws-beanstalk&quot;</span><span>)</span></code></pre>
+          </div>
+          <div class="tab-content" data-choice-name="scala-cli">
+            <p>Add directives to the <code>*.scala</code> file:</p>
+            <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">//&gt; using javaOpt -Dotel.otel4s.resource.detectors.enabled=aws-lambda,aws-ec2,aws-ecs,aws-eks,aws-beanstalk</span></code></pre>
+          </div>
+          <div class="tab-content" data-choice-name="shell">
+            <pre class="keep-together pdf epub"><code class="nohighlight"><span>$ </span><span class="identifier">export</span><span> OTEL_OTEL4S_RESOURCE_DETECTORS_ENABLED=aws-lambda,aws-ec</span><span class="number-literal">2</span><span>,aws-ecs,aws-eks,aws-beanstalk</span></code></pre>
+          </div>
+        </div>
+
+        
+<hr class="footer-rule"/>
+<footer>
+  otel4s-sdk is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache-2.0</a> license.
+</footer>
+
+
+      </main>
+
+    </div>
+
+  </body>
+
+</html>
