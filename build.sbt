@@ -623,6 +623,7 @@ lazy val docs = project
   )
   .settings(
     libraryDependencies ++= Seq(
+      "org.typelevel" %% "otel4s-instrumentation-metrics" % Otel4sVersion,
       "org.http4s" %% "http4s-client" % Http4sVersion,
       "org.http4s" %% "http4s-dsl" % Http4sVersion,
       "com.outr" %% "scribe" % ScribeVersion,
