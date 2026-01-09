@@ -18,15 +18,79 @@ package org.typelevel.otel4s.sdk.baggage
 
 import cats.effect.IO
 import cats.effect.IOLocal
-import org.typelevel.otel4s.baggage.BaggageManager
-import org.typelevel.otel4s.baggage.BaseBaggageManagerSuite
+import munit.CatsEffectSuite
+import org.typelevel.otel4s.baggage.{Baggage, BaggageManager}
 import org.typelevel.otel4s.sdk.context.Context
 import org.typelevel.otel4s.sdk.context.LocalContext
 
-class SdkBaggageManagerSuite extends BaseBaggageManagerSuite {
-  override protected def baggageManager: IO[BaggageManager[IO]] =
-    IOLocal(Context.root).map { iol =>
-      implicit val local: LocalContext[IO] = iol.asLocal
-      SdkBaggageManager.fromLocal[IO]
+class SdkBaggageManagerSuite extends CatsEffectSuite {
+
+  testManager(".current consistent with .scope") { m =>
+    val b1 = Baggage.empty
+      .updated("key", "value")
+      .updated("foo", "bar", "baz")
+    m.scope(b1)(m.current.map(assertEquals(_, b1)))
+  }
+
+  testManager(".current consistent with .local") { m =>
+    m.local(_.updated("key", "value").updated("foo", "bar", "baz")) {
+      for (baggage <- m.current)
+        yield {
+          assertEquals(baggage.get("key"), Some(Baggage.Entry("value", None)))
+          assertEquals(
+            baggage.get("foo"),
+            Some(Baggage.Entry("bar", Some(Baggage.Metadata("baz"))))
+          )
+        }
     }
+  }
+
+  testManager(".get consistent with .current") { m =>
+    val check = m.scope(_: Baggage) {
+      for {
+        baggage <- m.current
+        v1 <- m.get("key")
+        v2 <- m.get("foo")
+      } yield {
+        assertEquals(v1, baggage.get("key"))
+        assertEquals(v2, baggage.get("foo"))
+      }
+    }
+    check(Baggage.empty) >>
+      check(
+        Baggage.empty
+          .updated("key", "value")
+          .updated("foo", "bar", "baz")
+      )
+  }
+
+  testManager(".getValue consistent with .current") { m =>
+    val check = m.scope(_: Baggage) {
+      for {
+        baggage <- m.current
+        v1 <- m.getValue("key")
+        v2 <- m.getValue("foo")
+      } yield {
+        assertEquals(v1, baggage.get("key").map(_.value))
+        assertEquals(v2, baggage.get("foo").map(_.value))
+      }
+    }
+    check(Baggage.empty) >>
+      check(
+        Baggage.empty
+          .updated("key", "value")
+          .updated("foo", "bar", "baz")
+      )
+  }
+
+  private def testManager(name: String)(f: BaggageManager[IO] => IO[Unit]): Unit =
+    test(name) {
+      IOLocal(Context.root)
+        .map { iol =>
+          implicit val local: LocalContext[IO] = iol.asLocal
+          SdkBaggageManager.fromLocal[IO]
+        }
+        .flatMap(f)
+    }
+
 }

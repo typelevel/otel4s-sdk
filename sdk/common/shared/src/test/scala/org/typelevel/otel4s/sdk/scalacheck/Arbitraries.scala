@@ -17,11 +17,21 @@
 package org.typelevel.otel4s.sdk.scalacheck
 
 import org.scalacheck.Arbitrary
+import org.typelevel.otel4s.{AnyValue, Attribute, Attributes}
 import org.typelevel.otel4s.sdk.TelemetryResource
 import org.typelevel.otel4s.sdk.common.InstrumentationScope
 import org.typelevel.otel4s.sdk.context.TraceContext
 
-trait Arbitraries extends org.typelevel.otel4s.scalacheck.Arbitraries {
+trait Arbitraries {
+
+  implicit val attributeArbitrary: Arbitrary[Attribute[_]] =
+    Arbitrary(Gens.attribute)
+
+  implicit val attributesArbitrary: Arbitrary[Attributes] =
+    Arbitrary(Gens.attributes)
+
+  implicit val anyValueArbitrary: Arbitrary[AnyValue] =
+    Arbitrary(Gens.anyValue)
 
   implicit val telemetryResourceArbitrary: Arbitrary[TelemetryResource] =
     Arbitrary(Gens.telemetryResource)

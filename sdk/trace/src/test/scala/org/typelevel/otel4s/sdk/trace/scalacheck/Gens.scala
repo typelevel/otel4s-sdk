@@ -16,7 +16,8 @@
 
 package org.typelevel.otel4s.sdk.trace.scalacheck
 
-import org.scalacheck.Gen
+import org.scalacheck.{Arbitrary, Gen}
+import org.typelevel.otel4s.baggage.Baggage
 import org.typelevel.otel4s.sdk.data.LimitedData
 import org.typelevel.otel4s.sdk.trace.data.EventData
 import org.typelevel.otel4s.sdk.trace.data.LinkData
@@ -24,8 +25,64 @@ import org.typelevel.otel4s.sdk.trace.data.SpanData
 import org.typelevel.otel4s.sdk.trace.data.StatusData
 import org.typelevel.otel4s.sdk.trace.samplers.SamplingDecision
 import org.typelevel.otel4s.sdk.trace.samplers.SamplingResult
+import org.typelevel.otel4s.trace.{SpanContext, SpanKind, StatusCode, TraceFlags, TraceState}
+import scodec.bits.ByteVector
 
-trait Gens extends org.typelevel.otel4s.sdk.scalacheck.Gens with org.typelevel.otel4s.trace.scalacheck.Gens {
+trait Gens extends org.typelevel.otel4s.sdk.scalacheck.Gens {
+
+  val traceId: Gen[ByteVector] =
+    for {
+      hi <- Gen.long
+      lo <- nonZeroLong
+    } yield SpanContext.TraceId.fromLongs(hi, lo)
+
+  val spanId: Gen[ByteVector] =
+    for {
+      value <- nonZeroLong
+    } yield SpanContext.SpanId.fromLong(value)
+
+  val traceFlags: Gen[TraceFlags] =
+    Gen.oneOf(TraceFlags.Sampled, TraceFlags.Default)
+
+  val traceState: Gen[TraceState] =
+    for {
+      k1 <- nonEmptyString
+      v1 <- nonEmptyString
+      k2 <- nonEmptyString
+      v2 <- nonEmptyString
+      k3 <- nonEmptyString
+      v3 <- nonEmptyString
+    } yield TraceState.empty.updated(k1, v1).updated(k2, v2).updated(k3, v3)
+
+  val baggage: Gen[Baggage] =
+    for {
+      k1 <- nonEmptyString
+      v1 <- nonEmptyString
+      k2 <- nonEmptyString
+      v2 <- nonEmptyString
+      k3 <- nonEmptyString
+      v3 <- nonEmptyString
+    } yield Baggage.empty.updated(k1, v1).updated(k2, v2).updated(k3, v3)
+
+  val spanContext: Gen[SpanContext] =
+    for {
+      traceId <- Gens.traceId
+      spanId <- Gens.spanId
+      traceFlags <- Gens.traceFlags
+      remote <- Arbitrary.arbitrary[Boolean]
+    } yield SpanContext(traceId, spanId, traceFlags, TraceState.empty, remote)
+
+  val spanKind: Gen[SpanKind] =
+    Gen.oneOf(
+      SpanKind.Internal,
+      SpanKind.Server,
+      SpanKind.Client,
+      SpanKind.Producer,
+      SpanKind.Consumer
+    )
+
+  val statusCode: Gen[StatusCode] =
+    Gen.oneOf(StatusCode.Unset, StatusCode.Ok, StatusCode.Error)
 
   val samplingDecision: Gen[SamplingDecision] =
     Gen.oneOf(

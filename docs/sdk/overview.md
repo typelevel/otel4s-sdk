@@ -1,6 +1,6 @@
 # Overview
 
-SDK modules are an alternative to the [otel4s-oteljava](../oteljava/overview.md) implementation.
+SDK modules are an alternative to the [otel4s-oteljava][oteljava] implementation.
 All modules are implemented in Scala and available for all platforms: JVM, Scala Native, and Scala.js.
 The implementation remains **experimental** and some functionality may be lacking.
 
@@ -87,3 +87,5 @@ OpenTelemetrySdk.autoConfigured[IO](
 ### Metrics missing features
 
 - `Exponential Histogram` aggregation is not supported yet
+
+[oteljava]: https://typelevel.org/otel4s/oteljava/overview.html

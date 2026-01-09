@@ -16,37 +16,285 @@
 
 package org.typelevel.otel4s.sdk.metrics
 
+import java.util.concurrent.TimeUnit
+
+import cats.data.NonEmptyVector
 import cats.effect.IO
 import cats.effect.Resource
 import cats.effect.SyncIO
 import cats.effect.testkit.TestControl
 import cats.mtl.Local
+import cats.syntax.traverse.*
+import munit.{CatsEffectSuite, Location, TestOptions}
+import org.typelevel.otel4s.Attributes
 import org.typelevel.otel4s.context.LocalProvider
-import org.typelevel.otel4s.metrics.BaseMeterSuite
-import org.typelevel.otel4s.metrics.MeterProvider
-import org.typelevel.otel4s.sdk.common.Diagnostic
+import org.typelevel.otel4s.metrics.{BucketBoundaries, MeterProvider}
+import org.typelevel.otel4s.sdk.TelemetryResource
+import org.typelevel.otel4s.sdk.common.{Diagnostic, InstrumentationScope}
 import org.typelevel.otel4s.sdk.context.Context
 import org.typelevel.otel4s.sdk.context.TraceContext
-import org.typelevel.otel4s.sdk.metrics.data.AggregationTemporality
-import org.typelevel.otel4s.sdk.metrics.data.ExemplarData
-import org.typelevel.otel4s.sdk.metrics.data.MetricData
-import org.typelevel.otel4s.sdk.metrics.data.MetricPoints
-import org.typelevel.otel4s.sdk.metrics.data.PointData
+import org.typelevel.otel4s.sdk.metrics.data.{
+  AggregationTemporality,
+  ExemplarData,
+  MetricData,
+  MetricPoints,
+  PointData,
+  TimeWindow
+}
 import org.typelevel.otel4s.sdk.metrics.exporter.AggregationSelector
 import org.typelevel.otel4s.sdk.metrics.exporter.AggregationTemporalitySelector
 import org.typelevel.otel4s.sdk.metrics.exporter.CardinalityLimitSelector
 import org.typelevel.otel4s.sdk.testkit.metrics.MetricsTestkit
 import scodec.bits.ByteVector
 
-class SdkMeterSuite extends BaseMeterSuite {
+import scala.concurrent.duration.*
 
-  type Ctx = Context
+class SdkMeterSuite extends CatsEffectSuite {
+
+  private val TraceId = "c0d6e01941825730ffedcd00768eb663"
+  private val SpanId = "69568a2f0ba45094"
+
+  private val DefaultBoundaries = BucketBoundaries(
+    0.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0, 250.0, 500.0, 750.0, 1000.0, 2500.0, 5000.0, 7500.0, 10000.0
+  )
 
   private val traceContextKey = Context.Key
     .unique[SyncIO, TraceContext]("trace-context")
     .unsafeRunSync()
 
-  protected def tracedContext(traceId: String, spanId: String): Context = {
+  sdkTest("Counter - accept only positive values") { sdk =>
+    for {
+      meter <- sdk.provider.get("meter")
+      counter <- meter.counter[Long]("counter").create
+      _ <- counter.add(-1L)
+      metrics <- sdk.collectMetrics
+    } yield assertEquals(metrics, Nil)
+  }
+
+  sdkTest("Counter - record values") { sdk =>
+    val expected = makeSum("counter", monotonic = true, 5L, Some(5L))
+
+    for {
+      meter <- sdk.provider.get("meter")
+      counter <- meter.counter[Long]("counter").create
+      _ <- counter.add(5L)
+      metrics <- sdk.collectMetrics
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest("Counter - increment") { sdk =>
+    val expected = makeSum("counter", monotonic = true, 1L, Some(1L))
+
+    for {
+      meter <- sdk.provider.get("meter")
+      counter <- meter.counter[Long]("counter").create
+      _ <- counter.inc()
+      metrics <- sdk.collectMetrics
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest("Gauge - record values") { sdk =>
+    val expected = makeGauge("gauge", 1L, Some(1L))
+
+    for {
+      meter <- sdk.provider.get("meter")
+      gauge <- meter.gauge[Long]("gauge").create
+      _ <- gauge.record(1L)
+      metrics <- sdk.collectMetrics
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest("UpDownCounter - record values") { sdk =>
+    val expected = makeSum("counter", monotonic = false, 3L, Some(3L))
+
+    for {
+      meter <- sdk.provider.get("meter")
+      counter <- meter.upDownCounter[Long]("counter").create
+      _ <- counter.add(3L)
+      metrics <- sdk.collectMetrics
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest("UpDownCounter - increment") { sdk =>
+    val expected = makeSum("counter", monotonic = false, 1L, Some(1L))
+
+    for {
+      meter <- sdk.provider.get("meter")
+      counter <- meter.upDownCounter[Long]("counter").create
+      _ <- counter.inc()
+      metrics <- sdk.collectMetrics
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest("UpDownCounter - decrement") { sdk =>
+    val expected = makeSum("counter", monotonic = false, -1L, Some(-1L))
+
+    for {
+      meter <- sdk.provider.get("meter")
+      counter <- meter.upDownCounter[Long]("counter").create
+      _ <- counter.dec()
+      metrics <- sdk.collectMetrics
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest("Histogram - allow only non-negative values") { sdk =>
+    for {
+      meter <- sdk.provider.get("meter")
+      histogram <- meter.histogram[Double]("histogram").create
+      _ <- histogram.record(-1.0)
+      metrics <- sdk.collectMetrics
+    } yield assertEquals(metrics, Nil)
+  }
+
+  sdkTest("Histogram - record values") { sdk =>
+    val values = List(1.0, 2.0, 3.0)
+    val expected = makeHistogram(
+      "histogram",
+      values,
+      exemplarValue = Some(3.0)
+    )
+
+    for {
+      meter <- sdk.provider.get("meter")
+      histogram <- meter.histogram[Double]("histogram").create
+      _ <- values.traverse(value => histogram.record(value))
+      metrics <- sdk.collectMetrics
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest("Histogram - record duration") { sdk =>
+    val duration = 100.nanos
+    val expected = makeHistogram(
+      "histogram",
+      List(duration.toNanos.toDouble)
+    )
+
+    TestControl.executeEmbed {
+      for {
+        meter <- sdk.provider.get("meter")
+        histogram <- meter.histogram[Double]("histogram").create
+        _ <- histogram
+          .recordDuration(TimeUnit.NANOSECONDS)
+          .surround(IO.sleep(duration))
+        metrics <- sdk.collectMetrics
+      } yield assertEquals(metrics, List(expected))
+    }
+  }
+
+  sdkTest("Histogram - use explicit bucket boundaries") { sdk =>
+    val boundaries = BucketBoundaries(1.0, 2.0, 3.0)
+    val expected = makeHistogram(
+      name = "histogram",
+      values = List(1.0),
+      boundaries = boundaries,
+      exemplarValue = Some(1.0)
+    )
+
+    for {
+      meter <- sdk.provider.get("meter")
+      histogram <- meter
+        .histogram[Double]("histogram")
+        .withExplicitBucketBoundaries(boundaries)
+        .create
+      _ <- histogram.record(1.0)
+      metrics <- sdk.collectMetrics
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest("ObservableCounter - record values") { sdk =>
+    val expected = makeSum("counter", monotonic = true, 1L)
+
+    for {
+      meter <- sdk.provider.get("meter")
+      metrics <- meter
+        .observableCounter[Long]("counter")
+        .createWithCallback(cb => cb.record(1L))
+        .surround(sdk.collectMetrics)
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest(
+    "ObservableCounter - multiple values for same attributes - combine values"
+  ) { sdk =>
+    val expected = makeSum("counter", monotonic = true, 6L)
+
+    for {
+      meter <- sdk.provider.get("meter")
+      metrics <- meter
+        .observableCounter[Long]("counter")
+        .createWithCallback { cb =>
+          cb.record(1L) >> cb.record(2L) >> cb.record(3L)
+        }
+        .surround(sdk.collectMetrics)
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest("ObservableUpDownCounter - record values") { sdk =>
+    val expected = makeSum("counter", monotonic = false, 1L)
+
+    for {
+      meter <- sdk.provider.get("meter")
+      metrics <- meter
+        .observableUpDownCounter[Long]("counter")
+        .createWithCallback(cb => cb.record(1L))
+        .surround(sdk.collectMetrics)
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest(
+    "ObservableUpDownCounter - multiple values for same attributes - combine values"
+  ) { sdk =>
+    val expected = makeSum("counter", monotonic = false, 2L)
+
+    for {
+      meter <- sdk.provider.get("meter")
+      metrics <- meter
+        .observableUpDownCounter[Long]("counter")
+        .createWithCallback { cb =>
+          cb.record(1L) >> cb.record(2L) >> cb.record(3L) >> cb.record(-4L)
+        }
+        .surround(sdk.collectMetrics)
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest("ObservableGauge - record values") { sdk =>
+    val expected = makeGauge("gauge", 1L)
+
+    for {
+      meter <- sdk.provider.get("meter")
+      metrics <- meter
+        .observableGauge[Long]("gauge")
+        .createWithCallback(cb => cb.record(1L))
+        .surround(sdk.collectMetrics)
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  sdkTest(
+    "ObservableGauge - multiple values for same attributes - retain last"
+  ) { sdk =>
+    val expected = makeGauge("gauge", 3L)
+
+    for {
+      meter <- sdk.provider.get("meter")
+      metrics <- meter
+        .observableGauge[Long]("gauge")
+        .createWithCallback { cb =>
+          cb.record(1L) >> cb.record(2L) >> cb.record(3L)
+        }
+        .surround(sdk.collectMetrics)
+    } yield assertEquals(metrics, List(expected))
+  }
+
+  private def sdkTest[A](
+      options: TestOptions
+  )(body: Sdk => IO[A])(implicit loc: Location): Unit = {
+    val io = makeSdk.use { sdk =>
+      sdk.local.scope(body(sdk))(tracedContext(TraceId, SpanId))
+    }
+    test(options)(TestControl.executeEmbed(io))
+  }
+
+  private def tracedContext(traceId: String, spanId: String): Context = {
     val spanContext = TraceContext(
       traceId = ByteVector.fromValidHex(traceId),
       spanId = ByteVector.fromValidHex(spanId),
@@ -56,10 +304,13 @@ class SdkMeterSuite extends BaseMeterSuite {
     Context.root.updated(traceContextKey, spanContext)
   }
 
-  override protected def transform[A](io: IO[A]): IO[A] =
-    TestControl.executeEmbed(io)
+  private trait Sdk {
+    def provider: MeterProvider[IO]
+    def collectMetrics: IO[List[MetricData]]
+    def local: Local[IO, Context]
+  }
 
-  protected def makeSdk: Resource[IO, BaseMeterSuite.Sdk[Ctx]] =
+  private def makeSdk: Resource[IO, Sdk] =
     Resource
       .eval(LocalProvider[IO, Context].local)
       .flatMap { implicit localContext =>
@@ -73,12 +324,12 @@ class SdkMeterSuite extends BaseMeterSuite {
           .withDefaultCardinalityLimitSelector(CardinalityLimitSelector.default)
           .build
           .map { metrics =>
-            new BaseMeterSuite.Sdk[Ctx] {
+            new Sdk {
               def provider: MeterProvider[IO] =
                 metrics.meterProvider
 
-              def collectMetrics: IO[List[BaseMeterSuite.MetricData]] =
-                metrics.collectMetrics.map(_.map(toMetricData))
+              def collectMetrics: IO[List[MetricData]] =
+                metrics.collectMetrics
 
               def local: Local[IO, Context] =
                 localContext
@@ -86,86 +337,116 @@ class SdkMeterSuite extends BaseMeterSuite {
           }
       }
 
-  private def toMetricData(md: MetricData): BaseMeterSuite.MetricData = {
-    def temporality(
-        aggregationTemporality: AggregationTemporality
-    ): BaseMeterSuite.AggregationTemporality =
-      aggregationTemporality match {
-        case AggregationTemporality.Delta =>
-          BaseMeterSuite.AggregationTemporality.Delta
-        case AggregationTemporality.Cumulative =>
-          BaseMeterSuite.AggregationTemporality.Cumulative
+  private def makeSum(
+      name: String,
+      monotonic: Boolean,
+      value: Long,
+      exemplarValue: Option[Long] = None
+  ): MetricData =
+    MetricData(
+      resource = TelemetryResource.empty,
+      scope = InstrumentationScope.empty,
+      name = name,
+      description = None,
+      unit = None,
+      data = MetricPoints.sum(
+        points = NonEmptyVector.one(
+          PointData.longNumber(
+            timeWindow = TimeWindow(Duration.Zero, Duration.Zero),
+            attributes = Attributes.empty,
+            exemplars = exemplarValue.toVector.map { exemplar =>
+              ExemplarData.long(
+                Attributes.empty,
+                Duration.Zero,
+                Some(TraceContext(ByteVector.fromValidHex(TraceId), ByteVector.fromValidHex(SpanId), true)),
+                exemplar
+              )
+            },
+            value = value,
+          )
+        ),
+        monotonic = monotonic,
+        aggregationTemporality = AggregationTemporality.Cumulative
+      )
+    )
+
+  private def makeGauge(
+      name: String,
+      value: Long,
+      exemplarValue: Option[Long] = None
+  ): MetricData =
+    MetricData(
+      resource = TelemetryResource.empty,
+      scope = InstrumentationScope.empty,
+      name = name,
+      description = None,
+      unit = None,
+      data = MetricPoints.gauge(
+        points = NonEmptyVector.one(
+          PointData.longNumber(
+            timeWindow = TimeWindow(Duration.Zero, Duration.Zero),
+            attributes = Attributes.empty,
+            exemplars = exemplarValue.toVector.map { exemplar =>
+              ExemplarData.long(
+                Attributes.empty,
+                Duration.Zero,
+                Some(TraceContext(ByteVector.fromValidHex(TraceId), ByteVector.fromValidHex(SpanId), true)),
+                exemplar
+              )
+            },
+            value = value,
+          )
+        )
+      )
+    )
+
+  private def makeHistogram(
+      name: String,
+      values: List[Double],
+      boundaries: BucketBoundaries = DefaultBoundaries,
+      exemplarValue: Option[Double] = None
+  ): MetricData = {
+    val counts: Vector[Long] =
+      values.foldLeft(Vector.fill(boundaries.length + 1)(0L)) { case (acc, value) =>
+        val i = boundaries.boundaries.indexWhere(b => value <= b)
+        val idx = if (i == -1) boundaries.length else i
+
+        acc.updated(idx, acc(idx) + 1L)
       }
 
-    def toExemplar(exemplar: ExemplarData) = {
-      val value = exemplar match {
-        case long: ExemplarData.LongExemplar     => Left(long.value)
-        case double: ExemplarData.DoubleExemplar => Right(double.value)
-      }
-
-      BaseMeterSuite.Exemplar(
-        exemplar.filteredAttributes,
-        exemplar.timestamp,
-        exemplar.traceContext.map(_.traceId.toHex),
-        exemplar.traceContext.map(_.spanId.toHex),
-        value
-      )
-    }
-
-    def toNumberPoint(number: PointData.NumberPoint) = {
-      val value = number match {
-        case long: PointData.LongNumber     => Left(long.value)
-        case double: PointData.DoubleNumber => Right(double.value)
-      }
-
-      BaseMeterSuite.PointData.NumberPoint(
-        number.timeWindow.start,
-        number.timeWindow.end,
-        number.attributes,
-        value,
-        number.exemplars.map(toExemplar)
-      )
-    }
-
-    def toHistogramPoint(histogram: PointData.Histogram) =
-      BaseMeterSuite.PointData.Histogram(
-        histogram.timeWindow.start,
-        histogram.timeWindow.end,
-        histogram.attributes,
-        histogram.stats.map(_.sum),
-        histogram.stats.map(_.min),
-        histogram.stats.map(_.max),
-        histogram.stats.map(_.count),
-        histogram.boundaries,
-        histogram.counts,
-        histogram.exemplars.map(toExemplar)
-      )
-
-    val data = md.data match {
-      case sum: MetricPoints.Sum =>
-        BaseMeterSuite.MetricPoints.Sum(
-          sum.points.toVector.map(toNumberPoint),
-          sum.monotonic,
-          temporality(sum.aggregationTemporality)
-        )
-
-      case gauge: MetricPoints.Gauge =>
-        BaseMeterSuite.MetricPoints.Gauge(
-          gauge.points.toVector.map(toNumberPoint)
-        )
-
-      case histogram: MetricPoints.Histogram =>
-        BaseMeterSuite.MetricPoints.Histogram(
-          histogram.points.toVector.map(toHistogramPoint),
-          temporality(histogram.aggregationTemporality)
-        )
-    }
-
-    BaseMeterSuite.MetricData(
-      md.name,
-      md.description,
-      md.unit,
-      data
+    MetricData(
+      resource = TelemetryResource.empty,
+      scope = InstrumentationScope.empty,
+      name = name,
+      description = None,
+      unit = None,
+      data = MetricPoints.histogram(
+        points = NonEmptyVector.one(
+          PointData.histogram(
+            timeWindow = TimeWindow(Duration.Zero, Duration.Zero),
+            attributes = Attributes.empty,
+            exemplars = exemplarValue.toVector.map { exemplar =>
+              ExemplarData.double(
+                Attributes.empty,
+                Duration.Zero,
+                Some(TraceContext(ByteVector.fromValidHex(TraceId), ByteVector.fromValidHex(SpanId), true)),
+                exemplar
+              )
+            },
+            stats = Some(
+              PointData.Histogram.Stats(
+                values.sum,
+                values.min,
+                values.max,
+                values.size.toLong,
+              )
+            ),
+            boundaries = boundaries,
+            counts = counts,
+          )
+        ),
+        aggregationTemporality = AggregationTemporality.Cumulative
+      ),
     )
   }
 

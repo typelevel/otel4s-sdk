@@ -23,10 +23,18 @@ import org.typelevel.otel4s.sdk.trace.data.SpanData
 import org.typelevel.otel4s.sdk.trace.data.StatusData
 import org.typelevel.otel4s.sdk.trace.samplers.SamplingDecision
 import org.typelevel.otel4s.sdk.trace.samplers.SamplingResult
+import org.typelevel.otel4s.trace.{SpanContext, SpanKind, StatusCode}
 
-trait Arbitraries
-    extends org.typelevel.otel4s.sdk.scalacheck.Arbitraries
-    with org.typelevel.otel4s.trace.scalacheck.Arbitraries {
+trait Arbitraries extends org.typelevel.otel4s.sdk.scalacheck.Arbitraries {
+
+  implicit val spanContextArbitrary: Arbitrary[SpanContext] =
+    Arbitrary(Gens.spanContext)
+
+  implicit val spanKindArbitrary: Arbitrary[SpanKind] =
+    Arbitrary(Gens.spanKind)
+
+  implicit val statusCodeArbitrary: Arbitrary[StatusCode] =
+    Arbitrary(Gens.statusCode)
 
   implicit val samplingDecisionArbitrary: Arbitrary[SamplingDecision] =
     Arbitrary(Gens.samplingDecision)
