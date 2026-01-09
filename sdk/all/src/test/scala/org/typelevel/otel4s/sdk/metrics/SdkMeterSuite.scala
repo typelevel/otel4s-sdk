@@ -319,7 +319,9 @@ class SdkMeterSuite extends CatsEffectSuite {
 
         MetricsTestkit
           .builder[IO]
-          .addMeterProviderCustomizer(_.withTraceContextLookup(_.get(traceContextKey)))
+          .addMeterProviderCustomizer(
+            _.withTraceContextLookup(_.get(traceContextKey)).withResource(TelemetryResource.empty)
+          )
           .withAggregationTemporalitySelector(AggregationTemporalitySelector.alwaysCumulative)
           .withDefaultAggregationSelector(AggregationSelector.default)
           .withDefaultCardinalityLimitSelector(CardinalityLimitSelector.default)
@@ -346,7 +348,7 @@ class SdkMeterSuite extends CatsEffectSuite {
   ): MetricData =
     MetricData(
       resource = TelemetryResource.empty,
-      scope = InstrumentationScope.empty,
+      scope = InstrumentationScope.builder("meter").build,
       name = name,
       description = None,
       unit = None,
@@ -378,7 +380,7 @@ class SdkMeterSuite extends CatsEffectSuite {
   ): MetricData =
     MetricData(
       resource = TelemetryResource.empty,
-      scope = InstrumentationScope.empty,
+      scope = InstrumentationScope.builder("meter").build,
       name = name,
       description = None,
       unit = None,
@@ -417,7 +419,7 @@ class SdkMeterSuite extends CatsEffectSuite {
 
     MetricData(
       resource = TelemetryResource.empty,
-      scope = InstrumentationScope.empty,
+      scope = InstrumentationScope.builder("meter").build,
       name = name,
       description = None,
       unit = None,
