@@ -64,7 +64,7 @@ Prefer stable names and values that are easy to aggregate.
 
 Logs become far more valuable when they carry trace and span ids. 
 By default, otel4s uses the current context to propagate trace and span ids, 
-check out the [context propagation logic][context propagation logic]for more details.
+check out the [context propagation logic][context-propagation-logic] for more details.
 
 However, you can also use the `withContext` to inject a specific context into the log record.
 
