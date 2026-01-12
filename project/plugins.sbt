@@ -10,4 +10,4 @@ addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.4.8")
 addSbtPlugin("com.thesamet" % "sbt-protoc" % "1.0.8")
 addSbtPlugin("com.armanbilge" % "sbt-scala-native-config-brew-github-actions" % "0.4.0")
 
-libraryDependencies += "com.thesamet.scalapb" %% "compilerplugin" % "0.11.15"
+libraryDependencies += "com.thesamet.scalapb" %% "compilerplugin" % "0.11.20"
