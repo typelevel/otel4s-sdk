@@ -15,6 +15,8 @@ ThisBuild / startYear := Some(2022)
 // publish website from this branch
 ThisBuild / tlSitePublishBranch := Some("main")
 
+ThisBuild / resolvers += Resolver.sonatypeCentralSnapshots
+
 // VM runs out of memory when linking multiple targets concurrently, hence limit it
 Global / concurrentRestrictions += Tags.limit(NativeTags.Link, 1)
 
@@ -77,26 +79,25 @@ ThisBuild / mergifyPrRules ++= Seq(
   )
 )
 
-val CatsVersion = "2.11.0"
-val CatsEffectVersion = "3.6.3"
-val CatsMtlVersion = "1.4.0"
-val FS2Version = "3.12.2"
-val MUnitVersion = "1.0.0"
-val MUnitScalaCheckVersion = "1.0.0-M11"
-val MUnitCatsEffectVersion = "2.1.0"
-val MUnitDisciplineVersion = "2.0.0-M3"
-val MUnitScalaCheckEffectVersion = "2.0.0-M2"
+val CatsVersion = "2.13.0"
+val CatsEffectVersion = "3.7.0-RC1"
+val CatsMtlVersion = "1.6.0"
+val FS2Version = "3.13.0-M8"
+val MUnitVersion = "1.2.1"
+val MUnitScalaCheckVersion = "1.2.0"
+val MUnitCatsEffectVersion = "2.2.0-RC1"
+val MUnitDisciplineVersion = "2.0.0"
+val MUnitScalaCheckEffectVersion = "2.1.0-RC1"
 val OpenTelemetryVersion = "1.58.0"
 val OpenTelemetryProtoVersion = "1.9.0-alpha"
-val ScodecVersion = "1.1.38"
-val VaultVersion = "3.6.0"
-val Http4sVersion = "0.23.33"
-val CirceVersion = "0.14.8"
-val ScalaPBCirceVersion = "0.15.1"
-val CaseInsensitiveVersion = "1.4.2"
+val ScodecVersion = "1.2.4"
+val Http4sVersion = "0.23.30-161-f5b9629-SNAPSHOT"
+val CirceVersion = "0.14.15"
+val ScalaPBCirceVersion = "0.16.0"
+val CaseInsensitiveVersion = "1.5.0"
 val ScalaJavaTimeVersion = "2.6.0"
 val ScribeVersion = "3.17.0"
-val Otel4sVersion = "0.14.0"
+val Otel4sVersion = "0.15-ca28b04-SNAPSHOT"
 
 lazy val scalaReflectDependency = Def.settings(
   libraryDependencies ++= {
