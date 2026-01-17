@@ -13,7 +13,7 @@ ThisBuild / developers := List(
 ThisBuild / startYear := Some(2022)
 
 // publish website from this branch
-ThisBuild / tlCiReleaseBranches := Seq("main", "update/sn-0.5-snapshot")
+ThisBuild / tlCiReleaseBranches := Seq("main", "topic/sn-0.5-snapshot")
 ThisBuild / tlSitePublishBranch := Some("main")
 
 ThisBuild / resolvers += Resolver.sonatypeCentralSnapshots
