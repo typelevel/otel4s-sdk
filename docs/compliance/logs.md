@@ -1,4 +1,4 @@
-# Logs Compliance (SDK)
+# Logs
 
 This file tracks compliance for the OpenTelemetry logs specification in this repository.
 

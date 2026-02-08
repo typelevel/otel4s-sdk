@@ -1,4 +1,4 @@
-# Trace Compliance (SDK)
+# Trace
 
 This file tracks compliance for the OpenTelemetry trace specification in this repository.
 

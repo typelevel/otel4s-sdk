@@ -1,4 +1,4 @@
-# Metrics Compliance (SDK)
+# Metrics
 
 This file tracks compliance for the OpenTelemetry metrics specification in this repository.
 

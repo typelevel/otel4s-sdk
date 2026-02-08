@@ -1,4 +1,4 @@
-# Baggage Compliance (API + SDK)
+# Baggage
 
 This file tracks compliance for the OpenTelemetry baggage specification in this repository.
 
