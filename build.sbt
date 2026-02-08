@@ -630,6 +630,10 @@ lazy val docs = project
     ),
     run / fork := true,
     tlSiteApiPackage := Some("org.typelevel.otel4s.sdk"),
+    mdocVariables ++= Map(
+      "OTEL4S_GITHUB_URL" -> "https://github.com/typelevel/otel4s/blob/main",
+      "OTEL4S_SDK_GITHUB_URL" -> "https://github.com/typelevel/otel4s-sdk/blob/main"
+    ),
     laikaConfig := {
       import laika.config.{ChoiceConfig, Selections, SelectionConfig}
 
