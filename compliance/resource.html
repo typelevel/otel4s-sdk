@@ -242,9 +242,9 @@
             <tr>
               <td>Resource detector names</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/resource/sdk.md#resource-detector-name">Detectors SHOULD have unique snake_case names; SDK SHOULD report duplicate names</a></td>
-              <td>Partial</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/resource/HostDetector.scala#L28-L30">HostDetector.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/resource/ProcessRuntimeDetector.scala#L28-L30">ProcessRuntimeDetector.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/autoconfigure/TelemetryResourceAutoConfigure.scala#L142-L164">TelemetryResourceAutoConfigure.scala</a></td>
-              <td>Built-in detector names are stable/snake_case, but duplicate detector names are not explicitly detected and reported as an SDK error.</td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/resource/HostDetector.scala#L28-L30">HostDetector.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/resource/ProcessRuntimeDetector.scala#L28-L30">ProcessRuntimeDetector.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/autoconfigure/TelemetryResourceAutoConfigure.scala#L68-L70">TelemetryResourceAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/autoconfigure/TelemetryResourceAutoConfigure.scala#L192-L209">TelemetryResourceAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/test/scala/org/typelevel/otel4s/sdk/autoconfigure/TelemetryResourceAutoConfigureSuite.scala#L162-L215">TelemetryResourceAutoConfigureSuite.scala</a></td>
+              <td>Built-in detectors keep stable snake_case names, and auto-configuration now validates detector-name uniqueness and fails fast with a configuration error when duplicates are registered (including custom collisions).</td>
             </tr>
             <tr>
               <td>Env resource attributes</td>
