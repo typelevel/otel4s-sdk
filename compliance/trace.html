@@ -280,15 +280,15 @@
               <td>Span exporter</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#go-spanexporter-interface">SpanExporter interface + no-op + composite</a></td>
               <td>Partial</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/SpanExporter.scala#L60-L62">SpanExporter.scala</a></td>
-              <td>Spec includes shutdown + forceFlush; only <code>flush</code> is present</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/SpanExporter.scala#L62-L69">SpanExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/SpanExporter.scala#L145-L153">SpanExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/SpanExporter.scala#L166-L169">SpanExporter.scala</a></td>
+              <td>Interface/noop/composite are implemented; <code>flush</code> serves force-flush semantics, but explicit <code>shutdown</code> is not part of the exporter interface.</td>
             </tr>
             <tr>
               <td>Span exporter</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-exporter">Shutdown + ForceFlush methods</a></td>
               <td>Partial</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/SpanExporter.scala#L60-L62">SpanExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/trace/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/trace/autoconfigure/OtlpSpanExporterAutoConfigure.scala#L65-L68">OtlpSpanExporterAutoConfigure.scala</a></td>
-              <td>Lifecycle handled via Resource in concrete exporters; interface lacks shutdown/forceFlush</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/SpanExporter.scala#L62-L69">SpanExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/SpanExporter.scala#L166-L169">SpanExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/trace/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/trace/autoconfigure/OtlpSpanExporterAutoConfigure.scala#L65-L68">OtlpSpanExporterAutoConfigure.scala</a></td>
+              <td>ForceFlush semantics are represented by <code>flush</code>; lifecycle is Resource-managed in concrete exporters, but explicit <code>shutdown</code> is missing from the interface.</td>
             </tr>
             <tr>
               <td>Span exporter</td>

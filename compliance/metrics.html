@@ -254,8 +254,8 @@
               <td>MetricReader</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#periodic-exporting-metricreader">Interface + periodic reader</a></td>
               <td>Partial</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/MetricReader.scala#L40">MetricReader.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/PeriodicMetricReader.scala#L56-L57">PeriodicMetricReader.scala</a></td>
-              <td>Lifecycle is Resource-managed; no explicit shutdown API; forceFlush does not call exporter ForceFlush</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/MetricReader.scala#L69-L71">MetricReader.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/PeriodicMetricReader.scala#L93-L97">PeriodicMetricReader.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/PeriodicMetricReader.scala#L159-L160">PeriodicMetricReader.scala</a></td>
+              <td><code>forceFlush</code> performs collection and calls exporter <code>flush</code>; lifecycle remains Resource-managed and there is no explicit <code>shutdown</code> API.</td>
             </tr>
             <tr>
               <td>MetricReader</td>
@@ -268,8 +268,8 @@
               <td>MetricExporter</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#push-metric-exporter">Push/Pull interfaces + noop</a></td>
               <td>Partial</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/MetricExporter.scala#L35">MetricExporter.scala</a></td>
-              <td>Lifecycle is Resource-managed; missing ForceFlush / Shutdown on exporter interface</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/MetricExporter.scala#L72-L84">MetricExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/MetricExporter.scala#L98-L100">MetricExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/MetricExporter.scala#L109-L126">MetricExporter.scala</a></td>
+              <td>Push/pull interfaces and noop are implemented; <code>flush</code> covers force-flush semantics, but explicit exporter <code>shutdown</code> is missing.</td>
             </tr>
             <tr>
               <td>MetricProducer</td>
