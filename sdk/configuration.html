@@ -714,6 +714,16 @@
               <td>OTEL_SPAN_ATTRIBUTE_VALUE_LENGTH_LIMIT</td>
               <td>The maximum allowed attribute value size. No limit by default.</td>
             </tr>
+            <tr>
+              <td>otel.attribute.count.limit</td>
+              <td>OTEL_ATTRIBUTE_COUNT_LIMIT</td>
+              <td>Global fallback for span attribute count limit.</td>
+            </tr>
+            <tr>
+              <td>otel.attribute.value.length.limit</td>
+              <td>OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT</td>
+              <td>Global fallback for span attribute value length limit.</td>
+            </tr>
           </tbody>
         </table>
         
@@ -864,14 +874,24 @@
           </thead>
           <tbody>
             <tr>
+              <td>otel.logrecord.attribute.count.limit</td>
+              <td>OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT</td>
+              <td>The maximum allowed log record attribute count. Default is <code>128</code>.</td>
+            </tr>
+            <tr>
+              <td>otel.logrecord.attribute.value.length.limit</td>
+              <td>OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT</td>
+              <td>The maximum allowed attribute value size. No limit by default.</td>
+            </tr>
+            <tr>
               <td>otel.attribute.count.limit</td>
               <td>OTEL_ATTRIBUTE_COUNT_LIMIT</td>
-              <td>The maximum allowed log attribute count. Default is <code>128</code>.</td>
+              <td>Global fallback for attribute count limit.</td>
             </tr>
             <tr>
               <td>otel.attribute.value.length.limit</td>
               <td>OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT</td>
-              <td>The maximum allowed attribute value size. No limit by default.</td>
+              <td>Global fallback for attribute value length limit.</td>
             </tr>
           </tbody>
         </table>

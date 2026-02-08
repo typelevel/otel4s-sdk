@@ -217,8 +217,8 @@
               <td>Span limits</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-limits">Env/config auto-config for span limits</a></td>
               <td>Compliant</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/SpanLimitsAutoConfigure.scala#L43-L45">SpanLimitsAutoConfigure.scala</a></td>
-              <td></td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/SpanLimitsAutoConfigure.scala#L58-L77">SpanLimitsAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/autoconfigure/AttributeLimitsConfigurer.scala#L28-L36">AttributeLimitsConfigurer.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/test/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/SpanLimitsAutoConfigureSuite.scala#L112-L160">SpanLimitsAutoConfigureSuite.scala</a></td>
+              <td>Span-specific attribute limits are supported and override global <code>OTEL_ATTRIBUTE_*</code>; global limits are used as fallback when span-specific values are not set.</td>
             </tr>
             <tr>
               <td>Span limits</td>
