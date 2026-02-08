@@ -60,6 +60,7 @@ This file tracks compliance for the OpenTelemetry metrics specification in this 
 
 ## Cross-cutting specs
 
+- Attribute requirements are tracked in [attributes.md](attributes.md).
 - Instrumentation scope requirements are tracked in [instrumentation-scope.md](instrumentation-scope.md).
 - Resource requirements are tracked in [resource.md](resource.md).
 - SDK environment-variable requirements are tracked in [configuration.md](configuration.md).
