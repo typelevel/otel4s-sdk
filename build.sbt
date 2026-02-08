@@ -632,7 +632,8 @@ lazy val docs = project
     tlSiteApiPackage := Some("org.typelevel.otel4s.sdk"),
     mdocVariables ++= Map(
       "OTEL4S_GITHUB_URL" -> "https://github.com/typelevel/otel4s/blob/main",
-      "OTEL4S_SDK_GITHUB_URL" -> "https://github.com/typelevel/otel4s-sdk/blob/main"
+      "OTEL4S_SDK_GITHUB_URL" -> "https://github.com/typelevel/otel4s-sdk/blob/main",
+      "OTEL_SPEC_GITHUB_URL" -> "https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0"
     ),
     laikaConfig := {
       import laika.config.{ChoiceConfig, Selections, SelectionConfig}
