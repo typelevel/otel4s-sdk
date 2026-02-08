@@ -30,7 +30,7 @@ This file tracks compliance for the OpenTelemetry logs specification in this rep
 | Area | Requirement | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- |
 | Log data types | [LogRecord, severity, attributes, timestamps](@OTEL_SPEC_GITHUB_URL@/specification/logs/data-model.md#log-and-event-record-definition) | Partial | [LogRecordData.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/data/LogRecordData.scala#L44), [LogsProtoEncoder.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala#L43) | Uses FiniteDuration and encodes to nanos; TraceFlags encoded in OTLP |
-| Body types | [AnyValue mapping](@OTEL_SPEC_GITHUB_URL@/specification/logs/data-model.md#field-body) | In Progress | [LogRecordData.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/data/LogRecordData.scala#L44) | AnyValue comes from core |
+| Body types | [AnyValue mapping](@OTEL_SPEC_GITHUB_URL@/specification/logs/data-model.md#field-body) | Compliant | [LogRecordData.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/data/LogRecordData.scala#L44), [LogsProtoEncoder.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala#L43) | SDK uses `AnyValue` for body and OTLP encoding covers scalar/array/map/bytes/empty variants |
 
 ## logs/sdk_exporters
 
