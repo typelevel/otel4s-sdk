@@ -359,8 +359,19 @@
               <td>OTEL_EXPORTER_OTLP_METRICS_TIMEOUT</td>
               <td>The maximum waiting time to send each OTLP trace batch. Default is <code>10 seconds</code>.</td>
             </tr>
+            <tr>
+              <td>otel.exporter.otlp.metrics.temporality.preference</td>
+              <td>OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE</td>
+              <td>Configure default aggregation temporality by instrument kind. Default is <code>cumulative</code>. Supported values (case-insensitive): <code>cumulative</code>, <code>delta</code>, <code>lowmemory</code>.</td>
+            </tr>
+            <tr>
+              <td>otel.exporter.otlp.metrics.default.histogram.aggregation</td>
+              <td>OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION</td>
+              <td>Configure default histogram aggregation. Default is <code>explicit_bucket_histogram</code>. Supported value: <code>explicit_bucket_histogram</code>.</td>
+            </tr>
           </tbody>
         </table>
+        <p><code>otel.exporter.otlp.metrics.default.histogram.aggregation</code> currently rejects <code>base2_exponential_bucket_histogram</code>, since exponential histogram aggregation is not implemented in this SDK yet.</p>
         
         <h3 id="prometheus-exporter" class="section"><a class="anchor-link left" href="#prometheus-exporter"><i class="icofont-laika link">&#xef71;</i></a>Prometheus exporter</h3>
         <p>The exporter launches an HTTP server which responds to the HTTP requests with Prometheus metrics in the appropriate format.</p>
