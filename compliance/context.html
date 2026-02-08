@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content="Typelevel Laika + Helium Theme" />
-  <title>Overview</title>
+  <title>Context</title>
   
   <meta name="author" content="Ross A. Baker"/>
   
@@ -108,25 +108,25 @@
     <li class="level2 nav-leaf"><a href="../instrumentation/logs.html">Logs</a></li>
     <li class="level2 nav-leaf"><a href="../instrumentation/baggage.html">Baggage</a></li>
     <li class="level1 nav-header">SDK</li>
-    <li class="level2 active nav-leaf"><a href="#">Overview</a></li>
-    <li class="level2 nav-leaf"><a href="configuration.html">Configuration</a></li>
-    <li class="level2 nav-leaf"><a href="prometheus-exporter.html">Prometheus Exporter</a></li>
-    <li class="level2 nav-leaf"><a href="testkit.html">Testkit</a></li>
-    <li class="level2 nav-leaf"><a href="aws-resource-detectors.html">AWS | Resource detectors</a></li>
-    <li class="level2 nav-leaf"><a href="aws-xray.html">AWS | X-Ray ID Generator</a></li>
-    <li class="level2 nav-leaf"><a href="aws-xray-propagator.html">AWS | X-Ray propagator</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/overview.html">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/prometheus-exporter.html">Prometheus Exporter</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/testkit.html">Testkit</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-resource-detectors.html">AWS | Resource detectors</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-xray.html">AWS | X-Ray ID Generator</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-xray-propagator.html">AWS | X-Ray propagator</a></li>
     <li class="level1 nav-header">Specification Compliance</li>
-    <li class="level2 nav-leaf"><a href="../compliance/attributes.html">Attributes</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/baggage.html">Baggage</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/resource.html">Resource</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/instrumentation-scope.html">Instrumentation Scope</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/context.html">Context</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/context-propagation.html">Context Propagation</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/logs.html">Logs</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/metrics.html">Metrics</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/trace.html">Trace</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/configuration.html">Configuration</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/compliance-matrix.html">Compliance Matrix</a></li>
+    <li class="level2 nav-leaf"><a href="attributes.html">Attributes</a></li>
+    <li class="level2 nav-leaf"><a href="baggage.html">Baggage</a></li>
+    <li class="level2 nav-leaf"><a href="resource.html">Resource</a></li>
+    <li class="level2 nav-leaf"><a href="instrumentation-scope.html">Instrumentation Scope</a></li>
+    <li class="level2 active nav-leaf"><a href="#">Context</a></li>
+    <li class="level2 nav-leaf"><a href="context-propagation.html">Context Propagation</a></li>
+    <li class="level2 nav-leaf"><a href="logs.html">Logs</a></li>
+    <li class="level2 nav-leaf"><a href="metrics.html">Metrics</a></li>
+    <li class="level2 nav-leaf"><a href="trace.html">Trace</a></li>
+    <li class="level2 nav-leaf"><a href="configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="compliance-matrix.html">Compliance Matrix</a></li>
   </ul>
 
 </nav>
@@ -135,14 +135,10 @@
 
       
 <nav id="page-nav">
-  <p class="header"><a href="#">Overview</a></p>
+  <p class="header"><a href="#">Context</a></p>
 
   <ul class="nav-list">
-    <li class="level1 nav-leaf"><a href="#getting-started">Getting Started</a></li>
-    <li class="level1 nav-leaf"><a href="#configuration">Configuration</a></li>
-    <li class="level1 nav-node"><a href="#limitations">Limitations</a></li>
-    <li class="level2 nav-leaf"><a href="#no-autoload-of-third-party-components">No autoload of third-party components</a></li>
-    <li class="level2 nav-leaf"><a href="#metrics-missing-features">Metrics missing features</a></li>
+    <li class="level1 nav-leaf"><a href="#context-readme-md-checklist"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/context/README.md">context/README.md</a> checklist</a></li>
   </ul>
 
   <p class="footer"></p>
@@ -151,80 +147,52 @@
 
       <main class="content">
 
-        <h1 id="overview" class="title">Overview</h1>
-        <p>SDK modules are an alternative to the <a href="https://typelevel.org/otel4s/oteljava/overview.html">otel4s-oteljava</a> implementation.
-        All modules are implemented in Scala and available for all platforms: JVM, Scala Native, and Scala.js.
-        The implementation remains <strong>experimental</strong> and some functionality may be lacking.</p>
+        <h1 id="context" class="title">Context</h1>
+        <p>This file tracks compliance for OpenTelemetry context data model and context API requirements in this repository.</p>
+        <p>Context propagation-specific requirements are tracked in <a href="context-propagation.html">context-propagation.md</a>.</p>
         
-        <h2 id="getting-started" class="section"><a class="anchor-link left" href="#getting-started"><i class="icofont-laika link">&#xef71;</i></a>Getting Started</h2>
-        <div class="tab-container" data-tab-group="build-tool">
-          <ul class="tab-group">
-            <li class="tab active" data-choice-name="sbt"><a href="#">sbt</a></li>
-            <li class="tab" data-choice-name="scala-cli"><a href="#">Scala CLI</a></li>
-          </ul>
-          <div class="tab-content active" data-choice-name="sbt">
-            <p>Add settings to the <code>build.sbt</code>:</p>
-            <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">libraryDependencies</span><span> ++= </span><span class="type-name">Seq</span><span>(
-  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %%% </span><span class="string-literal">&quot;otel4s-sdk&quot;</span><span> % </span><span class="string-literal">&quot;0.16.0&quot;</span><span>, </span><span class="comment">// &lt;1&gt;
-</span><span>  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %%% </span><span class="string-literal">&quot;otel4s-sdk-exporter&quot;</span><span> % </span><span class="string-literal">&quot;0.16.0&quot;</span><span> </span><span class="comment">// &lt;2&gt;
-</span><span>)</span></code></pre>
-          </div>
-          <div class="tab-content" data-choice-name="scala-cli">
-            <p>Add directives to the <code>*.scala</code> file:</p>
-            <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">//&gt; using dep &quot;org.typelevel::otel4s-sdk::0.16.0&quot; // &lt;1&gt;
-//&gt; using dep &quot;org.typelevel::otel4s-sdk-exporter::0.16.0&quot; // &lt;2&gt;</span></code></pre>
-          </div>
-        </div>
-        <ol class="arabic">
-          <li>Add the <code>otel4s-sdk</code> library</li>
-          <li>Add the <code>otel4s-sdk-exporter</code> library. Without the exporter, the application will crash</li>
-        </ol>
-        <hr>
-        <p>Then use <code>OpenTelemetrySdk.autoConfigured</code> to autoconfigure the SDK:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.{</span><span class="type-name">IO</span><span>, </span><span class="type-name">IOApp</span><span>}
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="type-name">OpenTelemetrySdk</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">exporter</span><span>.</span><span class="identifier">otlp</span><span>.</span><span class="identifier">autoconfigure</span><span>.</span><span class="type-name">OtlpExportersAutoConfigure</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="type-name">MeterProvider</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="type-name">TracerProvider</span><span>
-
-</span><span class="keyword">object</span><span> </span><span class="type-name">TelemetryApp</span><span> </span><span class="keyword">extends</span><span> </span><span class="type-name">IOApp</span><span>.</span><span class="type-name">Simple</span><span> {
-
-  </span><span class="keyword">def</span><span> </span><span class="declaration-name">run</span><span>: </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
-    </span><span class="type-name">OpenTelemetrySdk</span><span>
-      .</span><span class="identifier">autoConfigured</span><span>[</span><span class="type-name">IO</span><span>]( </span><span class="comment">// register OTLP exporters configurer
-</span><span>        </span><span class="identifier">_</span><span>.</span><span class="identifier">addExportersConfigurer</span><span>(</span><span class="type-name">OtlpExportersAutoConfigure</span><span>[</span><span class="type-name">IO</span><span>]) 
-      )
-      .</span><span class="identifier">use</span><span> { </span><span class="identifier">autoConfigured</span><span> =&gt;
-        </span><span class="keyword">val</span><span> </span><span class="identifier">sdk</span><span> = </span><span class="identifier">autoConfigured</span><span>.</span><span class="identifier">sdk</span><span>
-        </span><span class="identifier">program</span><span>(</span><span class="identifier">sdk</span><span>.</span><span class="identifier">meterProvider</span><span>, </span><span class="identifier">sdk</span><span>.</span><span class="identifier">tracerProvider</span><span>)
-      }
-
-  </span><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span>(
-      </span><span class="identifier">meterProvider</span><span>: </span><span class="type-name">MeterProvider</span><span>[</span><span class="type-name">IO</span><span>], 
-      </span><span class="identifier">tracerProvider</span><span>: </span><span class="type-name">TracerProvider</span><span>[</span><span class="type-name">IO</span><span>]
-  ): </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
-    ???
-}</span></code></pre>
-        
-        <h2 id="configuration" class="section"><a class="anchor-link left" href="#configuration"><i class="icofont-laika link">&#xef71;</i></a>Configuration</h2>
-        <p>The <code>.autoConfigured(...)</code> relies on the environment variables and system properties to configure the SDK.
-        For example, use <code>export OTEL_SERVICE_NAME=auth-service</code> to configure the name of the service.</p>
-        <p>See the full set of the <a href="configuration.html">supported options</a>.</p>
-        
-        <h2 id="limitations" class="section"><a class="anchor-link left" href="#limitations"><i class="icofont-laika link">&#xef71;</i></a>Limitations</h2>
-        
-        <h3 id="no-autoload-of-third-party-components" class="section"><a class="anchor-link left" href="#no-autoload-of-third-party-components"><i class="icofont-laika link">&#xef71;</i></a>No autoload of third-party components</h3>
-        <p>Since Scala Native and Scala.js lack <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html">SPI</a> support, 
-        third-party components cannot be loaded dynamically as OpenTelemetry Java does.</p>
-        <p>Hence, the configurers must be registered manually:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">OpenTelemetrySdk</span><span>.</span><span class="identifier">autoConfigured</span><span>[</span><span class="type-name">IO</span><span>](
-  </span><span class="identifier">_</span><span>.</span><span class="identifier">addExportersConfigurer</span><span>(</span><span class="type-name">OtlpExportersAutoConfigure</span><span>[</span><span class="type-name">IO</span><span>])
-)</span></code></pre>
-        
-        <h3 id="metrics-missing-features" class="section"><a class="anchor-link left" href="#metrics-missing-features"><i class="icofont-laika link">&#xef71;</i></a>Metrics missing features</h3>
-        <ul>
-          <li><code>Exponential Histogram</code> aggregation is not supported yet</li>
-        </ul>
+        <h2 id="context-readme-md-checklist" class="section"><a class="anchor-link left" href="#context-readme-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/context/README.md">context/README.md</a> checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Context data model</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/context/README.md#overview">Context is immutable; write operations return a new Context</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/Context.scala#L25-L26">Context.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/Context.scala#L136-L137">Context.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/test/scala/org/typelevel/otel4s/sdk/context/ContextSuite.scala#L57-L59">ContextSuite.scala</a></td>
+              <td>SDK context storage is immutable and updates create new map-backed instances.</td>
+            </tr>
+            <tr>
+              <td>Create key</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/context/README.md#create-a-key">CreateKey takes debug name and returns opaque key; same name should not imply same key</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/Context.scala#L95-L97">Context.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/test/scala/org/typelevel/otel4s/sdk/context/ContextKeySuite.scala#L50-L55">ContextKeySuite.scala</a>, <a href="https://github.com/typelevel/otel4s/blob/main/core/common/src/main/scala/org/typelevel/otel4s/context/Key.scala#L45-L47">Key.scala</a></td>
+              <td>Keys are generated via <code>Unique</code> token and are non-equal even with same debug name.</td>
+            </tr>
+            <tr>
+              <td>Get/Set value</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/context/README.md#get-value">Get value by key and set value into Context</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/Context.scala#L33-L34">Context.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/Context.scala#L44-L45">Context.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/test/scala/org/typelevel/otel4s/sdk/context/ContextSuite.scala#L48-L52">ContextSuite.scala</a></td>
+              <td>Typed <code>get</code>/<code>updated</code> operations are exposed and covered by tests.</td>
+            </tr>
+            <tr>
+              <td>Optional global operations</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/context/README.md#optional-global-operations">Get current Context + attach/detach for implicit context</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/common/src/main/scala/org/typelevel/otel4s/context/LocalProvider.scala#L138-L142">LocalProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/package.scala#L26-L27">package.scala</a>, <a href="https://github.com/typelevel/otel4s/blob/main/core/common/src/test/scala/org/typelevel/otel4s/context/LocalProviderSuite.scala#L56-L60">LocalProviderSuite.scala</a></td>
+              <td><code>ask</code> + scoped <code>local</code> provide current/attach-restore semantics; explicit token API is not exposed directly by otel4s.</td>
+            </tr>
+          </tbody>
+        </table>
 
         
 <hr class="footer-rule"/>

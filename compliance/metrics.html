@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Typelevel Laika + Helium Theme" />
+  <title>Metrics</title>
+  
+  <meta name="author" content="Ross A. Baker"/>
+  
+  <meta name="author" content="Maksym Ochenashko"/>
+  
+  
+  <meta name="description" content="docs"/>
+  
+  
+  
+  <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
+  
+  <link rel="stylesheet" type="text/css" href="../helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/site/laika-helium.css" />
+  <script src="../helium/site/laika-helium.js"></script>
+  
+  
+  <script> /* for avoiding page load transitions */ </script>
+</head>
+
+  <body>
+
+    <header id="top-bar" class="light-default dark-default">
+
+  <div class="row">
+    <a id="nav-icon">
+      <i class="icofont-laika navigationMenu" title="Navigation">&#xefa2;</i>
+    </a>
+    
+    
+  </div>
+
+  <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
+
+  <div class="row links">
+    
+    <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/otel4s-sdk-docs_2.13/0.16.0/org/typelevel/otel4s/sdk/index.html"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/otel4s-sdk"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="svg-shape">
+    <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+  </g>
+</svg></span></a>
+    
+  </div>  
+
+</header>
+    
+    <nav id="sidebar">
+
+  <div class="row">
+    
+    <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/otel4s-sdk-docs_2.13/0.16.0/org/typelevel/otel4s/sdk/index.html"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/otel4s-sdk"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="svg-shape">
+    <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+  </g>
+</svg></span></a>
+    
+  </div>
+
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="../">otel4s-sdk</a></li>
+    <li class="level1 nav-leaf"><a href="../modules-structure.html">Modules structure</a></li>
+    <li class="level1 nav-leaf"><a href="../ecosystem.html">Ecosystem</a></li>
+    <li class="level1 nav-header">Instrumentation</li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/metrics-cats-effect-io-runtime.html">Metrics | Cats Effect IO runtime</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/tracing-cross-service-propagation.html">Tracing | Cross-service propagation</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/logs.html">Logs</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/baggage.html">Baggage</a></li>
+    <li class="level1 nav-header">SDK</li>
+    <li class="level2 nav-leaf"><a href="../sdk/overview.html">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/prometheus-exporter.html">Prometheus Exporter</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/testkit.html">Testkit</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-resource-detectors.html">AWS | Resource detectors</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-xray.html">AWS | X-Ray ID Generator</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-xray-propagator.html">AWS | X-Ray propagator</a></li>
+    <li class="level1 nav-header">Specification Compliance</li>
+    <li class="level2 nav-leaf"><a href="attributes.html">Attributes</a></li>
+    <li class="level2 nav-leaf"><a href="baggage.html">Baggage</a></li>
+    <li class="level2 nav-leaf"><a href="resource.html">Resource</a></li>
+    <li class="level2 nav-leaf"><a href="instrumentation-scope.html">Instrumentation Scope</a></li>
+    <li class="level2 nav-leaf"><a href="context.html">Context</a></li>
+    <li class="level2 nav-leaf"><a href="context-propagation.html">Context Propagation</a></li>
+    <li class="level2 nav-leaf"><a href="logs.html">Logs</a></li>
+    <li class="level2 active nav-leaf"><a href="#">Metrics</a></li>
+    <li class="level2 nav-leaf"><a href="trace.html">Trace</a></li>
+    <li class="level2 nav-leaf"><a href="configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="compliance-matrix.html">Compliance Matrix</a></li>
+  </ul>
+
+</nav>
+
+    <div id="container">
+
+      
+<nav id="page-nav">
+  <p class="header"><a href="#">Metrics</a></p>
+
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="#scope">Scope</a></li>
+    <li class="level1 nav-leaf"><a href="#module-mapping">Module mapping</a></li>
+    <li class="level1 nav-leaf"><a href="#metrics-sdk-md-checklist"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md">metrics/sdk.md</a> checklist</a></li>
+    <li class="level1 nav-leaf"><a href="#metrics-data-model-md-checklist"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md">metrics/data-model.md</a> checklist</a></li>
+    <li class="level1 nav-leaf"><a href="#metrics-sdk_exporters">metrics/sdk_exporters</a></li>
+    <li class="level1 nav-leaf"><a href="#cross-cutting-specs">Cross-cutting specs</a></li>
+  </ul>
+
+  <p class="footer"></p>
+</nav>
+
+
+      <main class="content">
+
+        <h1 id="metrics" class="title">Metrics</h1>
+        <p>This file tracks compliance for the OpenTelemetry metrics specification in this repository.</p>
+        
+        <h2 id="scope" class="section"><a class="anchor-link left" href="#scope"><i class="icofont-laika link">&#xef71;</i></a>Scope</h2>
+        <ul>
+          <li>This repository implements the SDK. The Metrics API types live in the external <code>otel4s-core-*</code> modules.</li>
+          <li>Metrics API-specific specs (e.g. <code>metrics/api.md</code>) are tracked as external dependencies here.</li>
+        </ul>
+        
+        <h2 id="module-mapping" class="section"><a class="anchor-link left" href="#module-mapping"><i class="icofont-laika link">&#xef71;</i></a>Module mapping</h2>
+        <ul>
+          <li>SDK core: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics">metrics</a></li>
+          <li>SDK exporters: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics">metrics</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/prometheus">prometheus</a></li>
+          <li>SDK data model: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/data">data</a></li>
+        </ul>
+        
+        <h2 id="metrics-sdk-md-checklist" class="section"><a class="anchor-link left" href="#metrics-sdk-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md">metrics/sdk.md</a> checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>MeterProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#meterprovider">Builder supports resource, views, readers, producers</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/SdkMeterProvider.scala#L53-L56">SdkMeterProvider.scala</a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>MeterProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#meterprovider">Default config (default resource, no readers/producers, noop lookup)</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/SdkMeterProvider.scala#L53-L56">SdkMeterProvider.scala</a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>MeterProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#meterprovider">ForceFlush / Shutdown support</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/autoconfigure/MeterProviderAutoConfigure.scala#L62-L65">MeterProviderAutoConfigure.scala</a></td>
+              <td>Provider lifecycle is Resource-managed; no explicit shutdown/forceFlush API in core interface</td>
+            </tr>
+            <tr>
+              <td>Meter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#meterprovider">Noop meter when no readers configured</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/SdkMeterProvider.scala#L62-L65">SdkMeterProvider.scala</a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Views</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#a-warning-will-be-emitted-for-conflicting-metric-identities-on-counter-x-as-two-views-matching-that-instrument">View + selector registry</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/view/ViewRegistry.scala#L57-L62">ViewRegistry.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/MetricStorageRegistry.scala#L72-L77">MetricStorageRegistry.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/MeterSharedState.scala#L106-L113">MeterSharedState.scala</a></td>
+              <td>Selector matching and duplicate-name conflict warning are implemented</td>
+            </tr>
+            <tr>
+              <td>Aggregation</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#only-counter-x-will-be-exported-with-the-default-configuration-match-all-drop-aggregation-does-not-result-in">Aggregation + selectors + temporality selectors</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/Aggregation.scala#L95-L117">Aggregation.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/AggregationSelector.scala#L35-L49">AggregationSelector.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/AggregationTemporalitySelector.scala#L41-L50">AggregationTemporalitySelector.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/aggregation/Aggregator.scala#L57-L68">Aggregator.scala</a></td>
+              <td><code>Aggregation.Sum</code> compatibility set omits <code>ObservableCounter</code>, so <code>View.withAggregation(Aggregation.sum)</code> is treated as incompatible for that instrument</td>
+            </tr>
+            <tr>
+              <td>Attribute limits</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#attribute-limits">Attributes are exempt from limits</a></td>
+              <td>Not Applicable</td>
+              <td></td>
+              <td>Spec states metric attributes are exempt from attribute limits</td>
+            </tr>
+            <tr>
+              <td>Cardinality limits</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#cardinality-limits">Default 2000 + overflow attribute + warning</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/CardinalityLimitSelector.scala#L38-L39">CardinalityLimitSelector.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/SynchronousStorage.scala#L141-L145">SynchronousStorage.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/AsynchronousStorage.scala#L72-L76">AsynchronousStorage.scala</a></td>
+              <td>Uses <code>otel.metric.overflow</code> attribute on overflow</td>
+            </tr>
+            <tr>
+              <td>Exemplar</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#exemplar">Exemplar data + filters + reservoirs</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exemplar/ExemplarFilter.scala#L54-L55">ExemplarFilter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exemplar/ExemplarFilter.scala#L69-L75">ExemplarFilter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exemplar/ExemplarReservoir.scala#L67-L74">ExemplarReservoir.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exemplar/Reservoirs.scala#L76-L79">Reservoirs.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/ExemplarData.scala#L48-L57">ExemplarData.scala</a></td>
+              <td>AlwaysOn/AlwaysOff/TraceBased filters and fixed-size/histogram reservoirs are implemented</td>
+            </tr>
+            <tr>
+              <td>Exemplar</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#custom-exemplarreservoir">Custom ExemplarReservoir per-view configurability</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/view/View.scala#L36">View.scala</a></td>
+              <td>View does not expose reservoir configuration</td>
+            </tr>
+            <tr>
+              <td>MetricReader</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#periodic-exporting-metricreader">Interface + periodic reader</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/MetricReader.scala#L40">MetricReader.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/PeriodicMetricReader.scala#L56-L57">PeriodicMetricReader.scala</a></td>
+              <td>Lifecycle is Resource-managed; no explicit shutdown API; forceFlush does not call exporter ForceFlush</td>
+            </tr>
+            <tr>
+              <td>MetricReader</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#metricreader">Prevent registration on multiple MeterProviders</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/PeriodicMetricReader.scala#L56-L57">PeriodicMetricReader.scala</a></td>
+              <td>Logs warning but does not error</td>
+            </tr>
+            <tr>
+              <td>MetricExporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#push-metric-exporter">Push/Pull interfaces + noop</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/MetricExporter.scala#L35">MetricExporter.scala</a></td>
+              <td>Lifecycle is Resource-managed; missing ForceFlush / Shutdown on exporter interface</td>
+            </tr>
+            <tr>
+              <td>MetricProducer</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#metricproducer">Interface + registration</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/MetricProducer.scala#L34">MetricProducer.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/MetricReader.scala#L40">MetricReader.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/PeriodicMetricReader.scala#L54">PeriodicMetricReader.scala</a></td>
+              <td><code>produce</code> API exists and producers are registered by reader</td>
+            </tr>
+            <tr>
+              <td>MetricFilter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#metricfilter">Filtering support</a></td>
+              <td>Not Implemented</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/SdkMeterProvider.scala#L193-L200">SdkMeterProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/SdkMeterProvider.scala#L212-L219">SdkMeterProvider.scala</a></td>
+              <td>No MetricFilter API or implementation found; builder/configuration path supports views and exemplar filtering only</td>
+            </tr>
+            <tr>
+              <td>Temporality</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#counter-x-will-be-exported-as-cumulative-sum">Delta/Cumulative collection semantics</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/SynchronousStorage.scala#L56-L57">SynchronousStorage.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/AsynchronousStorage.scala#L55">AsynchronousStorage.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/exporter/RegisteredReader.scala#L27">RegisteredReader.scala</a></td>
+              <td>Delta uses per-reader last-collect timestamp and reset/diff semantics; cumulative uses stable start times</td>
+            </tr>
+            <tr>
+              <td>Numerical limits</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#numerical-limits-handling">Handling for NaN/Inf, etc.</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/SynchronousStorage.scala#L48">SynchronousStorage.scala</a></td>
+              <td>Drops NaN for synchronous double values; no explicit Inf handling</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="metrics-data-model-md-checklist" class="section"><a class="anchor-link left" href="#metrics-data-model-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md">metrics/data-model.md</a> checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Metric data types</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md#metric-points">MetricData, Points, Temporality</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/MetricData.scala#L36-L50">MetricData.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/MetricPoints.scala#L33-L36">MetricPoints.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/PointData.scala#L43-L48">PointData.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/AggregationTemporality.scala#L33-L37">AggregationTemporality.scala</a></td>
+              <td>Core metric container/points/temporality model is implemented; unsupported point kinds are tracked separately</td>
+            </tr>
+            <tr>
+              <td>Point kinds</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md#point-kinds">Sum/Gauge/Histogram</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/MetricPoints.scala#L33-L36">MetricPoints.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/PointData.scala#L43">PointData.scala</a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Point kinds</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md#point-kinds">ExponentialHistogram</a></td>
+              <td>Missing</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/MetricPoints.scala#L33-L36">MetricPoints.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/PointData.scala#L43">PointData.scala</a></td>
+              <td>No exponential histogram support in data model</td>
+            </tr>
+            <tr>
+              <td>Point kinds</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md#point-kinds">Summary (legacy)</a></td>
+              <td>Missing</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/MetricPoints.scala#L33-L36">MetricPoints.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/PointData.scala#L43">PointData.scala</a></td>
+              <td>No summary support in data model</td>
+            </tr>
+            <tr>
+              <td>Exemplars</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md#exemplars">Exemplar data and trace context</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/ExemplarData.scala#L48">ExemplarData.scala</a></td>
+              <td>Includes filtered attributes, timestamp, value, and optional trace context</td>
+            </tr>
+            <tr>
+              <td>Data point flags</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md#data-point-flags">No-recorded-value flag</a></td>
+              <td>Missing</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/PointData.scala#L43">PointData.scala</a></td>
+              <td>No flags representation in PointData</td>
+            </tr>
+            <tr>
+              <td>Temporality</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md#temporality">Delta/Cumulative semantics</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/SynchronousStorage.scala#L56-L57">SynchronousStorage.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/AsynchronousStorage.scala#L55">AsynchronousStorage.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/exporter/RegisteredReader.scala#L27">RegisteredReader.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/SdkMeterProvider.scala#L52">SdkMeterProvider.scala</a></td>
+              <td>Per-reader last-collect timestamps used for delta; cumulative keeps fixed start time</td>
+            </tr>
+            <tr>
+              <td>Time windows</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md#cumulative-streams-handling-unknown-start-time">Start/End timestamps per point</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/TimeWindow.scala#L30-L32">TimeWindow.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/MeterSharedState.scala#L217-L220">MeterSharedState.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/SynchronousStorage.scala#L109-L113">SynchronousStorage.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/AsynchronousStorage.scala#L71-L72">AsynchronousStorage.scala</a></td>
+              <td>Start/end windows are carried into all point generation paths</td>
+            </tr>
+            <tr>
+              <td>Resets/Gaps/Overlap</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/data-model.md#resets-and-gaps">Handling</a></td>
+              <td>Missing</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/SynchronousStorage.scala#L48">SynchronousStorage.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/AsynchronousStorage.scala#L50">AsynchronousStorage.scala</a></td>
+              <td>No explicit reset-gap-overlap handling observed in SDK data model or storage</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="metrics-sdk_exporters" class="section"><a class="anchor-link left" href="#metrics-sdk_exporters"><i class="icofont-laika link">&#xef71;</i></a>metrics/sdk_exporters</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SDK Exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk_exporters/stdout.md">stdout.md</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/exporter/ConsoleMetricExporter.scala#L38-L40">ConsoleMetricExporter.scala</a></td>
+              <td>Verify output format requirements</td>
+            </tr>
+            <tr>
+              <td>SDK Exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk_exporters/in-memory.md">in-memory.md</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics-testkit/src/main/scala/org/typelevel/otel4s/sdk/testkit/metrics/InMemoryMetricExporter.scala#L40-L47">InMemoryMetricExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics-testkit/src/main/scala/org/typelevel/otel4s/sdk/testkit/metrics/InMemoryMetricReader.scala#L36-L43">InMemoryMetricReader.scala</a></td>
+              <td>Available in testkit module; not exposed as a production exporter module under <code>sdk-exporter/*</code></td>
+            </tr>
+            <tr>
+              <td>SDK Exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk_exporters/otlp.md">otlp.md</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/OtlpMetricExporter.scala#L62-L68">OtlpMetricExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/autoconfigure/OtlpMetricExporterAutoConfigure.scala#L69-L77">OtlpMetricExporterAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/common/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/autoconfigure/OtlpClientAutoConfigure.scala#L82-L90">OtlpClientAutoConfigure.scala</a></td>
+              <td>OTLP protocol config supported; missing env config for temporality preference + default histogram aggregation</td>
+            </tr>
+            <tr>
+              <td>SDK Exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk_exporters/prometheus.md">prometheus.md</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/prometheus/src/main/scala/org/typelevel/otel4s/sdk/exporter/prometheus/PrometheusMetricExporter.scala#L47-L49">PrometheusMetricExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/prometheus/src/main/scala/org/typelevel/otel4s/sdk/exporter/prometheus/PrometheusHttpRoutes.scala#L55-L57">PrometheusHttpRoutes.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/prometheus/src/main/scala/org/typelevel/otel4s/sdk/exporter/prometheus/PrometheusWriter.scala#L261-L269">PrometheusWriter.scala</a></td>
+              <td>Pull exporter with text format 0.0.4, cumulative temporality; content negotiation is minimal (text/* only), no translation_strategy config</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="cross-cutting-specs" class="section"><a class="anchor-link left" href="#cross-cutting-specs"><i class="icofont-laika link">&#xef71;</i></a>Cross-cutting specs</h2>
+        <ul>
+          <li>Attribute requirements are tracked in <a href="attributes.html">attributes.md</a>.</li>
+          <li>Instrumentation scope requirements are tracked in <a href="instrumentation-scope.html">instrumentation-scope.md</a>.</li>
+          <li>Resource requirements are tracked in <a href="resource.html">resource.md</a>.</li>
+          <li>SDK environment-variable requirements are tracked in <a href="configuration.html">configuration.md</a>.</li>
+        </ul>
+
+        
+<hr class="footer-rule"/>
+<footer>
+  otel4s-sdk is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache-2.0</a> license.
+</footer>
+
+
+      </main>
+
+    </div>
+
+  </body>
+
+</html>

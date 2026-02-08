@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Typelevel Laika + Helium Theme" />
+  <title>Trace</title>
+  
+  <meta name="author" content="Ross A. Baker"/>
+  
+  <meta name="author" content="Maksym Ochenashko"/>
+  
+  
+  <meta name="description" content="docs"/>
+  
+  
+  
+  <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
+  
+  <link rel="stylesheet" type="text/css" href="../helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/site/laika-helium.css" />
+  <script src="../helium/site/laika-helium.js"></script>
+  
+  
+  <script> /* for avoiding page load transitions */ </script>
+</head>
+
+  <body>
+
+    <header id="top-bar" class="light-default dark-default">
+
+  <div class="row">
+    <a id="nav-icon">
+      <i class="icofont-laika navigationMenu" title="Navigation">&#xefa2;</i>
+    </a>
+    
+    
+  </div>
+
+  <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
+
+  <div class="row links">
+    
+    <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/otel4s-sdk-docs_2.13/0.16.0/org/typelevel/otel4s/sdk/index.html"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/otel4s-sdk"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="svg-shape">
+    <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+  </g>
+</svg></span></a>
+    
+  </div>  
+
+</header>
+    
+    <nav id="sidebar">
+
+  <div class="row">
+    
+    <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/otel4s-sdk-docs_2.13/0.16.0/org/typelevel/otel4s/sdk/index.html"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/otel4s-sdk"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="svg-shape">
+    <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+  </g>
+</svg></span></a>
+    
+  </div>
+
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="../">otel4s-sdk</a></li>
+    <li class="level1 nav-leaf"><a href="../modules-structure.html">Modules structure</a></li>
+    <li class="level1 nav-leaf"><a href="../ecosystem.html">Ecosystem</a></li>
+    <li class="level1 nav-header">Instrumentation</li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/metrics-cats-effect-io-runtime.html">Metrics | Cats Effect IO runtime</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/tracing-cross-service-propagation.html">Tracing | Cross-service propagation</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/logs.html">Logs</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/baggage.html">Baggage</a></li>
+    <li class="level1 nav-header">SDK</li>
+    <li class="level2 nav-leaf"><a href="../sdk/overview.html">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/prometheus-exporter.html">Prometheus Exporter</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/testkit.html">Testkit</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-resource-detectors.html">AWS | Resource detectors</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-xray.html">AWS | X-Ray ID Generator</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-xray-propagator.html">AWS | X-Ray propagator</a></li>
+    <li class="level1 nav-header">Specification Compliance</li>
+    <li class="level2 nav-leaf"><a href="attributes.html">Attributes</a></li>
+    <li class="level2 nav-leaf"><a href="baggage.html">Baggage</a></li>
+    <li class="level2 nav-leaf"><a href="resource.html">Resource</a></li>
+    <li class="level2 nav-leaf"><a href="instrumentation-scope.html">Instrumentation Scope</a></li>
+    <li class="level2 nav-leaf"><a href="context.html">Context</a></li>
+    <li class="level2 nav-leaf"><a href="context-propagation.html">Context Propagation</a></li>
+    <li class="level2 nav-leaf"><a href="logs.html">Logs</a></li>
+    <li class="level2 nav-leaf"><a href="metrics.html">Metrics</a></li>
+    <li class="level2 active nav-leaf"><a href="#">Trace</a></li>
+    <li class="level2 nav-leaf"><a href="configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="compliance-matrix.html">Compliance Matrix</a></li>
+  </ul>
+
+</nav>
+
+    <div id="container">
+
+      
+<nav id="page-nav">
+  <p class="header"><a href="#">Trace</a></p>
+
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="#scope">Scope</a></li>
+    <li class="level1 nav-leaf"><a href="#module-mapping">Module mapping</a></li>
+    <li class="level1 nav-leaf"><a href="#trace-sdk-md-checklist"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md">trace/sdk.md</a> checklist</a></li>
+    <li class="level1 nav-leaf"><a href="#trace-tracestate-handling-md-checklist"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/tracestate-handling.md">trace/tracestate-handling.md</a> checklist</a></li>
+    <li class="level1 nav-leaf"><a href="#trace-tracestate-probability-sampling-md-checklist"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/tracestate-probability-sampling.md">trace/tracestate-probability-sampling.md</a> checklist</a></li>
+    <li class="level1 nav-leaf"><a href="#trace-sdk_exporters">trace/sdk_exporters</a></li>
+    <li class="level1 nav-leaf"><a href="#trace-api-md-checklist-external-otel4s-core"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md">trace/api.md</a> checklist (external: otel4s-core)</a></li>
+    <li class="level1 nav-leaf"><a href="#trace-api-md-context-interaction-checklist-external-otel4s-core"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md">trace/api.md</a> context interaction checklist (external: otel4s-core)</a></li>
+    <li class="level1 nav-leaf"><a href="#trace-exceptions-md-checklist"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/exceptions.md">trace/exceptions.md</a> checklist</a></li>
+    <li class="level1 nav-leaf"><a href="#cross-cutting-specs">Cross-cutting specs</a></li>
+  </ul>
+
+  <p class="footer"></p>
+</nav>
+
+
+      <main class="content">
+
+        <h1 id="trace" class="title">Trace</h1>
+        <p>This file tracks compliance for the OpenTelemetry trace specification in this repository.</p>
+        
+        <h2 id="scope" class="section"><a class="anchor-link left" href="#scope"><i class="icofont-laika link">&#xef71;</i></a>Scope</h2>
+        <ul>
+          <li>This repository implements the SDK. The Trace API types live in the external <code>otel4s-core-*</code> modules.</li>
+          <li>Trace API-specific specs (e.g. <code>trace/api.md</code>, <code>trace/exceptions.md</code>) are tracked as external dependencies here.</li>
+        </ul>
+        
+        <h2 id="module-mapping" class="section"><a class="anchor-link left" href="#module-mapping"><i class="icofont-laika link">&#xef71;</i></a>Module mapping</h2>
+        <ul>
+          <li>SDK core: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace">trace</a></li>
+          <li>SDK exporters: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/trace">trace</a></li>
+          <li>Context propagation: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/context/propagation">propagation</a></li>
+          <li>Contrib (non-core): <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-contrib/aws/xray">xray</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-contrib/aws/xray-propagator">xray-propagator</a></li>
+        </ul>
+        
+        <h2 id="trace-sdk-md-checklist" class="section"><a class="anchor-link left" href="#trace-sdk-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md">trace/sdk.md</a> checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>TracerProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#tracer-provider">Builder supports id generator, resource, span limits, sampler, propagators, processors</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L39-L42">SdkTracerProvider.scala</a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>TracerProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#tracer-provider">Default config (random ids, default resource, default span limits, parent-based always-on sampler)</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L39-L42">SdkTracerProvider.scala</a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>TracerProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#tracer-provider">Shutdown + ForceFlush on provider (invoke processors)</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/TracerProviderAutoConfigure.scala#L77-L80">TracerProviderAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L307-L310">BatchSpanProcessor.scala</a></td>
+              <td>Processor lifecycles are Resource-managed; no explicit shutdown/forceFlush API on provider</td>
+            </tr>
+            <tr>
+              <td>Span limits</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-limits">Span limits type + builder with defaults</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SpanLimits.scala#L65-L71">SpanLimits.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SpanLimits.scala#L105-L113">SpanLimits.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SpanLimits.scala#L175-L201">SpanLimits.scala</a></td>
+              <td>Span limits type and builder defaults are implemented with spec-aligned default values.</td>
+            </tr>
+            <tr>
+              <td>Span limits</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-limits">Env/config auto-config for span limits</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/SpanLimitsAutoConfigure.scala#L43-L45">SpanLimitsAutoConfigure.scala</a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Span limits</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-limits">Logging when limits drop data</a></td>
+              <td>Not Implemented</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/data/LimitedData.scala#L44">LimitedData.scala</a></td>
+              <td>No once-per-span log when attributes/events/links are dropped</td>
+            </tr>
+            <tr>
+              <td>Id generator</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#idgenerator-randomness">Default random ids</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L163-L166">SdkTracerProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/IdGenerator.scala#L63-L72">IdGenerator.scala</a></td>
+              <td>Default builder wires <code>IdGenerator.random</code>; random generator produces non-zero span/trace IDs.</td>
+            </tr>
+            <tr>
+              <td>Id generator</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#idgenerator-randomness">Custom IdGenerator support</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L182-L183">SdkTracerProvider.scala</a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Sampling</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#sampling">Sampler interface + parent-based + trace-id-ratio</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/samplers/Sampler.scala#L55-L63">Sampler.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/samplers/ParentBasedSampler.scala#L49-L57">ParentBasedSampler.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/samplers/TraceIdRatioBasedSampler.scala#L53-L58">TraceIdRatioBasedSampler.scala</a></td>
+              <td>No ProbabilitySampler, AlwaysRecord, CompositeSampler; no warnings when TraceIdRatioBased used as child sampler</td>
+            </tr>
+            <tr>
+              <td>Span processor</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-processor">SpanProcessor interface with onStart/onEnd + forceFlush</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/SpanProcessor.scala#L58-L60">SpanProcessor.scala</a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Span processor</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-processor">OnEnding hook</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/SpanProcessor.scala#L58-L60">SpanProcessor.scala</a></td>
+              <td><code>onEnd</code> exists with <code>SpanData</code> snapshot; no distinct pre-end OnEnding hook</td>
+            </tr>
+            <tr>
+              <td>Span processor</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-processor">Shutdown support</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L57-L60">BatchSpanProcessor.scala</a></td>
+              <td>Batch processor finalizer flushes (<code>exportAll</code>); no explicit shutdown/forceFlush API</td>
+            </tr>
+            <tr>
+              <td>Span processor</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-processor">Simple + Batch processors</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/SimpleSpanProcessor.scala#L49-L56">SimpleSpanProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L75-L90">BatchSpanProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L167-L170">BatchSpanProcessor.scala</a></td>
+              <td>Both simple and batch processors are implemented and export ended spans.</td>
+            </tr>
+            <tr>
+              <td>Span exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#go-spanexporter-interface">SpanExporter interface + no-op + composite</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/SpanExporter.scala#L60-L62">SpanExporter.scala</a></td>
+              <td>Spec includes shutdown + forceFlush; only <code>flush</code> is present</td>
+            </tr>
+            <tr>
+              <td>Span exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-exporter">Shutdown + ForceFlush methods</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/SpanExporter.scala#L60-L62">SpanExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/trace/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/trace/autoconfigure/OtlpSpanExporterAutoConfigure.scala#L65-L68">OtlpSpanExporterAutoConfigure.scala</a></td>
+              <td>Lifecycle handled via Resource in concrete exporters; interface lacks shutdown/forceFlush</td>
+            </tr>
+            <tr>
+              <td>Span exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-exporter">Stdout exporter</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/ConsoleSpanExporter.scala#L32-L35">ConsoleSpanExporter.scala</a></td>
+              <td>Doc comment does not note format is unspecified</td>
+            </tr>
+            <tr>
+              <td>Span lifecycle</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#sdk-span-creation">Span creation/ending via SdkSpanBuilder + SdkSpanBackend</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkSpanBuilder.scala#L149-L154">SdkSpanBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkSpanBackend.scala#L323-L329">SdkSpanBackend.scala</a></td>
+              <td>SpanId generated before ShouldSample (spec order is ShouldSample then SpanId)</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="trace-tracestate-handling-md-checklist" class="section"><a class="anchor-link left" href="#trace-tracestate-handling-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/tracestate-handling.md">trace/tracestate-handling.md</a> checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>TraceState propagation</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/tracestate-handling.md#tracestate-handling">W3C TraceContext encode/decode</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L48-L51">W3CTraceContextPropagator.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L87-L103">W3CTraceContextPropagator.scala</a></td>
+              <td>No OpenTelemetry <code>ot</code> entry handling or validation (key uniqueness/length)</td>
+            </tr>
+            <tr>
+              <td>TraceState propagation</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/tracestate-handling.md#tracestate-handling">OpenTelemetry <code>ot</code> sub-key handling (th/rv)</a></td>
+              <td>Not Implemented</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L112-L123">W3CTraceContextPropagator.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L125-L132">W3CTraceContextPropagator.scala</a></td>
+              <td>No utilities to set/merge <code>ot</code> entry</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="trace-tracestate-probability-sampling-md-checklist" class="section"><a class="anchor-link left" href="#trace-tracestate-probability-sampling-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/tracestate-probability-sampling.md">trace/tracestate-probability-sampling.md</a> checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Consistent probability sampling</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/tracestate-probability-sampling.md#tracestate-probability-sampling">TraceState update hooks in sampling results</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/samplers/SamplingResult.scala#L82-L83">SamplingResult.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/samplers/SamplingResult.scala#L93-L94">SamplingResult.scala</a></td>
+              <td>Updater exists but no ProbabilitySampler, CompositeSampler or rv/th handling</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="trace-sdk_exporters" class="section"><a class="anchor-link left" href="#trace-sdk_exporters"><i class="icofont-laika link">&#xef71;</i></a>trace/sdk_exporters</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SDK Exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk_exporters/stdout.md">stdout.md</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/ConsoleSpanExporter.scala#L32">ConsoleSpanExporter.scala</a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>SDK Exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk_exporters/zipkin.md">zipkin.md</a></td>
+              <td>Not Applicable</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="trace-api-md-checklist-external-otel4s-core" class="section"><a class="anchor-link left" href="#trace-api-md-checklist-external-otel4s-core"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md">trace/api.md</a> checklist (external: otel4s-core)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>TracerProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#tracerprovider">Global default TracerProvider access</a></td>
+              <td>Not Implemented</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TracerProvider.scala#L40">TracerProvider.scala</a></td>
+              <td>No global/default provider API found</td>
+            </tr>
+            <tr>
+              <td>TracerProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#tracerprovider">Get a Tracer accepts name + version + schema_url + attributes</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TracerProvider.scala#L40-L43">TracerProvider.scala</a>, <a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TracerBuilder.scala#L31-L33">TracerBuilder.scala</a></td>
+              <td>Attributes parameter not supported</td>
+            </tr>
+            <tr>
+              <td>TracerProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#tracerprovider">Invalid name handling (empty string -&gt; fallback + log)</a></td>
+              <td>Not Implemented</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TracerProvider.scala#L40-L43">TracerProvider.scala</a></td>
+              <td>No validation/logging for empty name</td>
+            </tr>
+            <tr>
+              <td>Tracer</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#tracerprovider">Enabled API</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracer.scala#L44">SdkTracer.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L47-L56">SdkTracerProvider.scala</a></td>
+              <td>Exposes <code>meta</code> on tracer; SDK wires <code>InstrumentMeta.enabled</code> so enablement is available via metadata (<code>meta.isEnabled</code>).</td>
+            </tr>
+            <tr>
+              <td>SpanContext</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#spancontext">TraceId/SpanId hex + binary access</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/SpanContext.scala#L41-L43">SpanContext.scala</a></td>
+              <td><code>traceId</code>/<code>spanId</code> (bytes) and <code>traceIdHex</code>/<code>spanIdHex</code></td>
+            </tr>
+            <tr>
+              <td>SpanContext</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#spancontext">TraceFlags sampled + random flag exposure</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceFlags.scala#L44">TraceFlags.scala</a></td>
+              <td>Only sampled flag exposed; no random flag API</td>
+            </tr>
+            <tr>
+              <td>TraceState</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#tracestate">get/add/update/delete with validation + error handling</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceState.scala#L47-L50">TraceState.scala</a></td>
+              <td>Invalid inputs are ignored (no error signaling)</td>
+            </tr>
+            <tr>
+              <td>Span</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#spancontext">IsRecording API</a></td>
+              <td>Not Implemented</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/Span.scala#L67-L69">Span.scala</a></td>
+              <td>No <code>isRecording</code>/<code>IsRecording</code> method</td>
+            </tr>
+            <tr>
+              <td>Span</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#determining-the-parent-span-from-a-context">Creation only via Tracer; parent must be Context only</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/SpanBuilder.scala#L47-L49">SpanBuilder.scala</a></td>
+              <td>Allows explicit parent <code>SpanContext</code></td>
+            </tr>
+            <tr>
+              <td>Span</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#spancontext">Wrap SpanContext into non-recording Span</a></td>
+              <td>Not Implemented</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/Span.scala#L71-L74">Span.scala</a></td>
+              <td>No public API to wrap SpanContext</td>
+            </tr>
+            <tr>
+              <td>Span</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#spancontext">Set attributes / add event / add link / set status / update name / end / record exception</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/Span.scala#L67-L69">Span.scala</a>, <a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala-2/org/typelevel/otel4s/trace/SpanMacro.scala#L42-L44">SpanMacro.scala</a></td>
+              <td>Matches required operations (except IsRecording)</td>
+            </tr>
+            <tr>
+              <td>Concurrency</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#concurrency">TracerProvider/Tracer/Span methods safe to call concurrently</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L36-L60">SdkTracerProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracer.scala#L37-L89">SdkTracer.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkSpanBackend.scala#L67-L204">SdkSpanBackend.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SpanStorage.scala#L19-L50">SpanStorage.scala</a></td>
+              <td>Implemented with Cats Effect concurrency primitives (<code>Ref</code>/<code>MapRef</code>) and immutable shared state.</td>
+            </tr>
+            <tr>
+              <td>No-SDK behavior</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk">No-op API preserves parent SpanContext for propagation</a></td>
+              <td>Not Implemented</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/Tracer.scala#L52-L55">Tracer.scala</a>, <a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/Span.scala#L71">Span.scala</a></td>
+              <td>No public API to wrap SpanContext; <code>Tracer.noop</code> always uses <code>SpanContext.invalid</code></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="trace-api-md-context-interaction-checklist-external-otel4s-core" class="section"><a class="anchor-link left" href="#trace-api-md-context-interaction-checklist-external-otel4s-core"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md">trace/api.md</a> context interaction checklist (external: otel4s-core)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Context interaction</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#context-interaction">Extract Span from Context</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceScope.scala#L41-L43">TraceScope.scala</a></td>
+              <td>TraceScope exposes <code>current</code> SpanContext only; no public API to extract Span</td>
+            </tr>
+            <tr>
+              <td>Context interaction</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#context-interaction">Combine Span with Context to create new Context</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceScope.scala#L41-L43">TraceScope.scala</a></td>
+              <td><code>childScope</code>/<code>withContext</code> are internal; no explicit API to attach Span to Context</td>
+            </tr>
+            <tr>
+              <td>Implicit context</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#determining-the-parent-span-from-a-context">Get current span from implicit context</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/Tracer.scala#L52-L55">Tracer.scala</a></td>
+              <td><code>currentSpanContext</code> and <code>currentSpanOrNoop</code> exist, but not a direct Context extraction API</td>
+            </tr>
+            <tr>
+              <td>Implicit context</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#spancontext">Set current span into implicit context</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/Tracer.scala#L52-L55">Tracer.scala</a></td>
+              <td><code>childScope</code>/<code>rootScope</code>/<code>noopScope</code> operate on SpanContext; no public Context-combine API</td>
+            </tr>
+            <tr>
+              <td>Context API</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#context-interaction">Generic Context storage only (no trace-specific helpers)</a></td>
+              <td>Not Implemented</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/Context.scala#L133-L137">Context.scala</a>, <a href="https://github.com/typelevel/otel4s/blob/main/core/common/src/main/scala/org/typelevel/otel4s/context/Contextual.scala#L27-L37">Contextual.scala</a></td>
+              <td>No helpers to extract/attach Span or SpanContext outside trace module</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="trace-exceptions-md-checklist" class="section"><a class="anchor-link left" href="#trace-exceptions-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/exceptions.md">trace/exceptions.md</a> checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Exception event</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/exceptions.md#recording-an-exception">Event name is <code>exception</code></a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/data/EventData.scala#L40-L42">EventData.scala</a></td>
+              <td><code>ExceptionEventName = &quot;exception&quot;</code></td>
+            </tr>
+            <tr>
+              <td>Exception attrs</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/exceptions.md#recording-an-exception"><code>exception.type</code>, <code>exception.message</code>, <code>exception.stacktrace</code></a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/data/EventData.scala#L107-L115">EventData.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/data/EventData.scala#L117-L125">EventData.scala</a></td>
+              <td>Exception event population sets type and conditionally sets message and stacktrace when present.</td>
+            </tr>
+            <tr>
+              <td>RecordException API</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/exceptions.md#recording-an-exception">Optional extra attributes override defaults</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/data/EventData.scala#L48-L50">EventData.scala</a></td>
+              <td><code>attributes.prependAll(exceptionAttributes)</code> keeps user attrs last</td>
+            </tr>
+            <tr>
+              <td>Unhandled exception guidance</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/exceptions.md#recording-an-exception">Record exception + set status Error on unhandled</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/SpanFinalizer.scala#L51-L54">SpanFinalizer.scala</a></td>
+              <td><code>reportAbnormal</code> records exception + sets Error; API does not enforce “only if unhandled”</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="cross-cutting-specs" class="section"><a class="anchor-link left" href="#cross-cutting-specs"><i class="icofont-laika link">&#xef71;</i></a>Cross-cutting specs</h2>
+        <ul>
+          <li>Attribute requirements are tracked in <a href="attributes.html">attributes.md</a>.</li>
+          <li>Context propagation requirements are tracked in <a href="context-propagation.html">context-propagation.md</a>.</li>
+          <li>Instrumentation scope requirements are tracked in <a href="instrumentation-scope.html">instrumentation-scope.md</a>.</li>
+          <li>Resource requirements are tracked in <a href="resource.html">resource.md</a>.</li>
+          <li>SDK environment-variable requirements are tracked in <a href="configuration.html">configuration.md</a>.</li>
+        </ul>
+
+        
+<hr class="footer-rule"/>
+<footer>
+  otel4s-sdk is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache-2.0</a> license.
+</footer>
+
+
+      </main>
+
+    </div>
+
+  </body>
+
+</html>

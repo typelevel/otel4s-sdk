@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Typelevel Laika + Helium Theme" />
+  <title>Logs</title>
+  
+  <meta name="author" content="Ross A. Baker"/>
+  
+  <meta name="author" content="Maksym Ochenashko"/>
+  
+  
+  <meta name="description" content="docs"/>
+  
+  
+  
+  <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
+  
+  <link rel="stylesheet" type="text/css" href="../helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/site/laika-helium.css" />
+  <script src="../helium/site/laika-helium.js"></script>
+  
+  
+  <script> /* for avoiding page load transitions */ </script>
+</head>
+
+  <body>
+
+    <header id="top-bar" class="light-default dark-default">
+
+  <div class="row">
+    <a id="nav-icon">
+      <i class="icofont-laika navigationMenu" title="Navigation">&#xefa2;</i>
+    </a>
+    
+    
+  </div>
+
+  <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
+
+  <div class="row links">
+    
+    <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/otel4s-sdk-docs_2.13/0.16.0/org/typelevel/otel4s/sdk/index.html"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/otel4s-sdk"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="svg-shape">
+    <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+  </g>
+</svg></span></a>
+    
+  </div>  
+
+</header>
+    
+    <nav id="sidebar">
+
+  <div class="row">
+    
+    <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/otel4s-sdk-docs_2.13/0.16.0/org/typelevel/otel4s/sdk/index.html"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/otel4s-sdk"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="svg-shape">
+    <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+  </g>
+</svg></span></a>
+    
+  </div>
+
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="../">otel4s-sdk</a></li>
+    <li class="level1 nav-leaf"><a href="../modules-structure.html">Modules structure</a></li>
+    <li class="level1 nav-leaf"><a href="../ecosystem.html">Ecosystem</a></li>
+    <li class="level1 nav-header">Instrumentation</li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/metrics-cats-effect-io-runtime.html">Metrics | Cats Effect IO runtime</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/tracing-cross-service-propagation.html">Tracing | Cross-service propagation</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/logs.html">Logs</a></li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/baggage.html">Baggage</a></li>
+    <li class="level1 nav-header">SDK</li>
+    <li class="level2 nav-leaf"><a href="../sdk/overview.html">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/prometheus-exporter.html">Prometheus Exporter</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/testkit.html">Testkit</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-resource-detectors.html">AWS | Resource detectors</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-xray.html">AWS | X-Ray ID Generator</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-xray-propagator.html">AWS | X-Ray propagator</a></li>
+    <li class="level1 nav-header">Specification Compliance</li>
+    <li class="level2 nav-leaf"><a href="attributes.html">Attributes</a></li>
+    <li class="level2 nav-leaf"><a href="baggage.html">Baggage</a></li>
+    <li class="level2 nav-leaf"><a href="resource.html">Resource</a></li>
+    <li class="level2 nav-leaf"><a href="instrumentation-scope.html">Instrumentation Scope</a></li>
+    <li class="level2 nav-leaf"><a href="context.html">Context</a></li>
+    <li class="level2 nav-leaf"><a href="context-propagation.html">Context Propagation</a></li>
+    <li class="level2 active nav-leaf"><a href="#">Logs</a></li>
+    <li class="level2 nav-leaf"><a href="metrics.html">Metrics</a></li>
+    <li class="level2 nav-leaf"><a href="trace.html">Trace</a></li>
+    <li class="level2 nav-leaf"><a href="configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="compliance-matrix.html">Compliance Matrix</a></li>
+  </ul>
+
+</nav>
+
+    <div id="container">
+
+      
+<nav id="page-nav">
+  <p class="header"><a href="#">Logs</a></p>
+
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="#scope">Scope</a></li>
+    <li class="level1 nav-leaf"><a href="#module-mapping">Module mapping</a></li>
+    <li class="level1 nav-leaf"><a href="#logs-sdk-md-checklist"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk.md">logs/sdk.md</a> checklist</a></li>
+    <li class="level1 nav-leaf"><a href="#logs-data-model-md-checklist"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/data-model.md">logs/data-model.md</a> checklist</a></li>
+    <li class="level1 nav-leaf"><a href="#logs-sdk_exporters">logs/sdk_exporters</a></li>
+    <li class="level1 nav-leaf"><a href="#cross-cutting-specs">Cross-cutting specs</a></li>
+  </ul>
+
+  <p class="footer"></p>
+</nav>
+
+
+      <main class="content">
+
+        <h1 id="logs" class="title">Logs</h1>
+        <p>This file tracks compliance for the OpenTelemetry logs specification in this repository.</p>
+        
+        <h2 id="scope" class="section"><a class="anchor-link left" href="#scope"><i class="icofont-laika link">&#xef71;</i></a>Scope</h2>
+        <ul>
+          <li>This repository implements the SDK. The Logs API types live in the external <code>otel4s-core-*</code> modules.</li>
+          <li>Logs API-specific specs (e.g. <code>logs/api.md</code>) are tracked as external dependencies here.</li>
+        </ul>
+        
+        <h2 id="module-mapping" class="section"><a class="anchor-link left" href="#module-mapping"><i class="icofont-laika link">&#xef71;</i></a>Module mapping</h2>
+        <ul>
+          <li>SDK core: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs">logs</a></li>
+          <li>SDK exporters: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs">logs</a></li>
+        </ul>
+        
+        <h2 id="logs-sdk-md-checklist" class="section"><a class="anchor-link left" href="#logs-sdk-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk.md">logs/sdk.md</a> checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LoggerProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk.md#loggerprovider">Builder supports resource, processors, limits</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLoggerProvider.scala#L146-L152">SdkLoggerProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLoggerProvider.scala#L167-L173">SdkLoggerProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/test/scala/org/typelevel/otel4s/sdk/logs/SdkLoggerProviderSuite.scala#L74-L79">SdkLoggerProviderSuite.scala</a></td>
+              <td>Builder applies resource, limits, and processor pipeline to created SDK loggers.</td>
+            </tr>
+            <tr>
+              <td>LoggerProvider</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk.md#loggerprovider">Default config and no-op behavior</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLoggerProvider.scala#L127-L133">SdkLoggerProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLoggerProvider.scala#L157-L159">SdkLoggerProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/test/scala/org/typelevel/otel4s/sdk/logs/SdkLoggerProviderSuite.scala#L41-L45">SdkLoggerProviderSuite.scala</a></td>
+              <td>Default builder falls back to <code>LoggerProvider.noop</code> when no processors are configured.</td>
+            </tr>
+            <tr>
+              <td>LogRecordProcessor</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk.md#logrecordprocessor">Interface + forceFlush</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/LogRecordProcessor.scala#L154-L157">LogRecordProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/SimpleLogRecordProcessor.scala#L53-L54">SimpleLogRecordProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/BatchLogRecordProcessor.scala#L83-L85">BatchLogRecordProcessor.scala</a></td>
+              <td><code>forceFlush</code> exists, but built-in processors do not invoke exporter-level flush semantics from the spec.</td>
+            </tr>
+            <tr>
+              <td>LogRecordProcessor</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk.md#logrecordprocessor">Simple + Batch processors</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/SimpleLogRecordProcessor.scala#L46-L49">SimpleLogRecordProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/BatchLogRecordProcessor.scala#L76-L80">BatchLogRecordProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/BatchLogRecordProcessor.scala#L136-L139">BatchLogRecordProcessor.scala</a></td>
+              <td>Both required built-in processors are implemented and actively export records.</td>
+            </tr>
+            <tr>
+              <td>LogRecordProcessor</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk.md#logrecordprocessor">Shutdown support</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/BatchLogRecordProcessor.scala#L295-L297">BatchLogRecordProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/SimpleLogRecordProcessor.scala#L46-L54">SimpleLogRecordProcessor.scala</a></td>
+              <td>Cleanup is Resource-driven (batch finalizer flushes queue), but processor API has no explicit <code>shutdown</code> operation.</td>
+            </tr>
+            <tr>
+              <td>LogExporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk.md#logrecordexporter">Interface + no-op + composite</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/exporter/LogRecordExporter.scala#L83-L85">LogRecordExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/exporter/LogRecordExporter.scala#L148-L152">LogRecordExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/exporter/LogRecordExporter.scala#L163-L169">LogRecordExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/test/scala/org/typelevel/otel4s/sdk/logs/exporter/LogRecordExporterSuite.scala#L55-L74">LogRecordExporterSuite.scala</a></td>
+              <td>No-op and composite exporters are implemented; explicit exporter <code>shutdown</code> operation is missing.</td>
+            </tr>
+            <tr>
+              <td>LogRecord limits</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk.md#logrecord-limits">Attribute/value limits + drop behavior</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLogRecordBuilder.scala#L134-L137">SdkLogRecordBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala#L115-L117">LogsProtoEncoder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/BatchLogRecordProcessor.scala#L282-L283">BatchLogRecordProcessor.scala</a></td>
+              <td>Attribute limits are enforced via bounded <code>LimitedData</code>; dropped attribute count and queue-drop behavior are surfaced.</td>
+            </tr>
+            <tr>
+              <td>LogRecord data model</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk.md#additional-logrecord-interfaces">Mapping to spec fields</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLogRecordBuilder.scala#L93-L104">SdkLogRecordBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala#L109-L121">LogsProtoEncoder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/test/scala/org/typelevel/otel4s/sdk/logs/SdkLogRecordBuilderSuite.scala#L106-L113">SdkLogRecordBuilderSuite.scala</a></td>
+              <td>SDK record construction and OTLP mapping cover timestamp/observed timestamp, context, severity, body, event name, attributes, scope, and resource.</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="logs-data-model-md-checklist" class="section"><a class="anchor-link left" href="#logs-data-model-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/data-model.md">logs/data-model.md</a> checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Log data types</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/data-model.md#log-and-event-record-definition">LogRecord, severity, attributes, timestamps</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLogRecordBuilder.scala#L93-L104">SdkLogRecordBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala#L109-L117">LogsProtoEncoder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/test/scala/org/typelevel/otel4s/sdk/logs/SdkLogRecordBuilderSuite.scala#L106-L113">SdkLogRecordBuilderSuite.scala</a></td>
+              <td>Core fields are populated by the SDK builder and encoded to OTLP with nanos precision and trace flags.</td>
+            </tr>
+            <tr>
+              <td>Body types</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/data-model.md#field-body">AnyValue mapping</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala#L80-L107">LogsProtoEncoder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala#L114-L114">LogsProtoEncoder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/test/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoderSuite.scala#L91-L114">LogsProtoEncoderSuite.scala</a></td>
+              <td><code>AnyValue</code> scalar/array/map/bytes/empty variants are mapped and validated by encoder tests.</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="logs-sdk_exporters" class="section"><a class="anchor-link left" href="#logs-sdk_exporters"><i class="icofont-laika link">&#xef71;</i></a>logs/sdk_exporters</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SDK Exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/logs/sdk_exporters/stdout.md">stdout.md</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/exporter/ConsoleLogRecordExporter.scala#L54-L68">ConsoleLogRecordExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/autoconfigure/LoggerProviderAutoConfigure.scala#L89-L91">LoggerProviderAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/test/scala/org/typelevel/otel4s/sdk/logs/exporter/ConsoleLogRecordExporterSuite.scala#L39-L49">ConsoleLogRecordExporterSuite.scala</a></td>
+              <td>Console exporter is implemented, tested, and autoconfigured with a simple processor when selected.</td>
+            </tr>
+            <tr>
+              <td>SDK Exporter</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/protocol/otlp.md">otlp.md</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/OtlpLogRecordExporter.scala#L62-L63">OtlpLogRecordExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/OtlpLogRecordExporter.scala#L199-L210">OtlpLogRecordExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/autoconfigure/OtlpLogRecordExporterAutoConfigure.scala#L65-L70">OtlpLogRecordExporterAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/test/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/OtlpLogRecordExporterSuite.scala#L177-L180">OtlpLogRecordExporterSuite.scala</a></td>
+              <td>OTLP export path and autoconfiguration are present; full protocol-wide compliance in <code>protocol/otlp.md</code> is broader than this checklist row and remains partially covered.</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 id="cross-cutting-specs" class="section"><a class="anchor-link left" href="#cross-cutting-specs"><i class="icofont-laika link">&#xef71;</i></a>Cross-cutting specs</h2>
+        <ul>
+          <li>Attribute requirements are tracked in <a href="attributes.html">attributes.md</a>.</li>
+          <li>Instrumentation scope requirements are tracked in <a href="instrumentation-scope.html">instrumentation-scope.md</a>.</li>
+          <li>Resource requirements are tracked in <a href="resource.html">resource.md</a>.</li>
+          <li>SDK environment-variable requirements are tracked in <a href="configuration.html">configuration.md</a>.</li>
+        </ul>
+
+        
+<hr class="footer-rule"/>
+<footer>
+  otel4s-sdk is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache-2.0</a> license.
+</footer>
+
+
+      </main>
+
+    </div>
+
+  </body>
+
+</html>

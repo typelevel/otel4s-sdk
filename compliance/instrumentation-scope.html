@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content="Typelevel Laika + Helium Theme" />
-  <title>Overview</title>
+  <title>Instrumentation Scope</title>
   
   <meta name="author" content="Ross A. Baker"/>
   
@@ -108,25 +108,25 @@
     <li class="level2 nav-leaf"><a href="../instrumentation/logs.html">Logs</a></li>
     <li class="level2 nav-leaf"><a href="../instrumentation/baggage.html">Baggage</a></li>
     <li class="level1 nav-header">SDK</li>
-    <li class="level2 active nav-leaf"><a href="#">Overview</a></li>
-    <li class="level2 nav-leaf"><a href="configuration.html">Configuration</a></li>
-    <li class="level2 nav-leaf"><a href="prometheus-exporter.html">Prometheus Exporter</a></li>
-    <li class="level2 nav-leaf"><a href="testkit.html">Testkit</a></li>
-    <li class="level2 nav-leaf"><a href="aws-resource-detectors.html">AWS | Resource detectors</a></li>
-    <li class="level2 nav-leaf"><a href="aws-xray.html">AWS | X-Ray ID Generator</a></li>
-    <li class="level2 nav-leaf"><a href="aws-xray-propagator.html">AWS | X-Ray propagator</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/overview.html">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/prometheus-exporter.html">Prometheus Exporter</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/testkit.html">Testkit</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-resource-detectors.html">AWS | Resource detectors</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-xray.html">AWS | X-Ray ID Generator</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/aws-xray-propagator.html">AWS | X-Ray propagator</a></li>
     <li class="level1 nav-header">Specification Compliance</li>
-    <li class="level2 nav-leaf"><a href="../compliance/attributes.html">Attributes</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/baggage.html">Baggage</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/resource.html">Resource</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/instrumentation-scope.html">Instrumentation Scope</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/context.html">Context</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/context-propagation.html">Context Propagation</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/logs.html">Logs</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/metrics.html">Metrics</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/trace.html">Trace</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/configuration.html">Configuration</a></li>
-    <li class="level2 nav-leaf"><a href="../compliance/compliance-matrix.html">Compliance Matrix</a></li>
+    <li class="level2 nav-leaf"><a href="attributes.html">Attributes</a></li>
+    <li class="level2 nav-leaf"><a href="baggage.html">Baggage</a></li>
+    <li class="level2 nav-leaf"><a href="resource.html">Resource</a></li>
+    <li class="level2 active nav-leaf"><a href="#">Instrumentation Scope</a></li>
+    <li class="level2 nav-leaf"><a href="context.html">Context</a></li>
+    <li class="level2 nav-leaf"><a href="context-propagation.html">Context Propagation</a></li>
+    <li class="level2 nav-leaf"><a href="logs.html">Logs</a></li>
+    <li class="level2 nav-leaf"><a href="metrics.html">Metrics</a></li>
+    <li class="level2 nav-leaf"><a href="trace.html">Trace</a></li>
+    <li class="level2 nav-leaf"><a href="configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="compliance-matrix.html">Compliance Matrix</a></li>
   </ul>
 
 </nav>
@@ -135,14 +135,10 @@
 
       
 <nav id="page-nav">
-  <p class="header"><a href="#">Overview</a></p>
+  <p class="header"><a href="#">Instrumentation Scope</a></p>
 
   <ul class="nav-list">
-    <li class="level1 nav-leaf"><a href="#getting-started">Getting Started</a></li>
-    <li class="level1 nav-leaf"><a href="#configuration">Configuration</a></li>
-    <li class="level1 nav-node"><a href="#limitations">Limitations</a></li>
-    <li class="level2 nav-leaf"><a href="#no-autoload-of-third-party-components">No autoload of third-party components</a></li>
-    <li class="level2 nav-leaf"><a href="#metrics-missing-features">Metrics missing features</a></li>
+    <li class="level1 nav-leaf"><a href="#common-instrumentation-scope-md-checklist"><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/instrumentation-scope.md">common/instrumentation-scope.md</a> checklist</a></li>
   </ul>
 
   <p class="footer"></p>
@@ -151,80 +147,79 @@
 
       <main class="content">
 
-        <h1 id="overview" class="title">Overview</h1>
-        <p>SDK modules are an alternative to the <a href="https://typelevel.org/otel4s/oteljava/overview.html">otel4s-oteljava</a> implementation.
-        All modules are implemented in Scala and available for all platforms: JVM, Scala Native, and Scala.js.
-        The implementation remains <strong>experimental</strong> and some functionality may be lacking.</p>
+        <h1 id="instrumentation-scope" class="title">Instrumentation Scope</h1>
+        <p>This file tracks compliance for cross-cutting OpenTelemetry instrumentation scope requirements in this repository.</p>
         
-        <h2 id="getting-started" class="section"><a class="anchor-link left" href="#getting-started"><i class="icofont-laika link">&#xef71;</i></a>Getting Started</h2>
-        <div class="tab-container" data-tab-group="build-tool">
-          <ul class="tab-group">
-            <li class="tab active" data-choice-name="sbt"><a href="#">sbt</a></li>
-            <li class="tab" data-choice-name="scala-cli"><a href="#">Scala CLI</a></li>
-          </ul>
-          <div class="tab-content active" data-choice-name="sbt">
-            <p>Add settings to the <code>build.sbt</code>:</p>
-            <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">libraryDependencies</span><span> ++= </span><span class="type-name">Seq</span><span>(
-  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %%% </span><span class="string-literal">&quot;otel4s-sdk&quot;</span><span> % </span><span class="string-literal">&quot;0.16.0&quot;</span><span>, </span><span class="comment">// &lt;1&gt;
-</span><span>  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %%% </span><span class="string-literal">&quot;otel4s-sdk-exporter&quot;</span><span> % </span><span class="string-literal">&quot;0.16.0&quot;</span><span> </span><span class="comment">// &lt;2&gt;
-</span><span>)</span></code></pre>
-          </div>
-          <div class="tab-content" data-choice-name="scala-cli">
-            <p>Add directives to the <code>*.scala</code> file:</p>
-            <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">//&gt; using dep &quot;org.typelevel::otel4s-sdk::0.16.0&quot; // &lt;1&gt;
-//&gt; using dep &quot;org.typelevel::otel4s-sdk-exporter::0.16.0&quot; // &lt;2&gt;</span></code></pre>
-          </div>
-        </div>
-        <ol class="arabic">
-          <li>Add the <code>otel4s-sdk</code> library</li>
-          <li>Add the <code>otel4s-sdk-exporter</code> library. Without the exporter, the application will crash</li>
-        </ol>
-        <hr>
-        <p>Then use <code>OpenTelemetrySdk.autoConfigured</code> to autoconfigure the SDK:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.{</span><span class="type-name">IO</span><span>, </span><span class="type-name">IOApp</span><span>}
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="type-name">OpenTelemetrySdk</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">exporter</span><span>.</span><span class="identifier">otlp</span><span>.</span><span class="identifier">autoconfigure</span><span>.</span><span class="type-name">OtlpExportersAutoConfigure</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="type-name">MeterProvider</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="type-name">TracerProvider</span><span>
-
-</span><span class="keyword">object</span><span> </span><span class="type-name">TelemetryApp</span><span> </span><span class="keyword">extends</span><span> </span><span class="type-name">IOApp</span><span>.</span><span class="type-name">Simple</span><span> {
-
-  </span><span class="keyword">def</span><span> </span><span class="declaration-name">run</span><span>: </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
-    </span><span class="type-name">OpenTelemetrySdk</span><span>
-      .</span><span class="identifier">autoConfigured</span><span>[</span><span class="type-name">IO</span><span>]( </span><span class="comment">// register OTLP exporters configurer
-</span><span>        </span><span class="identifier">_</span><span>.</span><span class="identifier">addExportersConfigurer</span><span>(</span><span class="type-name">OtlpExportersAutoConfigure</span><span>[</span><span class="type-name">IO</span><span>]) 
-      )
-      .</span><span class="identifier">use</span><span> { </span><span class="identifier">autoConfigured</span><span> =&gt;
-        </span><span class="keyword">val</span><span> </span><span class="identifier">sdk</span><span> = </span><span class="identifier">autoConfigured</span><span>.</span><span class="identifier">sdk</span><span>
-        </span><span class="identifier">program</span><span>(</span><span class="identifier">sdk</span><span>.</span><span class="identifier">meterProvider</span><span>, </span><span class="identifier">sdk</span><span>.</span><span class="identifier">tracerProvider</span><span>)
-      }
-
-  </span><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span>(
-      </span><span class="identifier">meterProvider</span><span>: </span><span class="type-name">MeterProvider</span><span>[</span><span class="type-name">IO</span><span>], 
-      </span><span class="identifier">tracerProvider</span><span>: </span><span class="type-name">TracerProvider</span><span>[</span><span class="type-name">IO</span><span>]
-  ): </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
-    ???
-}</span></code></pre>
-        
-        <h2 id="configuration" class="section"><a class="anchor-link left" href="#configuration"><i class="icofont-laika link">&#xef71;</i></a>Configuration</h2>
-        <p>The <code>.autoConfigured(...)</code> relies on the environment variables and system properties to configure the SDK.
-        For example, use <code>export OTEL_SERVICE_NAME=auth-service</code> to configure the name of the service.</p>
-        <p>See the full set of the <a href="configuration.html">supported options</a>.</p>
-        
-        <h2 id="limitations" class="section"><a class="anchor-link left" href="#limitations"><i class="icofont-laika link">&#xef71;</i></a>Limitations</h2>
-        
-        <h3 id="no-autoload-of-third-party-components" class="section"><a class="anchor-link left" href="#no-autoload-of-third-party-components"><i class="icofont-laika link">&#xef71;</i></a>No autoload of third-party components</h3>
-        <p>Since Scala Native and Scala.js lack <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html">SPI</a> support, 
-        third-party components cannot be loaded dynamically as OpenTelemetry Java does.</p>
-        <p>Hence, the configurers must be registered manually:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">OpenTelemetrySdk</span><span>.</span><span class="identifier">autoConfigured</span><span>[</span><span class="type-name">IO</span><span>](
-  </span><span class="identifier">_</span><span>.</span><span class="identifier">addExportersConfigurer</span><span>(</span><span class="type-name">OtlpExportersAutoConfigure</span><span>[</span><span class="type-name">IO</span><span>])
-)</span></code></pre>
-        
-        <h3 id="metrics-missing-features" class="section"><a class="anchor-link left" href="#metrics-missing-features"><i class="icofont-laika link">&#xef71;</i></a>Metrics missing features</h3>
-        <ul>
-          <li><code>Exponential Histogram</code> aggregation is not supported yet</li>
-        </ul>
+        <h2 id="common-instrumentation-scope-md-checklist" class="section"><a class="anchor-link left" href="#common-instrumentation-scope-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/instrumentation-scope.md">common/instrumentation-scope.md</a> checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Requirement</th>
+              <th>Status</th>
+              <th>Evidence</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Scope tuple model</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/instrumentation-scope.md">Instrumentation scope is defined by <code>(name, version, schema_url, attributes)</code> with optional fields</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/common/InstrumentationScope.scala#L39-L51">InstrumentationScope.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/common/InstrumentationScope.scala#L132-L138">InstrumentationScope.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/test/scala/org/typelevel/otel4s/sdk/common/InstrumentationScopeSuite.scala#L45-L58">InstrumentationScopeSuite.scala</a></td>
+              <td>SDK model and builder carry all four tuple fields, including optional version/schema URL and attributes.</td>
+            </tr>
+            <tr>
+              <td>Scope attributes propagation</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/instrumentation-scope.md">Optional instrumentation scope attributes provide additional scope information</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/common/InstrumentationScope.scala#L89-L97">InstrumentationScope.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/common/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/ProtoEncoder.scala#L98-L103">ProtoEncoder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/common/src/test/scala/org/typelevel/otel4s/sdk/exporter/otlp/ProtoEncoderSuite.scala#L154-L166">ProtoEncoderSuite.scala</a></td>
+              <td>Scope attributes are part of the scope object and are encoded into OTLP <code>InstrumentationScope.attributes</code>.</td>
+            </tr>
+            <tr>
+              <td>Scope uniqueness in SDK cache keys</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/instrumentation-scope.md">Instrumentation scope tuple SHOULD uniquely identify the logical telemetry-emitting unit</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/common/InstrumentationScope.scala#L145-L148">InstrumentationScope.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/internal/ComponentRegistry.scala#L75-L76">ComponentRegistry.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/internal/ComponentRegistry.scala#L83-L87">ComponentRegistry.scala</a></td>
+              <td>Component instances are keyed by full <code>InstrumentationScope</code>, including attributes, so distinct tuples map to distinct SDK components.</td>
+            </tr>
+            <tr>
+              <td>Scope name recommendation</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/instrumentation-scope.md">Instrumentation scope name SHOULD be specified</a></td>
+              <td>Partial</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/common/InstrumentationScope.scala#L104-L109">InstrumentationScope.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/common/InstrumentationScope.scala#L115-L116">InstrumentationScope.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/test/scala/org/typelevel/otel4s/sdk/common/InstrumentationScopeSuite.scala#L61-L64">InstrumentationScopeSuite.scala</a></td>
+              <td>SDK permits empty names (<code>InstrumentationScope.empty</code> and unrestricted builder input), so the SHOULD recommendation is not enforced by validation.</td>
+            </tr>
+            <tr>
+              <td>Scope selects telemetry API objects</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/instrumentation-scope.md">Instrumentation scope is used to obtain Tracer, Meter, or Logger</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLoggerBuilder.scala#L42-L43">SdkLoggerBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/SdkMeterBuilder.scala#L39-L40">SdkMeterBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerBuilder.scala#L47-L49">SdkTracerBuilder.scala</a></td>
+              <td>Logger/Meter/Tracer builders create SDK instances associated with instrumentation scope identity.</td>
+            </tr>
+            <tr>
+              <td>Logs scope</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/instrumentation-scope.md">Name/version/schema_url identify telemetry origin</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLoggerBuilder.scala#L36-L43">SdkLoggerBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala#L131-L137">LogsProtoEncoder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/common/InstrumentationScope.scala#L35-L47">InstrumentationScope.scala</a></td>
+              <td>Logger builder captures scope identity; OTLP encoding preserves scope and schema URL.</td>
+            </tr>
+            <tr>
+              <td>Metrics scope</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/instrumentation-scope.md">Name/version/schema_url identify telemetry origin</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/SdkMeterBuilder.scala#L33-L40">SdkMeterBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data/MetricData.scala#L52-L54">MetricData.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/MetricsProtoEncoder.scala#L194-L200">MetricsProtoEncoder.scala</a></td>
+              <td>Meter scope and schema URL are carried through metric data and OTLP export.</td>
+            </tr>
+            <tr>
+              <td>Trace scope</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/instrumentation-scope.md">Name/version/schema_url identify telemetry origin</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerBuilder.scala#L42-L49">SdkTracerBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/data/SpanData.scala#L80-L82">SpanData.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/trace/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/trace/SpansProtoEncoder.scala#L152-L158">SpansProtoEncoder.scala</a></td>
+              <td>Scope identity and schema URL are preserved from tracer construction to OTLP export.</td>
+            </tr>
+          </tbody>
+        </table>
 
         
 <hr class="footer-rule"/>
