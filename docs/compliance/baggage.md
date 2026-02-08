@@ -35,4 +35,4 @@ This file tracks compliance for the OpenTelemetry baggage specification in this 
 
 ## Cross-cutting specs
 
-- Context propagation requirements are tracked in [context.md](context.md).
+- Context propagation requirements are tracked in [context-propagation.md](context-propagation.md).

@@ -95,7 +95,7 @@ This file tracks compliance for the OpenTelemetry trace specification in this re
 
 ## Cross-cutting specs
 
-- Context propagation requirements are tracked in [context.md](context.md).
+- Context propagation requirements are tracked in [context-propagation.md](context-propagation.md).
 - Instrumentation scope requirements are tracked in [instrumentation-scope.md](instrumentation-scope.md).
 - Resource requirements are tracked in [resource.md](resource.md).
 - SDK environment-variable requirements are tracked in [configuration.md](configuration.md).
