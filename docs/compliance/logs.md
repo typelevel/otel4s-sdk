@@ -34,7 +34,7 @@ This file tracks compliance for the OpenTelemetry logs specification in this rep
 
 ## logs/sdk_exporters
 
-| Status | Evidence | Notes |
-| --- | --- | --- |
-| stdout.md | Partial | [ConsoleLogRecordExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/exporter/ConsoleLogRecordExporter.scala) |
-| otlp.md | Partial | [OtlpLogRecordExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/OtlpLogRecordExporter.scala), [LogsProtoEncoder.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala), [OtlpLogRecordExporterAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/autoconfigure/OtlpLogRecordExporterAutoConfigure.scala) |
+| Spec | Status | Evidence | Notes |
+| --- | --- | --- | --- |
+| stdout.md | Partial | [ConsoleLogRecordExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/exporter/ConsoleLogRecordExporter.scala) | Verify output format requirements |
+| otlp.md | Partial | [OtlpLogRecordExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/OtlpLogRecordExporter.scala), [LogsProtoEncoder.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala), [OtlpLogRecordExporterAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/autoconfigure/OtlpLogRecordExporterAutoConfigure.scala) | OTLP protocol and autoconfigure are implemented; lifecycle remains Resource-managed |
