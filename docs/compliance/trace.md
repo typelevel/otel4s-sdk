@@ -23,8 +23,8 @@ This file tracks compliance for the OpenTelemetry trace specification in this re
 | TracerProvider | [Shutdown + ForceFlush on provider (invoke processors)](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#tracer-provider) | Partial | [TracerProviderAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/TracerProviderAutoConfigure.scala#L40), [BatchSpanProcessor.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L54) | Processor lifecycles are Resource-managed; no explicit shutdown/forceFlush API on provider                      |
 | Span limits | [Span limits type + builder with defaults](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#span-limits) | Compliant | [SpanLimits.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SpanLimits.scala#L27) | Defaults match spec (128 limits; unlimited value length)                                                        |
 | Span limits | [Env/config auto-config for span limits](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#span-limits) | Compliant | [SpanLimitsAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/SpanLimitsAutoConfigure.scala#L42) |                                                                                                                 |
-| Id generator | [Default random ids](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#idgenerator-randomness-1) | Compliant | [IdGenerator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/IdGenerator.scala#L35) |                                                                                                                 |
-| Id generator | [Custom IdGenerator support](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#idgenerator-randomness-1) | Compliant | [SdkTracerProvider.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L36) |                                                                                                                 |
+| Id generator | [Default random ids](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#idgenerator-randomness) | Compliant | [IdGenerator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/IdGenerator.scala#L35) |                                                                                                                 |
+| Id generator | [Custom IdGenerator support](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#idgenerator-randomness) | Compliant | [SdkTracerProvider.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L36) |                                                                                                                 |
 | Sampling | [Sampler interface + parent-based + trace-id-ratio](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#sampling) | Partial | [samplers/](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/samplers/) | No ProbabilitySampler, AlwaysRecord, CompositeSampler; no warnings when TraceIdRatioBased used as child sampler |
 | Span processor | [SpanProcessor interface with onStart/onEnd + forceFlush](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#span-processor) | Compliant | [SpanProcessor.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/SpanProcessor.scala#L38) |                                                                                                                 |
 | Span processor | [OnEnding hook](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#span-processor) | Partial | [SpanProcessor.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/SpanProcessor.scala#L38) | `onEnd` exists with `SpanData` snapshot; no distinct pre-end OnEnding hook                                      |
@@ -51,10 +51,10 @@ This file tracks compliance for the OpenTelemetry trace specification in this re
 
 ## trace/sdk_exporters
 
-| Status | Evidence | Notes |
-| --- | --- | --- |
-| stdout.md | Partial | [ConsoleSpanExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/ConsoleSpanExporter.scala) |
-| zipkin.md | Not Applicable |  |
+| Area | Requirement | Status | Evidence | Notes |
+| --- | --- | --- | --- | --- |
+| SDK Exporter | [stdout.md](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk_exporters/stdout.md) | Partial | [ConsoleSpanExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/ConsoleSpanExporter.scala) |  |
+| SDK Exporter | [zipkin.md](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk_exporters/zipkin.md) | Not Applicable |  |  |
 
 ## trace/api.md checklist (external: otel4s-core)
 
