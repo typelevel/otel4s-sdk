@@ -12,7 +12,7 @@ This file tracks compliance for the OpenTelemetry logs specification in this rep
 - SDK core: [logs](@OTEL4S_SDK_GITHUB_URL@/sdk/logs)
 - SDK exporters: [logs](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs)
 
-## logs/sdk.md checklist
+## [logs/sdk.md](@OTEL_SPEC_GITHUB_URL@/specification/logs/sdk.md) checklist
 
 | Area | Requirement | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- |
@@ -25,7 +25,7 @@ This file tracks compliance for the OpenTelemetry logs specification in this rep
 | LogRecord limits | [Attribute/value limits + drop behavior](@OTEL_SPEC_GITHUB_URL@/specification/logs/sdk.md#logrecord-limits) | Compliant | [SdkLogRecordBuilder.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLogRecordBuilder.scala#L134-L137), [LogsProtoEncoder.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala#L115-L117), [BatchLogRecordProcessor.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/BatchLogRecordProcessor.scala#L282-L283) | Attribute limits are enforced via bounded `LimitedData`; dropped attribute count and queue-drop behavior are surfaced. |
 | LogRecord data model | [Mapping to spec fields](@OTEL_SPEC_GITHUB_URL@/specification/logs/sdk.md#additional-logrecord-interfaces) | Compliant | [SdkLogRecordBuilder.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/SdkLogRecordBuilder.scala#L93-L104), [LogsProtoEncoder.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/LogsProtoEncoder.scala#L109-L121), [SdkLogRecordBuilderSuite.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/test/scala/org/typelevel/otel4s/sdk/logs/SdkLogRecordBuilderSuite.scala#L106-L113) | SDK record construction and OTLP mapping cover timestamp/observed timestamp, context, severity, body, event name, attributes, scope, and resource. |
 
-## logs/data-model.md checklist
+## [logs/data-model.md](@OTEL_SPEC_GITHUB_URL@/specification/logs/data-model.md) checklist
 
 | Area | Requirement | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- |
@@ -38,3 +38,9 @@ This file tracks compliance for the OpenTelemetry logs specification in this rep
 | --- | --- | --- | --- | --- |
 | SDK Exporter | [stdout.md](@OTEL_SPEC_GITHUB_URL@/specification/logs/sdk_exporters/stdout.md) | Compliant | [ConsoleLogRecordExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/exporter/ConsoleLogRecordExporter.scala#L54-L68), [LoggerProviderAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/autoconfigure/LoggerProviderAutoConfigure.scala#L89-L91), [ConsoleLogRecordExporterSuite.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/logs/src/test/scala/org/typelevel/otel4s/sdk/logs/exporter/ConsoleLogRecordExporterSuite.scala#L39-L49) | Console exporter is implemented, tested, and autoconfigured with a simple processor when selected. |
 | SDK Exporter | [otlp.md](@OTEL_SPEC_GITHUB_URL@/specification/protocol/otlp.md) | Partial | [OtlpLogRecordExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/OtlpLogRecordExporter.scala#L62-L63), [OtlpLogRecordExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/OtlpLogRecordExporter.scala#L199-L210), [OtlpLogRecordExporterAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/autoconfigure/OtlpLogRecordExporterAutoConfigure.scala#L65-L70), [OtlpLogRecordExporterSuite.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/logs/src/test/scala/org/typelevel/otel4s/sdk/exporter/otlp/logs/OtlpLogRecordExporterSuite.scala#L177-L180) | OTLP export path and autoconfiguration are present; full protocol-wide compliance in `protocol/otlp.md` is broader than this checklist row and remains partially covered. |
+
+## Cross-cutting specs
+
+- Instrumentation scope requirements are tracked in [instrumentation-scope.md](instrumentation-scope.md).
+- Resource requirements are tracked in [resource.md](resource.md).
+- SDK environment-variable requirements are tracked in [configuration.md](configuration.md).

@@ -14,7 +14,7 @@ This file tracks compliance for the OpenTelemetry trace specification in this re
 - Context propagation: [propagation](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/context/propagation)
 - Contrib (non-core): [xray](@OTEL4S_SDK_GITHUB_URL@/sdk-contrib/aws/xray), [xray-propagator](@OTEL4S_SDK_GITHUB_URL@/sdk-contrib/aws/xray-propagator)
 
-## trace/sdk.md checklist
+## [trace/sdk.md](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md) checklist
 
 | Area | Requirement | Status | Evidence | Notes                                                                                                           |
 | --- | --- | --- | --- |-----------------------------------------------------------------------------------------------------------------|
@@ -36,14 +36,14 @@ This file tracks compliance for the OpenTelemetry trace specification in this re
 | Span lifecycle | [Span creation/ending via SdkSpanBuilder + SdkSpanBackend](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#sdk-span-creation) | Partial | [SdkSpanBuilder.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkSpanBuilder.scala#L149-L154), [SdkSpanBackend.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkSpanBackend.scala#L323-L329) | SpanId generated before ShouldSample (spec order is ShouldSample then SpanId) |
 | Span limits | [Logging when limits drop data](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk.md#span-limits) | Not Implemented | [LimitedData.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/data/LimitedData.scala#L44) | No once-per-span log when attributes/events/links are dropped |
 
-## trace/tracestate-handling.md checklist
+## [trace/tracestate-handling.md](@OTEL_SPEC_GITHUB_URL@/specification/trace/tracestate-handling.md) checklist
 
 | Area | Requirement | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- |
 | TraceState propagation | [W3C TraceContext encode/decode](@OTEL_SPEC_GITHUB_URL@/specification/trace/tracestate-handling.md#tracestate-handling) | Partial | [W3CTraceContextPropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L48-L51), [W3CTraceContextPropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L87-L103) | No OpenTelemetry `ot` entry handling or validation (key uniqueness/length) |
 | TraceState propagation | [OpenTelemetry `ot` sub-key handling (th/rv)](@OTEL_SPEC_GITHUB_URL@/specification/trace/tracestate-handling.md#tracestate-handling) | Not Implemented | [W3CTraceContextPropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L112-L123), [W3CTraceContextPropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L125-L132) | No utilities to set/merge `ot` entry |
 
-## trace/tracestate-probability-sampling.md checklist
+## [trace/tracestate-probability-sampling.md](@OTEL_SPEC_GITHUB_URL@/specification/trace/tracestate-probability-sampling.md) checklist
 
 | Area | Requirement | Status | Evidence | Notes                                                                        |
 | --- | --- | --- | --- |------------------------------------------------------------------------------|
@@ -56,7 +56,7 @@ This file tracks compliance for the OpenTelemetry trace specification in this re
 | SDK Exporter | [stdout.md](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk_exporters/stdout.md) | Partial | [ConsoleSpanExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/exporter/ConsoleSpanExporter.scala#L32) |  |
 | SDK Exporter | [zipkin.md](@OTEL_SPEC_GITHUB_URL@/specification/trace/sdk_exporters/zipkin.md) | Not Applicable |  |  |
 
-## trace/api.md checklist (external: otel4s-core)
+## [trace/api.md](@OTEL_SPEC_GITHUB_URL@/specification/trace/api.md) checklist (external: otel4s-core)
 
 | Area | Requirement | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- |
@@ -74,7 +74,7 @@ This file tracks compliance for the OpenTelemetry trace specification in this re
 | Concurrency | [TracerProvider/Tracer/Span methods safe to call concurrently](@OTEL_SPEC_GITHUB_URL@/specification/trace/api.md#concurrency) | Partial | [tracing.md](@OTEL4S_GITHUB_URL@/docs/instrumentation/tracing.md#L1) | Documented; not verified by tests |
 | No-SDK behavior | [No-op API preserves parent SpanContext for propagation](@OTEL_SPEC_GITHUB_URL@/specification/trace/api.md#behavior-of-the-api-in-the-absence-of-an-installed-sdk) | Not Implemented | [Tracer.scala](@OTEL4S_GITHUB_URL@/core/trace/src/main/scala/org/typelevel/otel4s/trace/Tracer.scala#L52-L55), [Span.scala](@OTEL4S_GITHUB_URL@/core/trace/src/main/scala/org/typelevel/otel4s/trace/Span.scala#L71) | No public API to wrap SpanContext; `Tracer.noop` always uses `SpanContext.invalid` |
 
-## trace/api.md context interaction checklist (external: otel4s-core)
+## [trace/api.md](@OTEL_SPEC_GITHUB_URL@/specification/trace/api.md) context interaction checklist (external: otel4s-core)
 
 | Area | Requirement | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- |
@@ -84,7 +84,7 @@ This file tracks compliance for the OpenTelemetry trace specification in this re
 | Implicit context | [Set current span into implicit context](@OTEL_SPEC_GITHUB_URL@/specification/trace/api.md#spancontext) | Partial | [Tracer.scala](@OTEL4S_GITHUB_URL@/core/trace/src/main/scala/org/typelevel/otel4s/trace/Tracer.scala#L52-L55) | `childScope`/`rootScope`/`noopScope` operate on SpanContext; no public Context-combine API |
 | Context API | [Generic Context storage only (no trace-specific helpers)](@OTEL_SPEC_GITHUB_URL@/specification/trace/api.md#context-interaction) | Not Implemented | [Context.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/Context.scala#L133-L137), [Contextual.scala](@OTEL4S_GITHUB_URL@/core/common/src/main/scala/org/typelevel/otel4s/context/Contextual.scala#L27-L37) | No helpers to extract/attach Span or SpanContext outside trace module |
 
-## trace/exceptions.md checklist
+## [trace/exceptions.md](@OTEL_SPEC_GITHUB_URL@/specification/trace/exceptions.md) checklist
 
 | Area | Requirement | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- |
@@ -92,3 +92,10 @@ This file tracks compliance for the OpenTelemetry trace specification in this re
 | Exception attrs | [`exception.type`, `exception.message`, `exception.stacktrace`](@OTEL_SPEC_GITHUB_URL@/specification/trace/exceptions.md#recording-an-exception) | Compliant | [EventData.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/data/EventData.scala#L107-L115), [EventData.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/data/EventData.scala#L117-L125) | Exception event population sets type and conditionally sets message and stacktrace when present. |
 | RecordException API | [Optional extra attributes override defaults](@OTEL_SPEC_GITHUB_URL@/specification/trace/exceptions.md#recording-an-exception) | Compliant | [EventData.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/data/EventData.scala#L48-L50) | `attributes.prependAll(exceptionAttributes)` keeps user attrs last |
 | Unhandled exception guidance | [Record exception + set status Error on unhandled](@OTEL_SPEC_GITHUB_URL@/specification/trace/exceptions.md#recording-an-exception) | Partial | [SpanFinalizer.scala](@OTEL4S_GITHUB_URL@/core/trace/src/main/scala/org/typelevel/otel4s/trace/SpanFinalizer.scala#L51-L54) | `reportAbnormal` records exception + sets Error; API does not enforce “only if unhandled” |
+
+## Cross-cutting specs
+
+- Context propagation requirements are tracked in [context-propagation.md](context-propagation.md).
+- Instrumentation scope requirements are tracked in [instrumentation-scope.md](instrumentation-scope.md).
+- Resource requirements are tracked in [resource.md](resource.md).
+- SDK environment-variable requirements are tracked in [configuration.md](configuration.md).

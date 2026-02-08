@@ -14,7 +14,7 @@ This file tracks compliance for the OpenTelemetry baggage specification in this 
 - SDK context keys: [SdkContextKeys.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkContextKeys.scala#L40)
 - SDK propagators: [propagation](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation)
 
-## baggage/api.md checklist
+## [baggage/api.md](@OTEL_SPEC_GITHUB_URL@/specification/baggage/api.md) checklist
 
 | Area | Requirement | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- |
@@ -32,3 +32,7 @@ This file tracks compliance for the OpenTelemetry baggage specification in this 
 | Clear baggage | [Ability to clear all baggage from Context](@OTEL_SPEC_GITHUB_URL@/specification/baggage/api.md#clear-baggage-in-the-context) | Partial | [SdkBaggageManager.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/baggage/SdkBaggageManager.scala#L32-L35) | Use `scope(Baggage.empty)`; no explicit helper |
 | Propagation | [W3C Baggage TextMapPropagator available](@OTEL_SPEC_GITHUB_URL@/specification/baggage/api.md#propagation) | Compliant | [W3CBaggagePropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CBaggagePropagator.scala#L43-L50), [W3CBaggagePropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CBaggagePropagator.scala#L55-L63) | Included in default propagators |
 | Conflict resolution | [New entry replaces existing same name](@OTEL_SPEC_GITHUB_URL@/specification/baggage/api.md#conflict-resolution) | Compliant | [Baggage.scala](@OTEL4S_GITHUB_URL@/core/common/src/main/scala/org/typelevel/otel4s/baggage/Baggage.scala#L200-L201), [BaggageSuite.scala](@OTEL4S_GITHUB_URL@/core/common/src/test/scala/org/typelevel/otel4s/baggage/BaggageSuite.scala#L75-L80) | `Map.updated` overwrites |
+
+## Cross-cutting specs
+
+- Context propagation requirements are tracked in [context-propagation.md](context-propagation.md).

@@ -13,7 +13,7 @@ This file tracks compliance for the OpenTelemetry metrics specification in this 
 - SDK exporters: [metrics](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/metrics), [prometheus](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/prometheus)
 - SDK data model: [data](@OTEL4S_SDK_GITHUB_URL@/sdk/metrics/data)
 
-## metrics/sdk.md checklist
+## [metrics/sdk.md](@OTEL_SPEC_GITHUB_URL@/specification/metrics/sdk.md) checklist
 
 | Area | Requirement | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- |
@@ -35,7 +35,7 @@ This file tracks compliance for the OpenTelemetry metrics specification in this 
 | Temporality | [Delta/Cumulative collection semantics](@OTEL_SPEC_GITHUB_URL@/specification/metrics/sdk.md#counter-x-will-be-exported-as-cumulative-sum) | Compliant | [SynchronousStorage.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/SynchronousStorage.scala#L56-L57), [AsynchronousStorage.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/AsynchronousStorage.scala#L55), [RegisteredReader.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/exporter/RegisteredReader.scala#L27) | Delta uses per-reader last-collect timestamp and reset/diff semantics; cumulative uses stable start times |
 | Numerical limits | [Handling for NaN/Inf, etc.](@OTEL_SPEC_GITHUB_URL@/specification/metrics/sdk.md#numerical-limits-handling) | Partial | [SynchronousStorage.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/internal/storage/SynchronousStorage.scala#L48) | Drops NaN for synchronous double values; no explicit Inf handling |
 
-## metrics/data-model.md checklist
+## [metrics/data-model.md](@OTEL_SPEC_GITHUB_URL@/specification/metrics/data-model.md) checklist
 
 | Area | Requirement | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- |
@@ -57,3 +57,9 @@ This file tracks compliance for the OpenTelemetry metrics specification in this 
 | SDK Exporter | [in-memory.md](@OTEL_SPEC_GITHUB_URL@/specification/metrics/sdk_exporters/in-memory.md) | Partial | [InMemoryMetricExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/metrics-testkit/src/main/scala/org/typelevel/otel4s/sdk/testkit/metrics/InMemoryMetricExporter.scala#L40-L47), [InMemoryMetricReader.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/metrics-testkit/src/main/scala/org/typelevel/otel4s/sdk/testkit/metrics/InMemoryMetricReader.scala#L36-L43) | Available in testkit module; not exposed as a production exporter module under `sdk-exporter/*` |
 | SDK Exporter | [otlp.md](@OTEL_SPEC_GITHUB_URL@/specification/metrics/sdk_exporters/otlp.md) | Partial | [OtlpMetricExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/OtlpMetricExporter.scala#L62-L68), [OtlpMetricExporterAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/autoconfigure/OtlpMetricExporterAutoConfigure.scala#L69-L77), [OtlpClientAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/common/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/autoconfigure/OtlpClientAutoConfigure.scala#L82-L90) | OTLP protocol config supported; missing env config for temporality preference + default histogram aggregation |
 | SDK Exporter | [prometheus.md](@OTEL_SPEC_GITHUB_URL@/specification/metrics/sdk_exporters/prometheus.md) | Partial | [PrometheusMetricExporter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/prometheus/src/main/scala/org/typelevel/otel4s/sdk/exporter/prometheus/PrometheusMetricExporter.scala#L47-L49), [PrometheusHttpRoutes.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/prometheus/src/main/scala/org/typelevel/otel4s/sdk/exporter/prometheus/PrometheusHttpRoutes.scala#L55-L57), [PrometheusWriter.scala](@OTEL4S_SDK_GITHUB_URL@/sdk-exporter/prometheus/src/main/scala/org/typelevel/otel4s/sdk/exporter/prometheus/PrometheusWriter.scala#L261-L269) | Pull exporter with text format 0.0.4, cumulative temporality; content negotiation is minimal (text/* only), no translation_strategy config |
+
+## Cross-cutting specs
+
+- Instrumentation scope requirements are tracked in [instrumentation-scope.md](instrumentation-scope.md).
+- Resource requirements are tracked in [resource.md](resource.md).
+- SDK environment-variable requirements are tracked in [configuration.md](configuration.md).

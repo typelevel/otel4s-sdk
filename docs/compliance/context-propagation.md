@@ -1,0 +1,17 @@
+# Context Propagation
+
+This file tracks compliance for cross-cutting OpenTelemetry context propagation requirements in this repository.
+
+## Scope
+
+- Applies across baggage and trace signal implementations.
+- Covers propagator APIs and default/override behavior.
+
+## [context/api-propagators.md](@OTEL_SPEC_GITHUB_URL@/specification/context/api-propagators.md) checklist
+
+| Area | Requirement | Status | Evidence | Notes |
+| --- | --- | --- | --- | --- |
+| Baggage propagator | [Inject/Extract operations for carrier propagation](@OTEL_SPEC_GITHUB_URL@/specification/context/api-propagators.md#operations) | Compliant | [W3CBaggagePropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CBaggagePropagator.scala#L43-L50), [W3CBaggagePropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CBaggagePropagator.scala#L55-L63), [W3CBaggagePropagatorSuite.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/test/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CBaggagePropagatorSuite.scala#L26-L33) | SDK baggage propagator implements both extraction and injection paths with tests. |
+| Trace propagator | [Inject/Extract operations for carrier propagation](@OTEL_SPEC_GITHUB_URL@/specification/context/api-propagators.md#operations) | Compliant | [W3CTraceContextPropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L48-L51), [W3CTraceContextPropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L87-L103), [W3CTraceContextPropagatorSuite.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/test/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagatorSuite.scala#L29-L36) | W3C tracecontext propagator implements extraction and injection with tests. |
+| Composite propagator | [Ability to compose multiple propagators](@OTEL_SPEC_GITHUB_URL@/specification/context/api-propagators.md#composite-propagator) | Compliant | [ContextPropagatorsAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/ContextPropagatorsAutoConfigure.scala#L92-L93), [OpenTelemetrySdk.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/all/src/main/scala/org/typelevel/otel4s/sdk/OpenTelemetrySdk.scala#L452-L453), [OpenTelemetrySdk.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/all/src/main/scala/org/typelevel/otel4s/sdk/OpenTelemetrySdk.scala#L483-L484) | Uses `ContextPropagators.of(...)` and wires composed propagators into SDK. |
+| Global/default propagators | [Default to pre-configured propagators and allow override](@OTEL_SPEC_GITHUB_URL@/specification/context/api-propagators.md#global-propagators) | Partial | [ContextPropagatorsAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/ContextPropagatorsAutoConfigure.scala#L128-L129), [ContextPropagatorsAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/ContextPropagatorsAutoConfigure.scala#L119-L121), [ContextPropagatorsAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/ContextPropagatorsAutoConfigure.scala#L75-L77) | `tracecontext,baggage` default and `OTEL_PROPAGATORS` override are supported; no process-wide global get/set API is exposed. |
