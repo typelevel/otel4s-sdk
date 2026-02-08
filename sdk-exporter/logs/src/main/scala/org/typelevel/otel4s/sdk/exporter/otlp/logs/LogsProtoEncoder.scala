@@ -114,9 +114,10 @@ private object LogsProtoEncoder {
       body = log.body.map(toAnyValueProto),
       attributes = ProtoEncoder.encode(log.attributes.elements),
       droppedAttributesCount = log.attributes.dropped,
-      flags = 0,
+      flags = log.traceContext.fold(0)(ctx => if (ctx.isSampled) 1 else 0),
       traceId = traceId,
       spanId = spanId,
+      eventName = log.eventName.getOrElse(""),
     )
   }
 
