@@ -226,6 +226,13 @@
               <td><code>Aggregation.Sum</code> compatibility set omits <code>ObservableCounter</code>, so <code>View.withAggregation(Aggregation.sum)</code> is treated as incompatible for that instrument</td>
             </tr>
             <tr>
+              <td>Explicit Bucket Histogram Aggregation</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#explicit-bucket-histogram-aggregation">RecordMinMax config parameter</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/ExplicitBucketHistogramOptions.scala#L22-L54">ExplicitBucketHistogramOptions.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/Aggregation.scala#L111-L127">Aggregation.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/aggregation/ExplicitBucketHistogramAggregator.scala#L52-L175">ExplicitBucketHistogramAggregator.scala</a></td>
+              <td><code>recordMinMax=false</code> suppresses min/max while keeping count and sum</td>
+            </tr>
+            <tr>
               <td>Attribute limits</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md#attribute-limits">Attributes are exempt from limits</a></td>
               <td>Not Applicable</td>
