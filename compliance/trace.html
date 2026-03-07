@@ -234,8 +234,8 @@
               <td>Id generator</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#idgenerator-randomness">Default random ids</a></td>
               <td>Compliant</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L163-L166">SdkTracerProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/IdGenerator.scala#L63-L72">IdGenerator.scala</a></td>
-              <td>Default builder wires <code>IdGenerator.random</code>; random generator produces non-zero span/trace IDs.</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L163-L166">SdkTracerProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/IdGenerator.scala#L63-L76">IdGenerator.scala</a></td>
+              <td>Default builder wires <code>IdGenerator.random</code>; random generator produces non-zero span/trace IDs and marks generated root contexts as random-trace-id.</td>
             </tr>
             <tr>
               <td>Id generator</td>
@@ -243,6 +243,13 @@
               <td>Compliant</td>
               <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkTracerProvider.scala#L182-L183">SdkTracerProvider.scala</a></td>
               <td></td>
+            </tr>
+            <tr>
+              <td>Id generator</td>
+              <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#idgenerator-randomness-1">IdGenerator randomness extension controls random flag</a></td>
+              <td>Compliant</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/IdGenerator.scala#L46-L56">IdGenerator.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkSpanBuilder.scala#L156-L159">SdkSpanBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-contrib/aws/xray/src/main/scala/org/typelevel/otel4s/sdk/trace/contrib/aws/xray/AwsXRayIdGenerator.scala#L66-L82">AwsXRayIdGenerator.scala</a></td>
+              <td>Root span contexts set the random-trace-id flag based on <code>IdGenerator.generatesRandomTraceId</code>; child spans preserve the parent random bit.</td>
             </tr>
             <tr>
               <td>Sampling</td>
@@ -442,7 +449,7 @@
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/api.md#spancontext">TraceFlags sampled + random flag exposure</a></td>
               <td>Partial</td>
               <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceFlags.scala#L44">TraceFlags.scala</a></td>
-              <td>Only sampled flag exposed; no random flag API</td>
+              <td>Only sampled flag is currently exposed in the released core API.</td>
             </tr>
             <tr>
               <td>TraceState</td>
