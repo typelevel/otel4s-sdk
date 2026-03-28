@@ -111,6 +111,7 @@
     <li class="level2 nav-leaf"><a href="otlp.html">Export telemetry with OTLP</a></li>
     <li class="level2 nav-leaf"><a href="prometheus-exporter.html">Export metrics with Prometheus</a></li>
     <li class="level2 active nav-leaf"><a href="#">Testing with testkit</a></li>
+    <li class="level2 nav-leaf"><a href="testkit-metrics.html">Testkit | Metrics</a></li>
     <li class="level1 nav-header">SDK</li>
     <li class="level2 nav-leaf"><a href="../sdk/overview.html">Overview</a></li>
     <li class="level2 nav-leaf"><a href="../sdk/configuration.html">Configuration</a></li>
@@ -177,6 +178,11 @@
         </ol>
         
         <h2 id="testing-metrics" class="section"><a class="anchor-link left" href="#testing-metrics"><i class="icofont-laika link">&#xef71;</i></a>Testing metrics</h2>
+        <p>The testkit provides a dedicated expectation API built on top of the <code>MetricData</code>.
+        This allows tests to match only the parts that matter: metric name, kind, values, point attributes,
+        instrumentation scope, telemetry resource, summaries, histograms, and more.</p>
+        <p>For the metrics expectation API, see the dedicated <a href="testkit-metrics.html">Metrics testkit guide</a>.</p>
+        <hr>
         <p>Let&#39;s assume we have a program that increments a counter by one and sets the gauge&#39;s value to 42. 
         Here is how we can test this program:</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>
