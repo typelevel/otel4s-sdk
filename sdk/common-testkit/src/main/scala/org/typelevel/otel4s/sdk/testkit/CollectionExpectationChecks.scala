@@ -83,26 +83,27 @@ private[testkit] object CollectionExpectationChecks {
     }
   }
 
-  def andCheck[M](
-      left: Either[NonEmptyList[M], Unit],
-      right: Either[NonEmptyList[M], Unit]
-  )(compositeMismatch: NonEmptyList[M] => M): Either[NonEmptyList[M], Unit] =
-    ExpectationChecks.combine(left, right) match {
-      case Right(_)         => Right(())
-      case Left(mismatches) => Left(NonEmptyList.one(compositeMismatch(mismatches)))
-    }
-
-  def orCheck[M](
+  def compositeCheck[M](
+      operator: LogicalOperator,
       left: Either[NonEmptyList[M], Unit],
       right: => Either[NonEmptyList[M], Unit]
   )(compositeMismatch: NonEmptyList[M] => M): Either[NonEmptyList[M], Unit] =
-    left match {
-      case success @ Right(_) => success
-      case Left(leftMismatch) =>
-        right match {
-          case success @ Right(_)  => success
-          case Left(rightMismatch) =>
-            ExpectationChecks.mismatch(compositeMismatch(leftMismatch.concatNel(rightMismatch)))
+    operator match {
+      case LogicalOperator.And =>
+        ExpectationChecks.combine(left, right) match {
+          case Right(_)         => Right(())
+          case Left(mismatches) => Left(NonEmptyList.one(compositeMismatch(mismatches)))
+        }
+
+      case LogicalOperator.Or =>
+        left match {
+          case success @ Right(_) => success
+          case Left(leftMismatch) =>
+            right match {
+              case success @ Right(_)  => success
+              case Left(rightMismatch) =>
+                ExpectationChecks.mismatch(compositeMismatch(leftMismatch.concatNel(rightMismatch)))
+            }
         }
     }
 }

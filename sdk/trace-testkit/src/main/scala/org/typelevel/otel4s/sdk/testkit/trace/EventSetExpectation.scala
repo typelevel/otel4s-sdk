@@ -279,15 +279,8 @@ object EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
-        operator match {
-          case LogicalOperator.And =>
-            CollectionExpectationChecks.andCheck(left.check(events), right.check(events)) { mismatches =>
-              Mismatch.CompositeMismatch(operator, mismatches)
-            }
-          case LogicalOperator.Or =>
-            CollectionExpectationChecks.orCheck(left.check(events), right.check(events)) { mismatches =>
-              Mismatch.CompositeMismatch(operator, mismatches)
-            }
+        CollectionExpectationChecks.compositeCheck(operator, left.check(events), right.check(events)) { mismatches =>
+          Mismatch.CompositeMismatch(operator, mismatches)
         }
       }
   }

@@ -373,15 +373,8 @@ object PointSetExpectation {
     def clue(text: String): PointSetExpectation[P] = copy(clue = Some(text))
     def check(points: List[P]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
-        operator match {
-          case LogicalOperator.And =>
-            CollectionExpectationChecks.andCheck(left.check(points), right.check(points)) { mismatches =>
-              Mismatch.CompositeMismatch(operator, mismatches)
-            }
-          case LogicalOperator.Or =>
-            CollectionExpectationChecks.orCheck(left.check(points), right.check(points)) { mismatches =>
-              Mismatch.CompositeMismatch(operator, mismatches)
-            }
+        CollectionExpectationChecks.compositeCheck(operator, left.check(points), right.check(points)) { mismatches =>
+          Mismatch.CompositeMismatch(operator, mismatches)
         }
       }
   }
