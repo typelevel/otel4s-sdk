@@ -26,6 +26,7 @@ import org.typelevel.otel4s.Attributes
 import org.typelevel.otel4s.sdk.metrics.data.MetricData
 import org.typelevel.otel4s.sdk.metrics.data.MetricPoints
 import org.typelevel.otel4s.sdk.metrics.data.PointData
+import org.typelevel.otel4s.sdk.testkit.LogicalOperator
 
 import scala.reflect.ClassTag
 import scala.reflect.classTag
@@ -163,7 +164,7 @@ class PointSetExpectationSuite extends CatsEffectSuite {
           .and(PointSetExpectation.none(PointExpectation.numeric(1L).attributesSubset(Attribute("region", "eu"))))
           .check(points)
       )
-      assertEquals(andMismatch.operator, PointSetExpectation.LogicalOperator.And)
+      assertEquals(andMismatch.operator, LogicalOperator.And)
 
       assertSuccess(
         PointSetExpectation

@@ -216,11 +216,11 @@ object PointSetExpectation {
 
   /** Combines two point-set expectations using logical conjunction. */
   def and[P](left: PointSetExpectation[P], right: PointSetExpectation[P]): PointSetExpectation[P] =
-    And(left, right, None)
+    Composite(left, right, LogicalOperator.And, None)
 
   /** Combines two point-set expectations using logical disjunction. */
   def or[P](left: PointSetExpectation[P], right: PointSetExpectation[P]): PointSetExpectation[P] =
-    Or(left, right, None)
+    Composite(left, right, LogicalOperator.Or, None)
 
   private final case class AnyPoint[P](clue: Option[String]) extends PointSetExpectation[P] {
     def clue(text: String): PointSetExpectation[P] = copy(clue = Some(text))
@@ -365,30 +365,24 @@ object PointSetExpectation {
       withClueContext(clue)(Either.cond(f(points), (), NonEmptyList.one(Mismatch.PredicateFailed(clue))))
   }
 
-  private final case class And[P](
+  private final case class Composite[P](
       left: PointSetExpectation[P],
       right: PointSetExpectation[P],
+      operator: LogicalOperator,
       clue: Option[String]
   ) extends PointSetExpectation[P] {
     def clue(text: String): PointSetExpectation[P] = copy(clue = Some(text))
     def check(points: List[P]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
-        CollectionExpectationChecks.andCheck(left.check(points), right.check(points)) { mismatches =>
-          Mismatch.CompositeMismatch(LogicalOperator.And, mismatches)
-        }
-      }
-  }
-
-  private final case class Or[P](
-      left: PointSetExpectation[P],
-      right: PointSetExpectation[P],
-      clue: Option[String]
-  ) extends PointSetExpectation[P] {
-    def clue(text: String): PointSetExpectation[P] = copy(clue = Some(text))
-    def check(points: List[P]): Either[NonEmptyList[Mismatch], Unit] =
-      withClueContext(clue) {
-        CollectionExpectationChecks.orCheck(left.check(points), right.check(points)) { mismatches =>
-          Mismatch.CompositeMismatch(LogicalOperator.Or, mismatches)
+        operator match {
+          case LogicalOperator.And =>
+            CollectionExpectationChecks.andCheck(left.check(points), right.check(points)) { mismatches =>
+              Mismatch.CompositeMismatch(operator, mismatches)
+            }
+          case LogicalOperator.Or =>
+            CollectionExpectationChecks.orCheck(left.check(points), right.check(points)) { mismatches =>
+              Mismatch.CompositeMismatch(operator, mismatches)
+            }
         }
       }
   }

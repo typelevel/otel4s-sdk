@@ -150,10 +150,12 @@ object EventSetExpectation {
   def where(clue: String)(f: List[EventData] => Boolean): EventSetExpectation = Predicate(f, Some(clue))
 
   /** Combines two event-set expectations using logical `and`. */
-  def and(left: EventSetExpectation, right: EventSetExpectation): EventSetExpectation = And(left, right, None)
+  def and(left: EventSetExpectation, right: EventSetExpectation): EventSetExpectation =
+    Composite(left, right, LogicalOperator.And, None)
 
   /** Combines two event-set expectations using logical `or`. */
-  def or(left: EventSetExpectation, right: EventSetExpectation): EventSetExpectation = Or(left, right, None)
+  def or(left: EventSetExpectation, right: EventSetExpectation): EventSetExpectation =
+    Composite(left, right, LogicalOperator.Or, None)
 
   private final case class AnyEvent(clue: Option[String]) extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
@@ -263,31 +265,30 @@ object EventSetExpectation {
       }
   }
 
-  private final case class Predicate(f: List[EventData] => Boolean, clue: Option[String])
-      extends EventSetExpectation {
+  private final case class Predicate(f: List[EventData] => Boolean, clue: Option[String]) extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue)(Either.cond(f(events), (), NonEmptyList.one(Mismatch.PredicateFailed(clue))))
   }
 
-  private final case class And(left: EventSetExpectation, right: EventSetExpectation, clue: Option[String])
-      extends EventSetExpectation {
+  private final case class Composite(
+      left: EventSetExpectation,
+      right: EventSetExpectation,
+      operator: LogicalOperator,
+      clue: Option[String]
+  ) extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
-        CollectionExpectationChecks.andCheck(left.check(events), right.check(events)) { mismatches =>
-          Mismatch.CompositeMismatch(LogicalOperator.And, mismatches)
-        }
-      }
-  }
-
-  private final case class Or(left: EventSetExpectation, right: EventSetExpectation, clue: Option[String])
-      extends EventSetExpectation {
-    def clue(text: String): EventSetExpectation = copy(clue = Some(text))
-    def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
-      withClueContext(clue) {
-        CollectionExpectationChecks.orCheck(left.check(events), right.check(events)) { mismatches =>
-          Mismatch.CompositeMismatch(LogicalOperator.Or, mismatches)
+        operator match {
+          case LogicalOperator.And =>
+            CollectionExpectationChecks.andCheck(left.check(events), right.check(events)) { mismatches =>
+              Mismatch.CompositeMismatch(operator, mismatches)
+            }
+          case LogicalOperator.Or =>
+            CollectionExpectationChecks.orCheck(left.check(events), right.check(events)) { mismatches =>
+              Mismatch.CompositeMismatch(operator, mismatches)
+            }
         }
       }
   }
