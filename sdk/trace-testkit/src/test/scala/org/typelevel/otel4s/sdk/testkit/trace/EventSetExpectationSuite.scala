@@ -67,20 +67,19 @@ class EventSetExpectationSuite extends FunSuite {
     val unmatched =
       EventExpectation.name("message").where("timestamp must be 2 seconds")(_.timestamp == 2.seconds)
 
-    EventSetExpectation
-      .contains(
-        EventExpectation.name("message"),
-        unmatched
-      )
-      .check(events) match {
+    val expectation = EventSetExpectation.contains(
+      EventExpectation.name("message"),
+      unmatched
+    )
+
+    assertMatches(expectation.check(events)) {
       case Left(NonEmptyList(mismatch: EventSetExpectation.Mismatch.MissingExpectedEvent, Nil)) =>
         assertEquals(mismatch.clue, unmatched.clue)
         assertEquals(
           mismatch.mismatches,
           NonEmptyList.one(EventExpectation.Mismatch.PredicateMismatch(Some("timestamp must be 2 seconds")))
         )
-      case other =>
-        fail(s"unexpected result: $other")
+        true
     }
   }
 

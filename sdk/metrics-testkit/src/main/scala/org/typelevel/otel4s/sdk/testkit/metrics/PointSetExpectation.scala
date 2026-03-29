@@ -111,7 +111,6 @@ object PointSetExpectation {
     }
 
     private[testkit] final case class CompositeMismatch(
-        /** The logical operator that combined the nested mismatches. */
         operator: LogicalOperator,
         mismatches: NonEmptyList[Mismatch]
     ) extends Mismatch {
