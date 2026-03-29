@@ -166,68 +166,68 @@ object PointSetExpectation {
 
   /** Creates an expectation that matches any point collection. */
   def any[P]: PointSetExpectation[P] =
-    AnyImpl(None)
+    AnyPoint(None)
 
   /** Creates an expectation that requires at least one collected point to match the given point expectation. */
   def exists[E](point: E)(implicit checker: SinglePointChecker[E]): PointSetExpectation[checker.P] =
-    ExistsImpl(point, checker, None)
+    Exists(point, checker, None)
 
   /** Creates an expectation that requires every collected point to match the given point expectation. */
   def forall[E](point: E)(implicit checker: SinglePointChecker[E]): PointSetExpectation[checker.P] =
-    ForAllImpl(point, checker, None)
+    ForAll(point, checker, None)
 
   /** Creates an expectation that requires the point collection to contain distinct matches for all given expectations.
     */
   def contains[E](first: E, rest: E*)(implicit checker: SinglePointChecker[E]): PointSetExpectation[checker.P] =
-    ContainsImpl(NonEmptyList(first, rest.toList), checker, None)
+    Contains(NonEmptyList(first, rest.toList), checker, None)
 
   /** Creates an expectation that requires the point collection to match the given point expectations exactly. */
   def exactly[E](first: E, rest: E*)(implicit checker: SinglePointChecker[E]): PointSetExpectation[checker.P] =
-    ExactlyImpl(NonEmptyList(first, rest.toList), checker, None)
+    Exactly(NonEmptyList(first, rest.toList), checker, None)
 
   /** Creates an expectation that requires the point collection to have exactly the given size. */
   def count[P](expected: Int): PointSetExpectation[P] =
-    CountImpl(expected, None)
+    Count(expected, None)
 
   /** Creates an expectation that requires the point collection to have at least the given size. */
   def minCount[P](expectedAtLeast: Int): PointSetExpectation[P] =
-    MinCountImpl(expectedAtLeast, None)
+    MinCount(expectedAtLeast, None)
 
   /** Creates an expectation that requires the point collection to have at most the given size. */
   def maxCount[P](expectedAtMost: Int): PointSetExpectation[P] =
-    MaxCountImpl(expectedAtMost, None)
+    MaxCount(expectedAtMost, None)
 
   /** Creates an expectation that requires exactly the given number of collected points to match the point expectation.
     */
   def countWhere[E](point: E, expected: Int)(implicit checker: SinglePointChecker[E]): PointSetExpectation[checker.P] =
-    CountWhereImpl(point, expected, checker, None)
+    CountWhere(point, expected, checker, None)
 
   /** Creates an expectation that requires no collected point to match the given point expectation. */
   def none[E](point: E)(implicit checker: SinglePointChecker[E]): PointSetExpectation[checker.P] =
-    NoneOfImpl(point, checker, None)
+    NoneOf(point, checker, None)
 
   /** Creates an expectation from a custom predicate over the entire point collection. */
   def predicate[P](f: List[P] => Boolean): PointSetExpectation[P] =
-    PredicateImpl(f, None)
+    Predicate(f, None)
 
   /** Creates an expectation from a custom predicate over the entire point collection with an explanatory clue. */
   def predicate[P](clue: String)(f: List[P] => Boolean): PointSetExpectation[P] =
-    PredicateImpl(f, Some(clue))
+    Predicate(f, Some(clue))
 
   /** Combines two point-set expectations using logical conjunction. */
   def and[P](left: PointSetExpectation[P], right: PointSetExpectation[P]): PointSetExpectation[P] =
-    AndImpl(left, right, None)
+    And(left, right, None)
 
   /** Combines two point-set expectations using logical disjunction. */
   def or[P](left: PointSetExpectation[P], right: PointSetExpectation[P]): PointSetExpectation[P] =
-    OrImpl(left, right, None)
+    Or(left, right, None)
 
-  private final case class AnyImpl[P](clue: Option[String]) extends PointSetExpectation[P] {
+  private final case class AnyPoint[P](clue: Option[String]) extends PointSetExpectation[P] {
     def clue(text: String): PointSetExpectation[P] = copy(clue = Some(text))
     def check(points: List[P]): Either[NonEmptyList[Mismatch], Unit] = ExpectationChecks.success
   }
 
-  private final case class ExistsImpl[E, P](
+  private final case class Exists[E, P](
       point: E,
       checker: SinglePointChecker.Aux[E, P],
       clue: Option[String]
@@ -244,7 +244,7 @@ object PointSetExpectation {
       }
   }
 
-  private final case class ForAllImpl[E, P](
+  private final case class ForAll[E, P](
       point: E,
       checker: SinglePointChecker.Aux[E, P],
       clue: Option[String]
@@ -268,7 +268,7 @@ object PointSetExpectation {
       }
   }
 
-  private final case class ContainsImpl[E, P](
+  private final case class Contains[E, P](
       expected: NonEmptyList[E],
       checker: SinglePointChecker.Aux[E, P],
       clue: Option[String]
@@ -278,7 +278,7 @@ object PointSetExpectation {
       withClueContext(clue)(containsCheck(expected, checker, points).void)
   }
 
-  private final case class ExactlyImpl[E, P](
+  private final case class Exactly[E, P](
       expected: NonEmptyList[E],
       checker: SinglePointChecker.Aux[E, P],
       clue: Option[String]
@@ -293,7 +293,7 @@ object PointSetExpectation {
       }
   }
 
-  private final case class CountImpl[P](expected: Int, clue: Option[String]) extends PointSetExpectation[P] {
+  private final case class Count[P](expected: Int, clue: Option[String]) extends PointSetExpectation[P] {
     def clue(text: String): PointSetExpectation[P] = copy(clue = Some(text))
     def check(points: List[P]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
@@ -302,7 +302,7 @@ object PointSetExpectation {
       }
   }
 
-  private final case class MinCountImpl[P](expectedAtLeast: Int, clue: Option[String]) extends PointSetExpectation[P] {
+  private final case class MinCount[P](expectedAtLeast: Int, clue: Option[String]) extends PointSetExpectation[P] {
     def clue(text: String): PointSetExpectation[P] = copy(clue = Some(text))
     def check(points: List[P]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
@@ -311,7 +311,7 @@ object PointSetExpectation {
       }
   }
 
-  private final case class MaxCountImpl[P](expectedAtMost: Int, clue: Option[String]) extends PointSetExpectation[P] {
+  private final case class MaxCount[P](expectedAtMost: Int, clue: Option[String]) extends PointSetExpectation[P] {
     def clue(text: String): PointSetExpectation[P] = copy(clue = Some(text))
     def check(points: List[P]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
@@ -321,7 +321,7 @@ object PointSetExpectation {
 
   }
 
-  private final case class CountWhereImpl[E, P](
+  private final case class CountWhere[E, P](
       point: E,
       expected: Int,
       checker: SinglePointChecker.Aux[E, P],
@@ -336,7 +336,7 @@ object PointSetExpectation {
       }
   }
 
-  private final case class NoneOfImpl[E, P](
+  private final case class NoneOf[E, P](
       point: E,
       checker: SinglePointChecker.Aux[E, P],
       clue: Option[String]
@@ -356,7 +356,7 @@ object PointSetExpectation {
       }
   }
 
-  private final case class PredicateImpl[P](
+  private final case class Predicate[P](
       f: List[P] => Boolean,
       clue: Option[String]
   ) extends PointSetExpectation[P] {
@@ -365,7 +365,7 @@ object PointSetExpectation {
       withClueContext(clue)(Either.cond(f(points), (), NonEmptyList.one(Mismatch.PredicateFailed(clue))))
   }
 
-  private final case class AndImpl[P](
+  private final case class And[P](
       left: PointSetExpectation[P],
       right: PointSetExpectation[P],
       clue: Option[String]
@@ -379,7 +379,7 @@ object PointSetExpectation {
       }
   }
 
-  private final case class OrImpl[P](
+  private final case class Or[P](
       left: PointSetExpectation[P],
       right: PointSetExpectation[P],
       clue: Option[String]

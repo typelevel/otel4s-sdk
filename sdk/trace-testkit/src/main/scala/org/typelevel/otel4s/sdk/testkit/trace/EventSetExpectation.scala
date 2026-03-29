@@ -112,55 +112,55 @@ object EventSetExpectation {
   }
 
   /** Creates an expectation that accepts any event collection. */
-  def any: EventSetExpectation = AnyImpl(None)
+  def any: EventSetExpectation = AnyEvent(None)
 
   /** Requires at least one collected event to match the given expectation. */
-  def exists(event: EventExpectation): EventSetExpectation = ExistsImpl(event, None)
+  def exists(event: EventExpectation): EventSetExpectation = Exists(event, None)
 
   /** Requires every collected event to match the given expectation. */
-  def forall(event: EventExpectation): EventSetExpectation = ForAllImpl(event, None)
+  def forall(event: EventExpectation): EventSetExpectation = ForAll(event, None)
 
   /** Requires the collected events to contain all given expectations. */
   def contains(first: EventExpectation, rest: EventExpectation*): EventSetExpectation =
-    ContainsImpl(NonEmptyList(first, rest.toList), None)
+    Contains(NonEmptyList(first, rest.toList), None)
 
   /** Requires the collected events to match the given expectations exactly. */
   def exactly(first: EventExpectation, rest: EventExpectation*): EventSetExpectation =
-    ExactlyImpl(NonEmptyList(first, rest.toList), None)
+    Exactly(NonEmptyList(first, rest.toList), None)
 
   /** Requires the collected events to have exactly the given size. */
-  def count(expected: Int): EventSetExpectation = CountImpl(expected, None)
+  def count(expected: Int): EventSetExpectation = Count(expected, None)
 
   /** Requires the collected events to have at least the given size. */
-  def countAtLeast(expectedAtLeast: Int): EventSetExpectation = MinCountImpl(expectedAtLeast, None)
+  def countAtLeast(expectedAtLeast: Int): EventSetExpectation = MinCount(expectedAtLeast, None)
 
   /** Requires the collected events to have at most the given size. */
-  def countAtMost(expectedAtMost: Int): EventSetExpectation = MaxCountImpl(expectedAtMost, None)
+  def countAtMost(expectedAtMost: Int): EventSetExpectation = MaxCount(expectedAtMost, None)
 
   /** Requires exactly the given number of collected events to match the expectation. */
-  def countWhere(event: EventExpectation, expected: Int): EventSetExpectation = CountWhereImpl(event, expected, None)
+  def countWhere(event: EventExpectation, expected: Int): EventSetExpectation = CountWhere(event, expected, None)
 
   /** Requires no collected event to match the given expectation. */
-  def none(event: EventExpectation): EventSetExpectation = NoneOfImpl(event, None)
+  def none(event: EventExpectation): EventSetExpectation = NoneOf(event, None)
 
   /** Adds a custom predicate over the full event collection. */
-  def where(f: List[EventData] => Boolean): EventSetExpectation = PredicateImpl(f, None)
+  def where(f: List[EventData] => Boolean): EventSetExpectation = Predicate(f, None)
 
   /** Adds a custom predicate over the full event collection with a clue shown in mismatches. */
-  def where(clue: String)(f: List[EventData] => Boolean): EventSetExpectation = PredicateImpl(f, Some(clue))
+  def where(clue: String)(f: List[EventData] => Boolean): EventSetExpectation = Predicate(f, Some(clue))
 
   /** Combines two event-set expectations using logical `and`. */
-  def and(left: EventSetExpectation, right: EventSetExpectation): EventSetExpectation = AndImpl(left, right, None)
+  def and(left: EventSetExpectation, right: EventSetExpectation): EventSetExpectation = And(left, right, None)
 
   /** Combines two event-set expectations using logical `or`. */
-  def or(left: EventSetExpectation, right: EventSetExpectation): EventSetExpectation = OrImpl(left, right, None)
+  def or(left: EventSetExpectation, right: EventSetExpectation): EventSetExpectation = Or(left, right, None)
 
-  private final case class AnyImpl(clue: Option[String]) extends EventSetExpectation {
+  private final case class AnyEvent(clue: Option[String]) extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] = ExpectationChecks.success
   }
 
-  private final case class ExistsImpl(event: EventExpectation, clue: Option[String]) extends EventSetExpectation {
+  private final case class Exists(event: EventExpectation, clue: Option[String]) extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
@@ -173,7 +173,7 @@ object EventSetExpectation {
       }
   }
 
-  private final case class ForAllImpl(event: EventExpectation, clue: Option[String]) extends EventSetExpectation {
+  private final case class ForAll(event: EventExpectation, clue: Option[String]) extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
@@ -191,14 +191,14 @@ object EventSetExpectation {
       }
   }
 
-  private final case class ContainsImpl(expected: NonEmptyList[EventExpectation], clue: Option[String])
+  private final case class Contains(expected: NonEmptyList[EventExpectation], clue: Option[String])
       extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue)(containsCheck(expected, events).void)
   }
 
-  private final case class ExactlyImpl(expected: NonEmptyList[EventExpectation], clue: Option[String])
+  private final case class Exactly(expected: NonEmptyList[EventExpectation], clue: Option[String])
       extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
@@ -210,7 +210,7 @@ object EventSetExpectation {
       }
   }
 
-  private final case class CountImpl(expected: Int, clue: Option[String]) extends EventSetExpectation {
+  private final case class Count(expected: Int, clue: Option[String]) extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
@@ -219,7 +219,7 @@ object EventSetExpectation {
       }
   }
 
-  private final case class MinCountImpl(expectedAtLeast: Int, clue: Option[String]) extends EventSetExpectation {
+  private final case class MinCount(expectedAtLeast: Int, clue: Option[String]) extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
@@ -228,7 +228,7 @@ object EventSetExpectation {
       }
   }
 
-  private final case class MaxCountImpl(expectedAtMost: Int, clue: Option[String]) extends EventSetExpectation {
+  private final case class MaxCount(expectedAtMost: Int, clue: Option[String]) extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
@@ -237,7 +237,7 @@ object EventSetExpectation {
       }
   }
 
-  private final case class CountWhereImpl(event: EventExpectation, expected: Int, clue: Option[String])
+  private final case class CountWhere(event: EventExpectation, expected: Int, clue: Option[String])
       extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
@@ -248,7 +248,7 @@ object EventSetExpectation {
       }
   }
 
-  private final case class NoneOfImpl(event: EventExpectation, clue: Option[String]) extends EventSetExpectation {
+  private final case class NoneOf(event: EventExpectation, clue: Option[String]) extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue) {
@@ -263,14 +263,14 @@ object EventSetExpectation {
       }
   }
 
-  private final case class PredicateImpl(f: List[EventData] => Boolean, clue: Option[String])
+  private final case class Predicate(f: List[EventData] => Boolean, clue: Option[String])
       extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
       withClueContext(clue)(Either.cond(f(events), (), NonEmptyList.one(Mismatch.PredicateFailed(clue))))
   }
 
-  private final case class AndImpl(left: EventSetExpectation, right: EventSetExpectation, clue: Option[String])
+  private final case class And(left: EventSetExpectation, right: EventSetExpectation, clue: Option[String])
       extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
@@ -281,7 +281,7 @@ object EventSetExpectation {
       }
   }
 
-  private final case class OrImpl(left: EventSetExpectation, right: EventSetExpectation, clue: Option[String])
+  private final case class Or(left: EventSetExpectation, right: EventSetExpectation, clue: Option[String])
       extends EventSetExpectation {
     def clue(text: String): EventSetExpectation = copy(clue = Some(text))
     def check(events: List[EventData]): Either[NonEmptyList[Mismatch], Unit] =
