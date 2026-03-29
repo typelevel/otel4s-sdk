@@ -163,7 +163,7 @@ class PointSetExpectationSuite extends CatsEffectSuite {
           .and(PointSetExpectation.none(PointExpectation.numeric(1L).attributesSubset(Attribute("region", "eu"))))
           .check(points)
       )
-      assertEquals(andMismatch.operator, PointSetExpectation.Mismatch.LogicalOperator.And)
+      assertEquals(andMismatch.operator, PointSetExpectation.LogicalOperator.And)
 
       assertSuccess(
         PointSetExpectation
