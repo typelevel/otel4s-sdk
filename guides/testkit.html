@@ -103,6 +103,7 @@
     <li class="level1 nav-leaf"><a href="../modules-structure.html">Modules structure</a></li>
     <li class="level1 nav-leaf"><a href="../ecosystem.html">Ecosystem</a></li>
     <li class="level1 nav-header">Instrumentation</li>
+    <li class="level2 nav-leaf"><a href="../instrumentation/metrics-runtime.html">Metrics | Runtime</a></li>
     <li class="level2 nav-leaf"><a href="../instrumentation/metrics-cats-effect-io-runtime.html">Metrics | Cats Effect IO runtime</a></li>
     <li class="level2 nav-leaf"><a href="../instrumentation/tracing-cross-service-propagation.html">Tracing | Cross-service propagation</a></li>
     <li class="level2 nav-leaf"><a href="../instrumentation/logs.html">Logs</a></li>
@@ -183,149 +184,12 @@
         This allows tests to match only the parts that matter: metric name, kind, values, point attributes,
         instrumentation scope, telemetry resource, summaries, histograms, and more.</p>
         <p>For the metrics expectation API, see the dedicated <a href="testkit-metrics.html">Metrics testkit guide</a>.</p>
-        <hr>
-        <p>Let&#39;s assume we have a program that increments a counter by one and sets the gauge&#39;s value to 42. 
-        Here is how we can test this program:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="type-name">MeterProvider</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="identifier">data</span><span>.{</span><span class="type-name">MetricData</span><span>, </span><span class="type-name">MetricPoints</span><span>, </span><span class="type-name">PointData</span><span>}
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">testkit</span><span>.</span><span class="type-name">OpenTelemetrySdkTestkit</span><span>
-
-</span><span class="comment">// the program that we want to test 
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span>(</span><span class="identifier">meterProvider</span><span>: </span><span class="type-name">MeterProvider</span><span>[</span><span class="type-name">IO</span><span>]): </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
-  </span><span class="keyword">for</span><span> {
-    </span><span class="identifier">meter</span><span> &lt;- </span><span class="identifier">meterProvider</span><span>.</span><span class="identifier">get</span><span>(</span><span class="string-literal">&quot;service&quot;</span><span>)
-    
-    </span><span class="identifier">counter</span><span> &lt;- </span><span class="identifier">meter</span><span>.</span><span class="identifier">counter</span><span>[</span><span class="type-name">Long</span><span>](</span><span class="string-literal">&quot;service.counter&quot;</span><span>).</span><span class="identifier">create</span><span>
-    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">counter</span><span>.</span><span class="identifier">inc</span><span>()
-
-    </span><span class="identifier">gauge</span><span> &lt;- </span><span class="identifier">meter</span><span>.</span><span class="identifier">gauge</span><span>[</span><span class="type-name">Long</span><span>](</span><span class="string-literal">&quot;service.gauge&quot;</span><span>).</span><span class="identifier">create</span><span>
-    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">gauge</span><span>.</span><span class="identifier">record</span><span>(</span><span class="number-literal">42L</span><span>)
-  } </span><span class="keyword">yield</span><span> ()
-
-</span><span class="comment">// the test
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">test</span><span>: </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] = 
-  </span><span class="type-name">OpenTelemetrySdkTestkit</span><span>.</span><span class="identifier">inMemory</span><span>[</span><span class="type-name">IO</span><span>]().</span><span class="identifier">use</span><span> { </span><span class="identifier">testkit</span><span> =&gt;
-    </span><span class="comment">// the list of expected metrics
-</span><span>    </span><span class="keyword">val</span><span> </span><span class="identifier">expected</span><span> = </span><span class="type-name">List</span><span>(
-      </span><span class="type-name">TelemetryMetric</span><span>.</span><span class="type-name">SumLong</span><span>(</span><span class="string-literal">&quot;service.counter&quot;</span><span>, </span><span class="type-name">Vector</span><span>(</span><span class="number-literal">1L</span><span>)),
-      </span><span class="type-name">TelemetryMetric</span><span>.</span><span class="type-name">GaugeLong</span><span>(</span><span class="string-literal">&quot;service.gauge&quot;</span><span>, </span><span class="type-name">Vector</span><span>(</span><span class="number-literal">42L</span><span>))
-    )
-    
-    </span><span class="keyword">for</span><span> {
-      </span><span class="comment">// invoke the program
-</span><span>      </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">program</span><span>(</span><span class="identifier">testkit</span><span>.</span><span class="identifier">meterProvider</span><span>)
-      </span><span class="comment">// collect the metrics
-</span><span>      </span><span class="identifier">metrics</span><span> &lt;- </span><span class="identifier">testkit</span><span>.</span><span class="identifier">collectMetrics</span><span>
-      </span><span class="comment">// verify the collected metrics
-</span><span>      </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">assertMetrics</span><span>(</span><span class="identifier">metrics</span><span>, </span><span class="identifier">expected</span><span>)
-    } </span><span class="keyword">yield</span><span> ()
-  }
-  
-</span><span class="comment">// here you can use an assertion mechanism from your favorite testing framework
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">assertMetrics</span><span>(</span><span class="identifier">metrics</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">MetricData</span><span>], </span><span class="identifier">expected</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">TelemetryMetric</span><span>]): </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
-  </span><span class="type-name">IO</span><span> {
-    </span><span class="identifier">assert</span><span>(</span><span class="identifier">metrics</span><span>.</span><span class="identifier">sortBy</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">name</span><span>).</span><span class="identifier">map</span><span>(</span><span class="type-name">TelemetryMetric</span><span>.</span><span class="identifier">fromMetricData</span><span>) == </span><span class="identifier">expected</span><span>)
-  }
-  
-</span><span class="comment">// a minimized representation of the MetricData to simplify testing
-</span><span class="keyword">sealed</span><span> </span><span class="keyword">trait</span><span> </span><span class="type-name">TelemetryMetric</span><span>
-</span><span class="keyword">object</span><span> </span><span class="type-name">TelemetryMetric</span><span> {
-  </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">SumLong</span><span>(</span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">values</span><span>: </span><span class="type-name">Vector</span><span>[</span><span class="type-name">Long</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">TelemetryMetric</span><span>
-  </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">SumDouble</span><span>(</span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">values</span><span>: </span><span class="type-name">Vector</span><span>[</span><span class="type-name">Double</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">TelemetryMetric</span><span>
-
-  </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">GaugeLong</span><span>(</span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">values</span><span>: </span><span class="type-name">Vector</span><span>[</span><span class="type-name">Long</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">TelemetryMetric</span><span>
-  </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">GaugeDouble</span><span>(</span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">values</span><span>: </span><span class="type-name">Vector</span><span>[</span><span class="type-name">Double</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">TelemetryMetric</span><span>
-
-  </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Histogram</span><span>(</span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">values</span><span>: </span><span class="type-name">Vector</span><span>[</span><span class="type-name">Double</span><span>]) </span><span class="keyword">extends</span><span> </span><span class="type-name">TelemetryMetric</span><span>
-
-  </span><span class="keyword">def</span><span> </span><span class="declaration-name">fromMetricData</span><span>(</span><span class="identifier">metric</span><span>: </span><span class="type-name">MetricData</span><span>): </span><span class="type-name">TelemetryMetric</span><span> =
-    </span><span class="identifier">metric</span><span>.</span><span class="identifier">data</span><span> </span><span class="keyword">match</span><span> {
-      </span><span class="keyword">case</span><span> </span><span class="identifier">sum</span><span>: </span><span class="type-name">MetricPoints</span><span>.</span><span class="type-name">Sum</span><span> =&gt;
-        </span><span class="keyword">val</span><span> (</span><span class="identifier">doubles</span><span>, </span><span class="identifier">longs</span><span>) = </span><span class="identifier">split</span><span>(</span><span class="identifier">sum</span><span>.</span><span class="identifier">points</span><span>.</span><span class="identifier">toVector</span><span>)
-        </span><span class="keyword">if</span><span> (</span><span class="identifier">doubles</span><span>.</span><span class="identifier">nonEmpty</span><span>) </span><span class="type-name">SumDouble</span><span>(</span><span class="identifier">metric</span><span>.</span><span class="identifier">name</span><span>, </span><span class="identifier">doubles</span><span>)
-        </span><span class="keyword">else</span><span> </span><span class="type-name">SumLong</span><span>(</span><span class="identifier">metric</span><span>.</span><span class="identifier">name</span><span>, </span><span class="identifier">longs</span><span>)
-
-      </span><span class="keyword">case</span><span> </span><span class="identifier">gauge</span><span>: </span><span class="type-name">MetricPoints</span><span>.</span><span class="type-name">Gauge</span><span> =&gt;
-        </span><span class="keyword">val</span><span> (</span><span class="identifier">doubles</span><span>, </span><span class="identifier">longs</span><span>) = </span><span class="identifier">split</span><span>(</span><span class="identifier">gauge</span><span>.</span><span class="identifier">points</span><span>.</span><span class="identifier">toVector</span><span>)
-        </span><span class="keyword">if</span><span> (</span><span class="identifier">doubles</span><span>.</span><span class="identifier">nonEmpty</span><span>) </span><span class="type-name">GaugeDouble</span><span>(</span><span class="identifier">metric</span><span>.</span><span class="identifier">name</span><span>, </span><span class="identifier">doubles</span><span>)
-        </span><span class="keyword">else</span><span> </span><span class="type-name">GaugeLong</span><span>(</span><span class="identifier">metric</span><span>.</span><span class="identifier">name</span><span>, </span><span class="identifier">longs</span><span>)
-
-      </span><span class="keyword">case</span><span> </span><span class="identifier">histogram</span><span>: </span><span class="type-name">MetricPoints</span><span>.</span><span class="type-name">Histogram</span><span> =&gt;
-        </span><span class="type-name">Histogram</span><span>(
-          </span><span class="identifier">metric</span><span>.</span><span class="identifier">name</span><span>,
-          </span><span class="identifier">histogram</span><span>.</span><span class="identifier">points</span><span>.</span><span class="identifier">toVector</span><span>.</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">stats</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">sum</span><span>))
-        )
-
-      </span><span class="keyword">case</span><span> </span><span class="identifier">exponentialHistogram</span><span>: </span><span class="type-name">MetricPoints</span><span>.</span><span class="type-name">ExponentialHistogram</span><span> =&gt;
-        </span><span class="type-name">Histogram</span><span>(
-          </span><span class="identifier">metric</span><span>.</span><span class="identifier">name</span><span>,
-          </span><span class="identifier">exponentialHistogram</span><span>.</span><span class="identifier">points</span><span>.</span><span class="identifier">toVector</span><span>.</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">stats</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">sum</span><span>))
-        )
-    }
-
-  </span><span class="keyword">private</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">split</span><span>(</span><span class="identifier">points</span><span>: </span><span class="type-name">Vector</span><span>[</span><span class="type-name">PointData</span><span>.</span><span class="type-name">NumberPoint</span><span>]): (</span><span class="type-name">Vector</span><span>[</span><span class="type-name">Double</span><span>], </span><span class="type-name">Vector</span><span>[</span><span class="type-name">Long</span><span>]) =
-    </span><span class="identifier">points</span><span>.</span><span class="identifier">partitionMap</span><span> {
-      </span><span class="keyword">case</span><span> </span><span class="identifier">point</span><span>: </span><span class="type-name">PointData</span><span>.</span><span class="type-name">LongNumber</span><span>    =&gt; </span><span class="type-name">Right</span><span>(</span><span class="identifier">point</span><span>.</span><span class="identifier">value</span><span>)
-      </span><span class="keyword">case</span><span> </span><span class="identifier">double</span><span>: </span><span class="type-name">PointData</span><span>.</span><span class="type-name">DoubleNumber</span><span> =&gt; </span><span class="type-name">Left</span><span>(</span><span class="identifier">double</span><span>.</span><span class="identifier">value</span><span>)
-    }
-}</span></code></pre>
-        <p><code>MetricData</code> contains far more than most tests need:
-        metric metadata, resource and scope details, data points, attributes, collection windows, exemplars, and more.</p>
-        <p>In tests, it is often more maintainable to assert on a focused projection of the signal.
-        In this example, <code>TelemetryMetric</code> keeps only the pieces we care about and ignores noisy fields.</p>
         
         <h2 id="testing-spans" class="section"><a class="anchor-link left" href="#testing-spans"><i class="icofont-laika link">&#xef71;</i></a>Testing spans</h2>
         <p>The testkit also provides a dedicated structural expectation API for traces.
         It can match the full exported forest, nested subtrees, ordered or unordered children,
         timestamps, attributes, events, links, scope, resource, and more.</p>
         <p>For the traces expectation API, see the dedicated <a href="testkit-traces.html">Traces testkit guide</a>.</p>
-        <hr>
-        <p>Let&#39;s assume we want to test the structure of created spans:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">testkit</span><span>.</span><span class="type-name">OpenTelemetrySdkTestkit</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">testkit</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="type-name">TracerProvider</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="identifier">duration</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="comment">// the program that we want to test 
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span>(</span><span class="identifier">tracerProvider</span><span>: </span><span class="type-name">TracerProvider</span><span>[</span><span class="type-name">IO</span><span>]): </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
-  </span><span class="keyword">for</span><span> {
-    </span><span class="identifier">tracer</span><span> &lt;- </span><span class="identifier">tracerProvider</span><span>.</span><span class="identifier">get</span><span>(</span><span class="string-literal">&quot;service&quot;</span><span>)
-    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">tracer</span><span>.</span><span class="identifier">span</span><span>(</span><span class="string-literal">&quot;app.span&quot;</span><span>).</span><span class="identifier">surround</span><span> {
-      </span><span class="identifier">tracer</span><span>.</span><span class="identifier">span</span><span>(</span><span class="string-literal">&quot;app.nested.1&quot;</span><span>).</span><span class="identifier">surround</span><span>(</span><span class="type-name">IO</span><span>.</span><span class="identifier">sleep</span><span>(</span><span class="number-literal">200</span><span>.</span><span class="identifier">millis</span><span>)) &gt;&gt;
-      </span><span class="identifier">tracer</span><span>.</span><span class="identifier">span</span><span>(</span><span class="string-literal">&quot;app.nested.2&quot;</span><span>).</span><span class="identifier">surround</span><span>(</span><span class="type-name">IO</span><span>.</span><span class="identifier">sleep</span><span>(</span><span class="number-literal">300</span><span>.</span><span class="identifier">millis</span><span>))
-    }
-  } </span><span class="keyword">yield</span><span> ()
-
-</span><span class="comment">// the test
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">test</span><span>: </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
-  </span><span class="type-name">OpenTelemetrySdkTestkit</span><span>.</span><span class="identifier">inMemory</span><span>[</span><span class="type-name">IO</span><span>]().</span><span class="identifier">use</span><span> { </span><span class="identifier">testkit</span><span> =&gt;
-    </span><span class="keyword">val</span><span> </span><span class="identifier">expected</span><span> =
-      </span><span class="type-name">TraceForestExpectation</span><span>.</span><span class="identifier">unordered</span><span>(
-        </span><span class="type-name">TraceExpectation</span><span>.</span><span class="identifier">unordered</span><span>(
-          </span><span class="type-name">SpanExpectation</span><span>.</span><span class="identifier">name</span><span>(</span><span class="string-literal">&quot;app.span&quot;</span><span>).</span><span class="identifier">noParentSpanContext</span><span>,
-          </span><span class="type-name">TraceExpectation</span><span>.</span><span class="identifier">leaf</span><span>(</span><span class="type-name">SpanExpectation</span><span>.</span><span class="identifier">name</span><span>(</span><span class="string-literal">&quot;app.nested.1&quot;</span><span>)),
-          </span><span class="type-name">TraceExpectation</span><span>.</span><span class="identifier">leaf</span><span>(</span><span class="type-name">SpanExpectation</span><span>.</span><span class="identifier">name</span><span>(</span><span class="string-literal">&quot;app.nested.2&quot;</span><span>))
-        )
-      )
-
-    </span><span class="keyword">for</span><span> {
-      </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">program</span><span>(</span><span class="identifier">testkit</span><span>.</span><span class="identifier">tracerProvider</span><span>)
-      </span><span class="identifier">spans</span><span> &lt;- </span><span class="identifier">testkit</span><span>.</span><span class="identifier">finishedSpans</span><span>
-    } </span><span class="keyword">yield</span><span> </span><span class="identifier">assertExpected</span><span>(</span><span class="identifier">spans</span><span>, </span><span class="identifier">expected</span><span>)
-  }
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">assertExpected</span><span>(</span><span class="identifier">spans</span><span>: </span><span class="type-name">List</span><span>[</span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">SpanData</span><span>], </span><span class="identifier">expected</span><span>: </span><span class="type-name">TraceForestExpectation</span><span>): </span><span class="type-name">Unit</span><span> =
-  </span><span class="type-name">TraceExpectations</span><span>.</span><span class="identifier">check</span><span>(</span><span class="identifier">spans</span><span>, </span><span class="identifier">expected</span><span>) </span><span class="keyword">match</span><span> {
-    </span><span class="keyword">case</span><span> </span><span class="type-name">Right</span><span>(</span><span class="identifier">_</span><span>) =&gt;
-      ()
-    </span><span class="keyword">case</span><span> </span><span class="type-name">Left</span><span>(</span><span class="identifier">mismatches</span><span>) =&gt;
-      </span><span class="identifier">sys</span><span>.</span><span class="identifier">error</span><span>(</span><span class="type-name">TraceExpectations</span><span>.</span><span class="identifier">format</span><span>(</span><span class="identifier">mismatches</span><span>))
-  }</span></code></pre>
-        <p>The trace expectation API removes the need to build a custom tree model in most tests.
-        You can still keep expectations focused by matching only span names, or gradually add more detail:
-        timestamps, attributes, events, links, scope, and resource.</p>
 
         
 <hr class="footer-rule"/>

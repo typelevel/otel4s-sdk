@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Typelevel Laika + Helium Theme" />
+  <title>Metrics | Runtime</title>
+  
+  <meta name="author" content="Ross A. Baker"/>
+  
+  <meta name="author" content="Maksym Ochenashko"/>
+  
+  
+  <meta name="description" content="docs"/>
+  
+  
+  
+  <link rel="icon" sizes="32x32" type="image/png" href="https://typelevel.org/img/favicon.png"/>
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:500">
+  
+  <link rel="stylesheet" type="text/css" href="../helium/site/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/site/laika-helium.css" />
+  <script src="../helium/site/laika-helium.js"></script>
+  
+  
+  <script> /* for avoiding page load transitions */ </script>
+</head>
+
+  <body>
+
+    <header id="top-bar" class="light-default dark-default">
+
+  <div class="row">
+    <a id="nav-icon">
+      <i class="icofont-laika navigationMenu" title="Navigation">&#xefa2;</i>
+    </a>
+    
+    
+  </div>
+
+  <a class="image-link" href="https://typelevel.org"><img src="https://typelevel.org/img/logo.svg"></a>
+
+  <div class="row links">
+    
+    <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/otel4s-sdk-docs_2.13/0.17.0/org/typelevel/otel4s/sdk/index.html"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/otel4s-sdk"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="svg-shape">
+    <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+  </g>
+</svg></span></a>
+    
+  </div>  
+
+</header>
+    
+    <nav id="sidebar">
+
+  <div class="row">
+    
+    <a class="icon-link svg-link" href="https://www.javadoc.io/doc/org.typelevel/otel4s-sdk-docs_2.13/0.17.0/org/typelevel/otel4s/sdk/index.html"><span class="api" title="API"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M75,47.5c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-50,-0c13.246,-0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,-0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm2.705,16.735l7.239,0l0.622,-4.904l-21.833,0l-0,4.904l7.589,0l0,22.067l6.383,0l-0,-22.067Zm58.076,7.265c-0,-8.757 -3.698,-14.166 -10.781,-14.166c-7.083,-0 -10.781,5.604 -10.781,14.166c0,8.757 3.698,14.166 10.781,14.166c7.083,0 10.781,-5.604 10.781,-14.166Zm-6.539,0c0,6.538 -1.128,9.496 -4.242,9.496c-2.997,0 -4.242,-2.88 -4.242,-9.496c-0,-6.616 1.206,-9.496 4.242,-9.496c3.036,-0 4.242,2.88 4.242,9.496Zm-29.242,-67c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm0.512,9.834c-7.122,-0 -12.609,5.098 -12.609,14.127c-0,9.263 5.215,14.205 12.532,14.205c4.164,0 7.083,-1.634 9.068,-3.658l-2.88,-3.697c-1.518,1.206 -3.153,2.413 -5.838,2.413c-3.697,-0 -6.266,-2.763 -6.266,-9.263c-0,-6.616 2.724,-9.379 6.149,-9.379c2.102,-0 3.892,0.778 5.371,1.984l3.113,-3.775c-2.257,-1.868 -4.748,-2.957 -8.64,-2.957Z"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link svg-link" href="https://github.com/typelevel/otel4s-sdk"><span class="github" title="Source Code"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g class="svg-shape">
+    <path d="M49.995,1c-27.609,-0 -49.995,22.386 -49.995,50.002c-0,22.09 14.325,40.83 34.194,47.444c2.501,0.458 3.413,-1.086 3.413,-2.412c0,-1.185 -0.043,-4.331 -0.067,-8.503c-13.908,3.021 -16.843,-6.704 -16.843,-6.704c-2.274,-5.773 -5.552,-7.311 -5.552,-7.311c-4.54,-3.103 0.344,-3.042 0.344,-3.042c5.018,0.356 7.658,5.154 7.658,5.154c4.46,7.64 11.704,5.433 14.552,4.156c0.454,-3.232 1.744,-5.436 3.174,-6.685c-11.102,-1.262 -22.775,-5.553 -22.775,-24.713c-0,-5.457 1.949,-9.92 5.147,-13.416c-0.516,-1.265 -2.231,-6.348 0.488,-13.233c0,0 4.199,-1.344 13.751,5.126c3.988,-1.108 8.266,-1.663 12.518,-1.682c4.245,0.019 8.523,0.574 12.517,1.682c9.546,-6.47 13.736,-5.126 13.736,-5.126c2.728,6.885 1.013,11.968 0.497,13.233c3.204,3.496 5.141,7.959 5.141,13.416c0,19.209 -11.691,23.436 -22.83,24.673c1.795,1.544 3.394,4.595 3.394,9.26c0,6.682 -0.061,12.076 -0.061,13.715c0,1.338 0.899,2.894 3.438,2.406c19.853,-6.627 34.166,-25.354 34.166,-47.438c-0,-27.616 -22.389,-50.002 -50.005,-50.002"/>
+  </g>
+</svg></span></a>
+    
+    <a class="icon-link glyph-link" href="https://discord.gg/XF3CXcMzqD"><i class="icofont-laika chat" title="Chat">&#xeed5;</i></a>
+    
+    <a class="icon-link svg-link" href="https://fosstodon.org/@typelevel"><span class="mastodon" title="Mastodon"><svg class="svg-icon" width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="svg-shape">
+    <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+  </g>
+</svg></span></a>
+    
+  </div>
+
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="../">otel4s-sdk</a></li>
+    <li class="level1 nav-leaf"><a href="../modules-structure.html">Modules structure</a></li>
+    <li class="level1 nav-leaf"><a href="../ecosystem.html">Ecosystem</a></li>
+    <li class="level1 nav-header">Instrumentation</li>
+    <li class="level2 active nav-leaf"><a href="#">Metrics | Runtime</a></li>
+    <li class="level2 nav-leaf"><a href="metrics-cats-effect-io-runtime.html">Metrics | Cats Effect IO runtime</a></li>
+    <li class="level2 nav-leaf"><a href="tracing-cross-service-propagation.html">Tracing | Cross-service propagation</a></li>
+    <li class="level2 nav-leaf"><a href="logs.html">Logs</a></li>
+    <li class="level2 nav-leaf"><a href="baggage.html">Baggage</a></li>
+    <li class="level1 nav-header">Guides</li>
+    <li class="level2 nav-leaf"><a href="../guides/otlp.html">Export telemetry with OTLP</a></li>
+    <li class="level2 nav-leaf"><a href="../guides/prometheus-exporter.html">Export metrics with Prometheus</a></li>
+    <li class="level2 nav-leaf"><a href="../guides/testkit.html">Testing with testkit</a></li>
+    <li class="level2 nav-leaf"><a href="../guides/testkit-metrics.html">Testkit | Metrics</a></li>
+    <li class="level2 nav-leaf"><a href="../guides/testkit-traces.html">Testkit | Traces</a></li>
+    <li class="level1 nav-header">SDK</li>
+    <li class="level2 nav-leaf"><a href="../sdk/overview.html">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../sdk/configuration.html">Configuration</a></li>
+    <li class="level1 nav-header">AWS integrations</li>
+    <li class="level2 nav-leaf"><a href="../aws/resource-detectors.html">Resource detectors</a></li>
+    <li class="level2 nav-leaf"><a href="../aws/xray.html">X-Ray ID generator</a></li>
+    <li class="level2 nav-leaf"><a href="../aws/xray-propagator.html">X-Ray propagator</a></li>
+    <li class="level1 nav-header">Specification Compliance</li>
+    <li class="level2 nav-leaf"><a href="../compliance/attributes.html">Attributes</a></li>
+    <li class="level2 nav-leaf"><a href="../compliance/baggage.html">Baggage</a></li>
+    <li class="level2 nav-leaf"><a href="../compliance/resource.html">Resource</a></li>
+    <li class="level2 nav-leaf"><a href="../compliance/instrumentation-scope.html">Instrumentation Scope</a></li>
+    <li class="level2 nav-leaf"><a href="../compliance/context.html">Context</a></li>
+    <li class="level2 nav-leaf"><a href="../compliance/context-propagation.html">Context Propagation</a></li>
+    <li class="level2 nav-leaf"><a href="../compliance/logs.html">Logs</a></li>
+    <li class="level2 nav-leaf"><a href="../compliance/metrics.html">Metrics</a></li>
+    <li class="level2 nav-leaf"><a href="../compliance/trace.html">Trace</a></li>
+    <li class="level2 nav-leaf"><a href="../compliance/configuration.html">Configuration</a></li>
+    <li class="level2 nav-leaf"><a href="../compliance/compliance-matrix.html">Compliance Matrix</a></li>
+  </ul>
+
+</nav>
+
+    <div id="container">
+
+      
+<nav id="page-nav">
+  <p class="header"><a href="#">Metrics | Runtime</a></p>
+
+  <ul class="nav-list">
+    <li class="level1 nav-leaf"><a href="#getting-started">Getting started</a></li>
+    <li class="level1 nav-leaf"><a href="#registering-runtime-metrics">Registering runtime metrics</a></li>
+    <li class="level1 nav-leaf"><a href="#configuration-model">Configuration model</a></li>
+    <li class="level1 nav-node"><a href="#platform-support">Platform support</a></li>
+    <li class="level2 nav-leaf"><a href="#jvm">JVM</a></li>
+    <li class="level2 nav-leaf"><a href="#scala-js">Scala.js</a></li>
+    <li class="level2 nav-leaf"><a href="#scala-native">Scala Native</a></li>
+    <li class="level1 nav-leaf"><a href="#what-gets-exported">What gets exported</a></li>
+  </ul>
+
+  <p class="footer"></p>
+</nav>
+
+
+      <main class="content">
+
+        <h1 id="metrics-runtime" class="title">Metrics | Runtime</h1>
+        <p><code>otel4s-sdk-contrib-metrics</code> can register runtime metrics for all supported platforms:</p>
+        <ul>
+          <li>JVM</li>
+          <li>Scala.js on Node.js</li>
+          <li>Scala Native</li>
+        </ul>
+        <p>These metrics are not enabled by the SDK autoconfiguration automatically. You register them explicitly in your
+        application, and they are exported by whatever metric reader/exporter configuration your SDK already uses.</p>
+        
+        <h2 id="getting-started" class="section"><a class="anchor-link left" href="#getting-started"><i class="icofont-laika link">&#xef71;</i></a>Getting started</h2>
+        <p>Add the runtime metrics module:</p>
+        <div class="tab-container" data-tab-group="build-tool">
+          <ul class="tab-group">
+            <li class="tab active" data-choice-name="sbt"><a href="#">sbt</a></li>
+            <li class="tab" data-choice-name="scala-cli"><a href="#">Scala CLI</a></li>
+          </ul>
+          <div class="tab-content active" data-choice-name="sbt">
+            <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">libraryDependencies</span><span> ++= </span><span class="type-name">Seq</span><span>(
+  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %%% </span><span class="string-literal">&quot;otel4s-sdk-contrib-metrics&quot;</span><span> % </span><span class="string-literal">&quot;0.17.0&quot;</span><span> </span><span class="comment">// &lt;1&gt;
+</span><span>)</span></code></pre>
+          </div>
+          <div class="tab-content" data-choice-name="scala-cli">
+            <pre class="keep-together pdf epub"><code class="nohighlight"><span class="comment">//&gt; using dep &quot;org.typelevel::otel4s-sdk-contrib-metrics::0.17.0&quot; // &lt;1&gt;</span></code></pre>
+          </div>
+        </div>
+        <ol class="arabic">
+          <li>Add the runtime metrics module</li>
+        </ol>
+        
+        <h2 id="registering-runtime-metrics" class="section"><a class="anchor-link left" href="#registering-runtime-metrics"><i class="icofont-laika link">&#xef71;</i></a>Registering runtime metrics</h2>
+        <p>Runtime metrics use the same <code>MeterProvider[F]</code> as the rest of your application. The returned <code>Resource</code> manages the
+        lifecycle of all registered observers and background tasks.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.{</span><span class="type-name">IO</span><span>, </span><span class="type-name">IOApp</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="type-name">MeterProvider</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="type-name">OpenTelemetrySdk</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">contrib</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="identifier">runtime</span><span>.</span><span class="type-name">RuntimeMetrics</span><span>
+
+</span><span class="keyword">object</span><span> </span><span class="type-name">Main</span><span> </span><span class="keyword">extends</span><span> </span><span class="type-name">IOApp</span><span>.</span><span class="type-name">Simple</span><span> {
+
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">run</span><span>: </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
+    </span><span class="type-name">OpenTelemetrySdk</span><span>.</span><span class="identifier">autoConfigured</span><span>[</span><span class="type-name">IO</span><span>]().</span><span class="identifier">use</span><span> { </span><span class="identifier">autoConfigured</span><span> =&gt;
+      </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">meterProvider</span><span>: </span><span class="type-name">MeterProvider</span><span>[</span><span class="type-name">IO</span><span>] =
+        </span><span class="identifier">autoConfigured</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">meterProvider</span><span>
+
+      </span><span class="type-name">RuntimeMetrics</span><span>.</span><span class="identifier">register</span><span>[</span><span class="type-name">IO</span><span>].</span><span class="identifier">surround</span><span> {
+        </span><span class="identifier">program</span><span>
+      }
+    }
+
+  </span><span class="keyword">private</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">program</span><span>: </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
+    </span><span class="type-name">IO</span><span>.</span><span class="identifier">never</span><span>
+}</span></code></pre>
+        <p>If you already export application metrics through OTLP, Prometheus, or another configured exporter, runtime metrics are
+        exported the same way. Exporter and reader settings are documented in <a href="../sdk/configuration.html">SDK configuration</a>.</p>
+        
+        <h2 id="configuration-model" class="section"><a class="anchor-link left" href="#configuration-model"><i class="icofont-laika link">&#xef71;</i></a>Configuration model</h2>
+        <p>Runtime metrics are configured in code via <code>RuntimeMetrics.Config</code>.</p>
+        <ul>
+          <li><code>RuntimeMetrics.register[IO]</code> uses <code>RuntimeMetrics.Config.enabledAll</code></li>
+          <li><code>RuntimeMetrics.register[IO](config)</code> uses the supplied platform-specific config</li>
+        </ul>
+        <p>There are no dedicated environment variables or system properties for enabling or disabling individual runtime metric
+        groups. Runtime metric collection itself is controlled in code; export behavior is controlled by the SDK metric
+        configuration.</p>
+        
+        <h2 id="platform-support" class="section"><a class="anchor-link left" href="#platform-support"><i class="icofont-laika link">&#xef71;</i></a>Platform support</h2>
+        
+        <h3 id="jvm" class="section"><a class="anchor-link left" href="#jvm"><i class="icofont-laika link">&#xef71;</i></a>JVM</h3>
+        <p>Available config switches:</p>
+        <ul>
+          <li><code>withClassMetricsEnabled</code> / <code>withClassMetricsDisabled</code></li>
+          <li><code>withCpuMetricsEnabled</code> / <code>withCpuMetricsDisabled</code></li>
+          <li><code>withGcMetricsEnabled</code> / <code>withGcMetricsDisabled</code></li>
+          <li><code>withMemoryPoolMetricsEnabled</code> / <code>withMemoryPoolMetricsDisabled</code></li>
+          <li><code>withThreadMetricsEnabled</code> / <code>withThreadMetricsDisabled</code></li>
+          <li><code>withGcMetricsBucketBoundaries(...)</code></li>
+        </ul>
+        <p>Example:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.{</span><span class="type-name">IO</span><span>, </span><span class="type-name">Resource</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">metrics</span><span>.{</span><span class="type-name">BucketBoundaries</span><span>, </span><span class="type-name">MeterProvider</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">contrib</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="identifier">runtime</span><span>.</span><span class="type-name">RuntimeMetrics</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">config</span><span> =
+  </span><span class="type-name">RuntimeMetrics</span><span>.</span><span class="type-name">Config</span><span>.</span><span class="identifier">disabledAll</span><span>
+    .</span><span class="identifier">withCpuMetricsEnabled</span><span>
+    .</span><span class="identifier">withMemoryPoolMetricsEnabled</span><span>
+    .</span><span class="identifier">withGcMetricsEnabled</span><span>
+    .</span><span class="identifier">withGcMetricsBucketBoundaries</span><span>(</span><span class="type-name">BucketBoundaries</span><span>(</span><span class="number-literal">0.005</span><span>, </span><span class="number-literal">0.01</span><span>, </span><span class="number-literal">0.05</span><span>, </span><span class="number-literal">0.1</span><span>, </span><span class="number-literal">1.0</span><span>))
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">register</span><span>(</span><span class="keyword">implicit</span><span> </span><span class="identifier">provider</span><span>: </span><span class="type-name">MeterProvider</span><span>[</span><span class="type-name">IO</span><span>]): </span><span class="type-name">Resource</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Unit</span><span>] = 
+  </span><span class="type-name">RuntimeMetrics</span><span>.</span><span class="identifier">register</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="identifier">config</span><span>)</span></code></pre>
+        <p>Exported metrics:</p>
+        <ul>
+          <li>Class metrics: <code>jvm.class.count</code>, <code>jvm.class.loaded</code>, <code>jvm.class.unloaded</code></li>
+          <li>CPU metrics: <code>jvm.cpu.count</code>, <code>jvm.cpu.recent_utilization</code>, <code>jvm.cpu.time</code></li>
+          <li>GC metrics: <code>jvm.gc.duration</code></li>
+          <li>Memory metrics: <code>jvm.memory.committed</code>, <code>jvm.memory.limit</code>, <code>jvm.memory.used</code>, <code>jvm.memory.used_after_last_gc</code></li>
+          <li>Thread metrics: <code>jvm.thread.count</code></li>
+        </ul>
+        <p>Notes:</p>
+        <ul>
+          <li>The metrics are emitted with the instrumentation scope name <code>org.typelevel.otel4s.sdk.runtime</code>.</li>
+          <li><code>jvm.gc.duration</code> uses the configured histogram bucket boundaries.</li>
+          <li>GC duration reporting depends on JVM GC notifications. If <code>com.sun.management.GarbageCollectionNotificationInfo</code> is
+          unavailable, GC metrics are skipped and a diagnostic error is emitted.</li>
+        </ul>
+        
+        <h3 id="scala-js" class="section"><a class="anchor-link left" href="#scala-js"><i class="icofont-laika link">&#xef71;</i></a>Scala.js</h3>
+        <p>Scala.js runtime metrics target Node.js runtimes. They depend on Node APIs such as <code>node:perf_hooks</code>, so they are not
+        intended for browser environments.</p>
+        <p>Available config switches:</p>
+        <ul>
+          <li><code>withProcessCpuMetricsEnabled</code> / <code>withProcessCpuMetricsDisabled</code></li>
+          <li><code>withProcessMemoryMetricsEnabled</code> / <code>withProcessMemoryMetricsDisabled</code></li>
+          <li><code>withNodeGcMetricsEnabled</code> / <code>withNodeGcMetricsDisabled</code></li>
+          <li><code>withNodeEventLoopMetricsEnabled</code> / <code>withNodeEventLoopMetricsDisabled</code></li>
+          <li><code>withNodeMemoryMetricsEnabled</code> / <code>withNodeMemoryMetricsDisabled</code></li>
+          <li><code>withEventLoopMonitoringPrecision(...)</code></li>
+        </ul>
+        <p>Example:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.{</span><span class="type-name">IO</span><span>, </span><span class="type-name">Resource</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="type-name">MeterProvider</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">contrib</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="identifier">runtime</span><span>.</span><span class="type-name">RuntimeMetrics</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="identifier">duration</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">config</span><span> =
+  </span><span class="type-name">RuntimeMetrics</span><span>.</span><span class="type-name">Config</span><span>.</span><span class="identifier">enabledAll</span><span>
+    .</span><span class="identifier">withEventLoopMonitoringPrecision</span><span>(</span><span class="number-literal">20</span><span>.</span><span class="identifier">millis</span><span>)
+    .</span><span class="identifier">withNodeGcMetricsDisabled</span><span>
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">register</span><span>(</span><span class="keyword">implicit</span><span> </span><span class="identifier">provider</span><span>: </span><span class="type-name">MeterProvider</span><span>[</span><span class="type-name">IO</span><span>]): </span><span class="type-name">Resource</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Unit</span><span>] = 
+  </span><span class="type-name">RuntimeMetrics</span><span>.</span><span class="identifier">register</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="identifier">config</span><span>)</span></code></pre>
+        <p>Exported metrics:</p>
+        <ul>
+          <li>Process CPU metrics: <code>process.cpu.time</code>, <code>process.cpu.utilization</code></li>
+          <li>Process memory metrics: <code>process.memory.usage</code></li>
+          <li>V8 GC metrics: <code>v8js.gc.duration</code></li>
+          <li>Node.js event loop metrics:
+          <code>nodejs.eventloop.time</code>,
+          <code>nodejs.eventloop.utilization</code>,
+          <code>nodejs.eventloop.delay.min</code>,
+          <code>nodejs.eventloop.delay.max</code>,
+          <code>nodejs.eventloop.delay.mean</code>,
+          <code>nodejs.eventloop.delay.stddev</code>,
+          <code>nodejs.eventloop.delay.p50</code>,
+          <code>nodejs.eventloop.delay.p90</code>,
+          <code>nodejs.eventloop.delay.p99</code></li>
+          <li>V8 memory metrics:
+          <code>v8js.memory.heap.limit</code>,
+          <code>v8js.memory.heap.used</code>,
+          <code>v8js.heap.space.available_size</code>,
+          <code>v8js.heap.space.physical_size</code></li>
+        </ul>
+        <p>Notes:</p>
+        <ul>
+          <li><code>eventLoopMonitoringPrecision</code> controls the resolution used by the Node event loop delay monitor.</li>
+          <li><code>nodejs.eventloop.time</code> exports one time series per <code>nodejs.eventloop.state</code> with <code>active</code> and <code>idle</code> values.</li>
+        </ul>
+        
+        <h3 id="scala-native" class="section"><a class="anchor-link left" href="#scala-native"><i class="icofont-laika link">&#xef71;</i></a>Scala Native</h3>
+        <p>Available config switches:</p>
+        <ul>
+          <li><code>withCpuMetricsEnabled</code> / <code>withCpuMetricsDisabled</code></li>
+          <li><code>withGcMetricsEnabled</code> / <code>withGcMetricsDisabled</code></li>
+          <li><code>withMemoryPoolMetricsEnabled</code> / <code>withMemoryPoolMetricsDisabled</code></li>
+          <li><code>withThreadMetricsEnabled</code> / <code>withThreadMetricsDisabled</code></li>
+          <li><code>withGcMetricsRefreshRate(...)</code></li>
+          <li><code>withGcMetricsBucketBoundaries(...)</code></li>
+        </ul>
+        <p>Example:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.{</span><span class="type-name">IO</span><span>, </span><span class="type-name">Resource</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">metrics</span><span>.{</span><span class="type-name">BucketBoundaries</span><span>, </span><span class="type-name">MeterProvider</span><span>}
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">contrib</span><span>.</span><span class="identifier">metrics</span><span>.</span><span class="identifier">runtime</span><span>.</span><span class="type-name">RuntimeMetrics</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="identifier">duration</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">config</span><span> =
+  </span><span class="type-name">RuntimeMetrics</span><span>.</span><span class="type-name">Config</span><span>.</span><span class="identifier">enabledAll</span><span>
+    .</span><span class="identifier">withGcMetricsRefreshRate</span><span>(</span><span class="number-literal">1</span><span>.</span><span class="identifier">second</span><span>)
+    .</span><span class="identifier">withGcMetricsBucketBoundaries</span><span>(</span><span class="type-name">BucketBoundaries</span><span>(</span><span class="number-literal">0.01</span><span>, </span><span class="number-literal">0.1</span><span>, </span><span class="number-literal">1.0</span><span>, </span><span class="number-literal">5.0</span><span>))
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">register</span><span>(</span><span class="keyword">implicit</span><span> </span><span class="identifier">provider</span><span>: </span><span class="type-name">MeterProvider</span><span>[</span><span class="type-name">IO</span><span>]): </span><span class="type-name">Resource</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Unit</span><span>] = 
+  </span><span class="type-name">RuntimeMetrics</span><span>.</span><span class="identifier">register</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="identifier">config</span><span>)</span></code></pre>
+        <p>Exported metrics:</p>
+        <ul>
+          <li>CPU metrics: <code>scalanative.cpu.count</code>, <code>scalanative.cpu.time</code></li>
+          <li>GC metrics: <code>scalanative.gc.duration</code></li>
+          <li>Memory metrics: <code>scalanative.memory.committed</code>, <code>scalanative.memory.limit</code>, <code>scalanative.memory.used</code></li>
+          <li>Thread metrics: <code>scalanative.thread.count</code></li>
+        </ul>
+        <p>Notes:</p>
+        <ul>
+          <li>The metric set follows JVM runtime metric semantics where practical, but uses the <code>scalanative.</code> prefix.</li>
+          <li><code>gcMetricsRefreshRate</code> controls how often GC state is sampled.</li>
+          <li><code>scalanative.gc.duration</code> uses the configured histogram bucket boundaries.</li>
+        </ul>
+        
+        <h2 id="what-gets-exported" class="section"><a class="anchor-link left" href="#what-gets-exported"><i class="icofont-laika link">&#xef71;</i></a>What gets exported</h2>
+        <p>Runtime metrics are regular SDK metrics:</p>
+        <ul>
+          <li>they use your application&#39;s <code>MeterProvider</code></li>
+          <li>they are attached to the same telemetry resource as the rest of your SDK metrics</li>
+          <li>they are exported by the configured metric reader/exporter pipeline</li>
+        </ul>
+        <p>If you use <code>OpenTelemetrySdk.autoConfigured</code>, runtime metrics inherit:</p>
+        <ul>
+          <li>resource attributes such as <code>service.name</code></li>
+          <li>configured metric exporters such as OTLP, Prometheus, or console</li>
+          <li>reader settings such as <code>otel.metric.export.interval</code></li>
+        </ul>
+        <p>The instrumentation scope used by these metrics is:</p>
+        <pre class="keep-together pdf epub"><code class="text">org.typelevel.otel4s.sdk.runtime</code></pre>
+        <p>If your resource detectors are enabled, exported metrics will also include process and runtime resource attributes such
+        as <code>process.runtime.name</code>, <code>process.runtime.version</code>, and <code>process.runtime.description</code> where supported.
+        See <a href="../sdk/configuration.html#telemetry-resource">SDK configuration</a> for resource detector settings.</p>
+
+        
+<hr class="footer-rule"/>
+<footer>
+  otel4s-sdk is a <a href="https://typelevel.org/">Typelevel</a> project distributed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache-2.0</a> license.
+</footer>
+
+
+      </main>
+
+    </div>
+
+  </body>
+
+</html>
