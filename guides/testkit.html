@@ -252,8 +252,14 @@
 
       </span><span class="keyword">case</span><span> </span><span class="identifier">histogram</span><span>: </span><span class="type-name">MetricPoints</span><span>.</span><span class="type-name">Histogram</span><span> =&gt;
         </span><span class="type-name">Histogram</span><span>(
-          </span><span class="identifier">metric</span><span>.</span><span class="identifier">name</span><span>, 
+          </span><span class="identifier">metric</span><span>.</span><span class="identifier">name</span><span>,
           </span><span class="identifier">histogram</span><span>.</span><span class="identifier">points</span><span>.</span><span class="identifier">toVector</span><span>.</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">stats</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">sum</span><span>))
+        )
+
+      </span><span class="keyword">case</span><span> </span><span class="identifier">exponentialHistogram</span><span>: </span><span class="type-name">MetricPoints</span><span>.</span><span class="type-name">ExponentialHistogram</span><span> =&gt;
+        </span><span class="type-name">Histogram</span><span>(
+          </span><span class="identifier">metric</span><span>.</span><span class="identifier">name</span><span>,
+          </span><span class="identifier">exponentialHistogram</span><span>.</span><span class="identifier">points</span><span>.</span><span class="identifier">toVector</span><span>.</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">stats</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">sum</span><span>))
         )
     }
 
