@@ -112,6 +112,7 @@
     <li class="level2 nav-leaf"><a href="prometheus-exporter.html">Export metrics with Prometheus</a></li>
     <li class="level2 active nav-leaf"><a href="#">Testing with testkit</a></li>
     <li class="level2 nav-leaf"><a href="testkit-metrics.html">Testkit | Metrics</a></li>
+    <li class="level2 nav-leaf"><a href="testkit-traces.html">Testkit | Traces</a></li>
     <li class="level1 nav-header">SDK</li>
     <li class="level2 nav-leaf"><a href="../sdk/overview.html">Overview</a></li>
     <li class="level2 nav-leaf"><a href="../sdk/configuration.html">Configuration</a></li>
@@ -275,10 +276,15 @@
         In this example, <code>TelemetryMetric</code> keeps only the pieces we care about and ignores noisy fields.</p>
         
         <h2 id="testing-spans" class="section"><a class="anchor-link left" href="#testing-spans"><i class="icofont-laika link">&#xef71;</i></a>Testing spans</h2>
+        <p>The testkit also provides a dedicated structural expectation API for traces.
+        It can match the full exported forest, nested subtrees, ordered or unordered children,
+        timestamps, attributes, events, links, scope, resource, and more.</p>
+        <p>For the traces expectation API, see the dedicated <a href="testkit-traces.html">Traces testkit guide</a>.</p>
+        <hr>
         <p>Let&#39;s assume we want to test the structure of created spans:</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">testkit</span><span>.</span><span class="type-name">OpenTelemetrySdkTestkit</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">SpanData</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">testkit</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="type-name">TracerProvider</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="identifier">duration</span><span>.</span><span class="identifier">_</span><span>
 
@@ -295,105 +301,31 @@
 </span><span class="comment">// the test
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">test</span><span>: </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
   </span><span class="type-name">OpenTelemetrySdkTestkit</span><span>.</span><span class="identifier">inMemory</span><span>[</span><span class="type-name">IO</span><span>]().</span><span class="identifier">use</span><span> { </span><span class="identifier">testkit</span><span> =&gt;
-    </span><span class="comment">// the list of expected spans
-</span><span>    </span><span class="keyword">val</span><span> </span><span class="identifier">expected</span><span> = </span><span class="type-name">List</span><span>(
-      </span><span class="type-name">SpanTree</span><span>(
-        </span><span class="type-name">TelemetrySpan</span><span>(</span><span class="string-literal">&quot;app.span&quot;</span><span>),
-        </span><span class="type-name">List</span><span>(
-          </span><span class="type-name">SpanTree</span><span>(</span><span class="type-name">TelemetrySpan</span><span>(</span><span class="string-literal">&quot;app.nested.1&quot;</span><span>), </span><span class="type-name">Nil</span><span>),
-          </span><span class="type-name">SpanTree</span><span>(</span><span class="type-name">TelemetrySpan</span><span>(</span><span class="string-literal">&quot;app.nested.2&quot;</span><span>), </span><span class="type-name">Nil</span><span>)
+    </span><span class="keyword">val</span><span> </span><span class="identifier">expected</span><span> =
+      </span><span class="type-name">TraceForestExpectation</span><span>.</span><span class="identifier">unordered</span><span>(
+        </span><span class="type-name">TraceExpectation</span><span>.</span><span class="identifier">unordered</span><span>(
+          </span><span class="type-name">SpanExpectation</span><span>.</span><span class="identifier">name</span><span>(</span><span class="string-literal">&quot;app.span&quot;</span><span>).</span><span class="identifier">noParentSpanContext</span><span>,
+          </span><span class="type-name">TraceExpectation</span><span>.</span><span class="identifier">leaf</span><span>(</span><span class="type-name">SpanExpectation</span><span>.</span><span class="identifier">name</span><span>(</span><span class="string-literal">&quot;app.nested.1&quot;</span><span>)),
+          </span><span class="type-name">TraceExpectation</span><span>.</span><span class="identifier">leaf</span><span>(</span><span class="type-name">SpanExpectation</span><span>.</span><span class="identifier">name</span><span>(</span><span class="string-literal">&quot;app.nested.2&quot;</span><span>))
         )
       )
-    )
 
     </span><span class="keyword">for</span><span> {
-      </span><span class="comment">// invoke the program
-</span><span>      </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">program</span><span>(</span><span class="identifier">testkit</span><span>.</span><span class="identifier">tracerProvider</span><span>)
-      </span><span class="comment">// collect the finished spans
-</span><span>      </span><span class="identifier">spans</span><span> &lt;- </span><span class="identifier">testkit</span><span>.</span><span class="identifier">finishedSpans</span><span>
-      </span><span class="comment">// verify the collected spans
-</span><span>      </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">assertSpans</span><span>(</span><span class="identifier">spans</span><span>, </span><span class="identifier">expected</span><span>)
-    } </span><span class="keyword">yield</span><span> ()
+      </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">program</span><span>(</span><span class="identifier">testkit</span><span>.</span><span class="identifier">tracerProvider</span><span>)
+      </span><span class="identifier">spans</span><span> &lt;- </span><span class="identifier">testkit</span><span>.</span><span class="identifier">finishedSpans</span><span>
+    } </span><span class="keyword">yield</span><span> </span><span class="identifier">assertExpected</span><span>(</span><span class="identifier">spans</span><span>, </span><span class="identifier">expected</span><span>)
   }
 
-</span><span class="comment">// here you can use an assertion mechanism from your favorite testing framework
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">assertSpans</span><span>(</span><span class="identifier">spans</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">SpanData</span><span>], </span><span class="identifier">expected</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">SpanTree</span><span>[</span><span class="type-name">TelemetrySpan</span><span>]]): </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>] =
-  </span><span class="type-name">IO</span><span> {
-    </span><span class="keyword">val</span><span> </span><span class="identifier">trees</span><span> = </span><span class="type-name">SpanTree</span><span>.</span><span class="identifier">fromSpans</span><span>(</span><span class="identifier">spans</span><span>)
-    </span><span class="identifier">assert</span><span>(</span><span class="identifier">trees</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">data</span><span> =&gt; </span><span class="type-name">TelemetrySpan</span><span>(</span><span class="identifier">data</span><span>.</span><span class="identifier">name</span><span>))) == </span><span class="identifier">expected</span><span>)
-  }
-
-</span><span class="comment">// a minimized representation of the SpanData to simplify testing
-</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">TelemetrySpan</span><span>(</span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>)
-
-</span><span class="comment">// a tree-like representation of the spans
-</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">SpanTree</span><span>[</span><span class="type-name">A</span><span>](</span><span class="identifier">current</span><span>: </span><span class="type-name">A</span><span>, </span><span class="identifier">children</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">SpanTree</span><span>[</span><span class="type-name">A</span><span>]]) {
-  </span><span class="keyword">def</span><span> </span><span class="declaration-name">map</span><span>[</span><span class="type-name">B</span><span>](</span><span class="identifier">f</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">B</span><span>): </span><span class="type-name">SpanTree</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="type-name">SpanTree</span><span>(</span><span class="identifier">f</span><span>(</span><span class="identifier">current</span><span>), </span><span class="identifier">children</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">f</span><span>)))
-}
-</span><span class="keyword">object</span><span> </span><span class="type-name">SpanTree</span><span> {
-  </span><span class="keyword">def</span><span> </span><span class="declaration-name">fromSpans</span><span>(</span><span class="identifier">spans</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">SpanData</span><span>]): </span><span class="type-name">List</span><span>[</span><span class="type-name">SpanTree</span><span>[</span><span class="type-name">SpanData</span><span>]] = {
-    </span><span class="keyword">val</span><span> </span><span class="identifier">byParent</span><span> = </span><span class="identifier">spans</span><span>.</span><span class="identifier">groupBy</span><span>(</span><span class="identifier">s</span><span> =&gt; </span><span class="identifier">s</span><span>.</span><span class="identifier">parentSpanContext</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">spanIdHex</span><span>))
-    </span><span class="keyword">val</span><span> </span><span class="identifier">topNodes</span><span> = </span><span class="identifier">byParent</span><span>.</span><span class="identifier">getOrElse</span><span>(</span><span class="type-name">None</span><span>, </span><span class="type-name">Nil</span><span>)
-    </span><span class="keyword">val</span><span> </span><span class="identifier">bottomToTop</span><span> = </span><span class="identifier">sortNodesByDepth</span><span>(</span><span class="number-literal">0</span><span>, </span><span class="identifier">topNodes</span><span>, </span><span class="identifier">byParent</span><span>, </span><span class="type-name">Nil</span><span>)
-    </span><span class="keyword">val</span><span> </span><span class="identifier">maxDepth</span><span> = </span><span class="identifier">bottomToTop</span><span>.</span><span class="identifier">headOption</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">depth</span><span>).</span><span class="identifier">getOrElse</span><span>(</span><span class="number-literal">0</span><span>)
-    </span><span class="identifier">buildFromBottom</span><span>(</span><span class="identifier">maxDepth</span><span>, </span><span class="identifier">bottomToTop</span><span>, </span><span class="identifier">byParent</span><span>, </span><span class="type-name">Map</span><span>.</span><span class="identifier">empty</span><span>)
-  }
-  
-  </span><span class="keyword">private</span><span> </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">EntryWithDepth</span><span>(</span><span class="identifier">data</span><span>: </span><span class="type-name">SpanData</span><span>, </span><span class="identifier">depth</span><span>: </span><span class="type-name">Int</span><span>)
-  
-  </span><span class="annotation">@annotation</span><span>.</span><span class="identifier">tailrec</span><span>
-  </span><span class="keyword">private</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">sortNodesByDepth</span><span>(
-      </span><span class="identifier">depth</span><span>: </span><span class="type-name">Int</span><span>,
-      </span><span class="identifier">nodesInDepth</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">SpanData</span><span>],
-      </span><span class="identifier">nodesByParent</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">String</span><span>], </span><span class="type-name">List</span><span>[</span><span class="type-name">SpanData</span><span>]],
-      </span><span class="identifier">acc</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">EntryWithDepth</span><span>]
-  ): </span><span class="type-name">List</span><span>[</span><span class="type-name">EntryWithDepth</span><span>] = {
-    </span><span class="keyword">val</span><span> </span><span class="identifier">withDepth</span><span> = </span><span class="identifier">nodesInDepth</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">n</span><span> =&gt; </span><span class="type-name">EntryWithDepth</span><span>(</span><span class="identifier">n</span><span>, </span><span class="identifier">depth</span><span>))
-    </span><span class="keyword">val</span><span> </span><span class="identifier">calculated</span><span> = </span><span class="identifier">withDepth</span><span> ++ </span><span class="identifier">acc</span><span>
-    </span><span class="keyword">val</span><span> </span><span class="identifier">children</span><span> = </span><span class="identifier">nodesInDepth</span><span>.</span><span class="identifier">flatMap</span><span> { </span><span class="identifier">n</span><span> =&gt;
-      </span><span class="identifier">nodesByParent</span><span>.</span><span class="identifier">getOrElse</span><span>(</span><span class="type-name">Some</span><span>(</span><span class="identifier">n</span><span>.</span><span class="identifier">spanContext</span><span>.</span><span class="identifier">spanIdHex</span><span>), </span><span class="type-name">Nil</span><span>)
-    }
-    </span><span class="identifier">children</span><span> </span><span class="keyword">match</span><span> {
-      </span><span class="keyword">case</span><span> </span><span class="type-name">Nil</span><span> =&gt;
-        </span><span class="identifier">calculated</span><span>
-      </span><span class="keyword">case</span><span> </span><span class="identifier">_</span><span> =&gt;
-        </span><span class="identifier">sortNodesByDepth</span><span>(</span><span class="identifier">depth</span><span> + </span><span class="number-literal">1</span><span>, </span><span class="identifier">children</span><span>, </span><span class="identifier">nodesByParent</span><span>, </span><span class="identifier">calculated</span><span>)
-    }
-  }
-  
-  </span><span class="annotation">@annotation</span><span>.</span><span class="identifier">tailrec</span><span>
-  </span><span class="keyword">private</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">buildFromBottom</span><span>(
-      </span><span class="identifier">depth</span><span>: </span><span class="type-name">Int</span><span>,
-      </span><span class="identifier">remaining</span><span>: </span><span class="type-name">List</span><span>[</span><span class="type-name">EntryWithDepth</span><span>],
-      </span><span class="identifier">nodesByParent</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">String</span><span>], </span><span class="type-name">List</span><span>[</span><span class="type-name">SpanData</span><span>]],
-      </span><span class="identifier">processedNodesById</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">SpanTree</span><span>[</span><span class="type-name">SpanData</span><span>]]
-  ): </span><span class="type-name">List</span><span>[</span><span class="type-name">SpanTree</span><span>[</span><span class="type-name">SpanData</span><span>]] = {
-    </span><span class="keyword">val</span><span> (</span><span class="identifier">nodesOnCurrentDepth</span><span>, </span><span class="identifier">rest</span><span>) = </span><span class="identifier">remaining</span><span>.</span><span class="identifier">span</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">depth</span><span> == </span><span class="identifier">depth</span><span>)
-    </span><span class="keyword">val</span><span> </span><span class="identifier">newProcessedNodes</span><span> = </span><span class="identifier">nodesOnCurrentDepth</span><span>.</span><span class="identifier">map</span><span> { </span><span class="identifier">n</span><span> =&gt;
-      </span><span class="keyword">val</span><span> </span><span class="identifier">nodeId</span><span> = </span><span class="identifier">n</span><span>.</span><span class="identifier">data</span><span>.</span><span class="identifier">spanContext</span><span>.</span><span class="identifier">spanIdHex</span><span>
-      </span><span class="keyword">val</span><span> </span><span class="identifier">children</span><span> = </span><span class="identifier">nodesByParent</span><span>
-        .</span><span class="identifier">getOrElse</span><span>(</span><span class="type-name">Some</span><span>(</span><span class="identifier">nodeId</span><span>), </span><span class="type-name">Nil</span><span>)
-        .</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">c</span><span> =&gt; </span><span class="identifier">processedNodesById</span><span>.</span><span class="identifier">get</span><span>(</span><span class="identifier">c</span><span>.</span><span class="identifier">spanContext</span><span>.</span><span class="identifier">spanIdHex</span><span>))
-      </span><span class="keyword">val</span><span> </span><span class="identifier">leaf</span><span> = </span><span class="type-name">SpanTree</span><span>(</span><span class="identifier">n</span><span>.</span><span class="identifier">data</span><span>, </span><span class="identifier">children</span><span>)
-      </span><span class="identifier">nodeId</span><span> -&gt; </span><span class="identifier">leaf</span><span>
-    }.</span><span class="identifier">toMap</span><span>
-    </span><span class="keyword">if</span><span> (</span><span class="identifier">depth</span><span> &gt; </span><span class="number-literal">0</span><span>) {
-      </span><span class="identifier">buildFromBottom</span><span>(
-        </span><span class="identifier">depth</span><span> - </span><span class="number-literal">1</span><span>, 
-        </span><span class="identifier">rest</span><span>, 
-        </span><span class="identifier">nodesByParent</span><span>, 
-        </span><span class="identifier">processedNodesById</span><span> ++ </span><span class="identifier">newProcessedNodes</span><span>
-      )
-    } </span><span class="keyword">else</span><span> {
-      </span><span class="comment">// top nodes
-</span><span>      </span><span class="identifier">newProcessedNodes</span><span>.</span><span class="identifier">values</span><span>.</span><span class="identifier">toList</span><span>
-    }
-  }
-}</span></code></pre>
-        <p><code>SpanData</code> also includes much more than we usually want to verify in a unit test:
-        resource and scope metadata, attributes, timing information, links, events, and status.</p>
-        <p>For stable assertions, project each span into a smaller domain model first.
-        Here, <code>TelemetrySpan</code> captures only the span name, while <code>SpanTree</code> validates parent-child structure.</p>
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">assertExpected</span><span>(</span><span class="identifier">spans</span><span>: </span><span class="type-name">List</span><span>[</span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">otel4s</span><span>.</span><span class="identifier">sdk</span><span>.</span><span class="identifier">trace</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">SpanData</span><span>], </span><span class="identifier">expected</span><span>: </span><span class="type-name">TraceForestExpectation</span><span>): </span><span class="type-name">Unit</span><span> =
+  </span><span class="type-name">TraceExpectations</span><span>.</span><span class="identifier">check</span><span>(</span><span class="identifier">spans</span><span>, </span><span class="identifier">expected</span><span>) </span><span class="keyword">match</span><span> {
+    </span><span class="keyword">case</span><span> </span><span class="type-name">Right</span><span>(</span><span class="identifier">_</span><span>) =&gt;
+      ()
+    </span><span class="keyword">case</span><span> </span><span class="type-name">Left</span><span>(</span><span class="identifier">mismatches</span><span>) =&gt;
+      </span><span class="identifier">sys</span><span>.</span><span class="identifier">error</span><span>(</span><span class="type-name">TraceExpectations</span><span>.</span><span class="identifier">format</span><span>(</span><span class="identifier">mismatches</span><span>))
+  }</span></code></pre>
+        <p>The trace expectation API removes the need to build a custom tree model in most tests.
+        You can still keep expectations focused by matching only span names, or gradually add more detail:
+        timestamps, attributes, events, links, scope, and resource.</p>
 
         
 <hr class="footer-rule"/>
