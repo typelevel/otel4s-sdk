@@ -114,6 +114,7 @@
     <li class="level2 active nav-leaf"><a href="#">Testing with testkit</a></li>
     <li class="level2 nav-leaf"><a href="testkit-metrics.html">Testkit | Metrics</a></li>
     <li class="level2 nav-leaf"><a href="testkit-traces.html">Testkit | Traces</a></li>
+    <li class="level2 nav-leaf"><a href="testkit-logs.html">Testkit | Logs</a></li>
     <li class="level1 nav-header">SDK</li>
     <li class="level2 nav-leaf"><a href="../sdk/overview.html">Overview</a></li>
     <li class="level2 nav-leaf"><a href="../sdk/configuration.html">Configuration</a></li>
@@ -147,6 +148,7 @@
     <li class="level1 nav-leaf"><a href="#getting-started">Getting started</a></li>
     <li class="level1 nav-leaf"><a href="#testing-metrics">Testing metrics</a></li>
     <li class="level1 nav-leaf"><a href="#testing-spans">Testing spans</a></li>
+    <li class="level1 nav-leaf"><a href="#testing-logs">Testing logs</a></li>
   </ul>
 
   <p class="footer"></p>
@@ -190,6 +192,12 @@
         It can match the full exported forest, nested subtrees, ordered or unordered children,
         timestamps, attributes, events, links, scope, resource, and more.</p>
         <p>For the traces expectation API, see the dedicated <a href="testkit-traces.html">Traces testkit guide</a>.</p>
+        
+        <h2 id="testing-logs" class="section"><a class="anchor-link left" href="#testing-logs"><i class="icofont-laika link">&#xef71;</i></a>Testing logs</h2>
+        <p>The testkit also provides a dedicated expectation API for SDK logs.
+        It can match body values, severity, event name, timestamps, trace correlation, attributes,
+        scope, resource, and more.</p>
+        <p>For the logs expectation API, see the dedicated <a href="testkit-logs.html">Logs testkit guide</a>.</p>
 
         
 <hr class="footer-rule"/>
