@@ -95,7 +95,7 @@ val ScalaPBCirceVersion = "0.16.0"
 val CaseInsensitiveVersion = "1.5.0"
 val ScalaJavaTimeVersion = "2.6.0"
 val ScribeVersion = "3.17.0"
-val Otel4sVersion = "1.0.0-RC1"
+val Otel4sVersion = "1.0.0"
 
 lazy val scalaReflectDependency = Def.settings(
   libraryDependencies ++= {
