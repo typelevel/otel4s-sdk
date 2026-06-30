@@ -21,7 +21,7 @@ package processor
 import cats.effect.Ref
 import cats.effect.Resource
 import cats.effect.Temporal
-import cats.effect.std.CountDownLatch
+import cats.effect.kernel.Deferred
 import cats.effect.std.Queue
 import cats.effect.syntax.monadCancel._
 import cats.effect.syntax.spawn._
@@ -53,7 +53,7 @@ import scala.concurrent.duration._
   */
 private final class BatchSpanProcessor[F[_]: Temporal: Diagnostic] private (
     queue: Queue[F, SpanData],
-    signal: CountDownLatch[F],
+    signalRef: Ref[F, Deferred[F, Unit]],
     state: Ref[F, BatchSpanProcessor.State],
     exporter: SpanExporter[F],
     config: BatchSpanProcessor.Config
@@ -81,7 +81,7 @@ private final class BatchSpanProcessor[F[_]: Temporal: Diagnostic] private (
         for {
           queueSize <- queue.size
           state <- state.get
-          _ <- if (state.spansNeeded.exists(needed => queueSize >= needed)) signal.release else unit
+          _ <- if (state.spansNeeded.exists(needed => queueSize >= needed)) signalRef.get.flatMap(_.complete(()).void) else unit
         } yield ()
 
       for {
@@ -117,7 +117,9 @@ private final class BatchSpanProcessor[F[_]: Temporal: Diagnostic] private (
         val request =
           for {
             _ <- state.update(_.copy(spansNeeded = Some(spansNeeded)))
-            _ <- signal.await.timeoutTo(pollWaitTime, unit)
+            newSignal <- Deferred[F, Unit]
+            currentSignal <- signalRef.getAndSet(newSignal)
+            _ <- currentSignal.get.timeoutTo(pollWaitTime, unit)
           } yield ()
 
         if (pollWaitTime > Duration.Zero) {
@@ -295,10 +297,11 @@ object BatchSpanProcessor {
           queue <- Queue.dropping[F, SpanData](maxQueueSize)
           now <- Temporal[F].monotonic
           state <- Ref.of(State(now + config.scheduleDelay, Vector.empty, None))
-          signal <- CountDownLatch[F](1)
+          initialSignal <- Deferred[F, Unit]
+          signalRef <- Ref.of[F, Deferred[F, Unit]](initialSignal)
         } yield new BatchSpanProcessor[F](
           queue = queue,
-          signal = signal,
+          signalRef = signalRef,
           state = state,
           exporter = exporter,
           config = config
