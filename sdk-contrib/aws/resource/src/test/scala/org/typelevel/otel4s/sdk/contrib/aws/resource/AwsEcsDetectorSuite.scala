@@ -29,9 +29,10 @@ import org.typelevel.otel4s.Attribute
 import org.typelevel.otel4s.Attributes
 import org.typelevel.otel4s.sdk.TelemetryResource
 import org.typelevel.otel4s.semconv.SchemaUrls
+import org.typelevel.otel4s.semconv.attributes.ContainerAttributes._
 import org.typelevel.otel4s.semconv.experimental.attributes.AwsExperimentalAttributes._
 import org.typelevel.otel4s.semconv.experimental.attributes.CloudExperimentalAttributes._
-import org.typelevel.otel4s.semconv.experimental.attributes.ContainerExperimentalAttributes._
+import org.typelevel.otel4s.semconv.experimental.attributes.ContainerExperimentalAttributes.ContainerName
 
 import scala.collection.immutable
 

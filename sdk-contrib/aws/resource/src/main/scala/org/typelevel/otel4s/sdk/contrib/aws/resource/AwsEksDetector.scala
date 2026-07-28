@@ -43,6 +43,8 @@ import org.typelevel.otel4s.sdk.TelemetryResource
 import org.typelevel.otel4s.sdk.common.Diagnostic
 import org.typelevel.otel4s.sdk.resource.TelemetryResourceDetector
 import org.typelevel.otel4s.semconv.SchemaUrls
+import org.typelevel.otel4s.semconv.attributes.ContainerAttributes
+import org.typelevel.otel4s.semconv.attributes.K8sAttributes
 
 import scala.concurrent.duration._
 
@@ -183,8 +185,8 @@ object AwsEksDetector {
   private object Keys {
     val CloudProvider: AttributeKey[String] = AttributeKey("cloud.provider")
     val CloudPlatform: AttributeKey[String] = AttributeKey("cloud.platform")
-    val K8sClusterName: AttributeKey[String] = AttributeKey("k8s.cluster.name")
-    val ContainerId: AttributeKey[String] = AttributeKey("container.id")
+    val K8sClusterName: AttributeKey[String] = K8sAttributes.K8sClusterName
+    val ContainerId: AttributeKey[String] = ContainerAttributes.ContainerId
   }
 
   /** The detector detects if running on AWS EKS and provides EKS-specific resource attributes.
