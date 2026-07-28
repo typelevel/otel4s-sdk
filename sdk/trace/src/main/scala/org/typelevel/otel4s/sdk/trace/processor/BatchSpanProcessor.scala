@@ -126,6 +126,8 @@ private final class BatchSpanProcessor[F[_]: Temporal: Diagnostic] private (
 
         if (pollWaitTime > Duration.Zero) {
           poll(request).guarantee(state.update(_.copy(spansNeeded = None)))
+        } else if (currentBatchSize == 0) {
+          state.update(_.copy(nextExportTime = now + config.scheduleDelay))
         } else {
           unit
         }
