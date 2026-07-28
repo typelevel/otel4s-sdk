@@ -81,7 +81,9 @@ private final class BatchSpanProcessor[F[_]: Temporal: Diagnostic] private (
         for {
           queueSize <- queue.size
           state <- state.get
-          _ <- if (state.spansNeeded.exists(needed => queueSize >= needed)) signalRef.get.flatMap(_.complete(()).void) else unit
+          _ <-
+            if (state.spansNeeded.exists(needed => queueSize >= needed)) signalRef.get.flatMap(_.complete(()).void)
+            else unit
         } yield ()
 
       for {
