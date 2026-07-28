@@ -37,7 +37,7 @@ private object NodeMemoryMetrics {
     Meter[F].batchCallback.of(
       Meter[F]
         .observableGauge[Double](MetricNames.V8jsMemoryHeapLimit)
-        .withDescription("Total heap memory size pre-allocated.")
+        .withDescription("Total heap memory size pre-allocated for a heap space.")
         .withUnit("By")
         .createObserver,
       Meter[F]
@@ -77,7 +77,7 @@ private object NodeMemoryMetrics {
     Attributes(Keys.V8jsHeapSpaceName(spaceName))
 
   private object MetricNames {
-    val V8jsMemoryHeapLimit = "v8js.memory.heap.limit"
+    val V8jsMemoryHeapLimit = "v8js.memory.heap.space.size"
     val V8jsMemoryHeapUsed = "v8js.memory.heap.used"
     val V8jsHeapSpaceAvailableSize = "v8js.memory.heap.space.available_size"
     val V8jsHeapSpacePhysicalSize = "v8js.memory.heap.space.physical_size"

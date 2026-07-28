@@ -35,6 +35,7 @@ import org.typelevel.otel4s.sdk.TelemetryResource
 import org.typelevel.otel4s.sdk.common.Diagnostic
 import org.typelevel.otel4s.sdk.resource.TelemetryResourceDetector
 import org.typelevel.otel4s.semconv.SchemaUrls
+import org.typelevel.otel4s.semconv.attributes.ContainerAttributes
 
 import scala.concurrent.duration._
 
@@ -167,10 +168,10 @@ object AwsEcsDetector {
     val CloudAvailabilityZones: AttributeKey[String] = AttributeKey("cloud.availability_zone")
     val CloudRegion: AttributeKey[String] = AttributeKey("cloud.region")
     val CloudResourceId: AttributeKey[String] = AttributeKey("cloud.resource_id")
-    val ContainerId: AttributeKey[String] = AttributeKey("container.id")
+    val ContainerId: AttributeKey[String] = ContainerAttributes.ContainerId
     val ContainerName: AttributeKey[String] = AttributeKey("container.name")
-    val ContainerImageName: AttributeKey[String] = AttributeKey("container.image.name")
-    val ContainerImageTags: AttributeKey[Seq[String]] = AttributeKey("container.image.tags")
+    val ContainerImageName: AttributeKey[String] = ContainerAttributes.ContainerImageName
+    val ContainerImageTags: AttributeKey[Seq[String]] = ContainerAttributes.ContainerImageTags
     val AwsEcsClusterArn: AttributeKey[String] = AttributeKey("aws.ecs.cluster.arn")
     val AwsEcsContainerImageId: AttributeKey[String] = AttributeKey("aws.ecs.container.image.id")
     val AwsEcsContainerArn: AttributeKey[String] = AttributeKey("aws.ecs.container.arn")

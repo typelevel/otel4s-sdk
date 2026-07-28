@@ -52,7 +52,7 @@ class RuntimeMetricsSuite extends CatsEffectSuite {
       // V8jsExperimentalMetrics.GcDuration, // todo: I don't think we can trigger gc on demand in JS?
       // V8 JS Memory
       V8jsExperimentalMetrics.MemoryHeapUsed,
-      V8jsExperimentalMetrics.MemoryHeapLimit,
+      V8jsExperimentalMetrics.MemoryHeapSpaceSize,
       V8jsExperimentalMetrics.MemoryHeapSpacePhysicalSize,
       V8jsExperimentalMetrics.MemoryHeapSpaceAvailableSize,
       // thread

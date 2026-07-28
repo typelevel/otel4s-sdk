@@ -44,6 +44,7 @@ val Scala213 = "2.13.18"
 ThisBuild / crossScalaVersions := Seq(Scala213, "3.3.8")
 ThisBuild / scalaVersion := Scala213 // the default Scala
 
+ThisBuild / githubWorkflowOSes := Seq("ubuntu-24.04")
 ThisBuild / githubWorkflowBuildPreamble ++= nativeBrewInstallWorkflowSteps.value
 
 ThisBuild / mergifyStewardConfig := None
@@ -95,7 +96,7 @@ val ScalaPBCirceVersion = "0.16.0"
 val CaseInsensitiveVersion = "1.5.0"
 val ScalaJavaTimeVersion = "2.7.0"
 val ScribeVersion = "3.17.0"
-val Otel4sVersion = "1.0.0"
+val Otel4sVersion = "1.0.1"
 
 lazy val scalaReflectDependency = Def.settings(
   libraryDependencies ++= {
