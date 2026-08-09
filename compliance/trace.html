@@ -176,7 +176,7 @@
         <ul>
           <li>SDK core: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace">trace</a></li>
           <li>SDK exporters: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/trace">trace</a></li>
-          <li>Context propagation: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/context/propagation">propagation</a></li>
+          <li>Context propagation: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation">propagation</a></li>
           <li>Contrib (non-core): <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-contrib/aws/xray">xray</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-contrib/aws/xray-propagator">xray-propagator</a></li>
         </ul>
         
@@ -210,7 +210,7 @@
               <td>TracerProvider</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#tracer-provider">Shutdown + ForceFlush on provider (invoke processors)</a></td>
               <td>Partial</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/TracerProviderAutoConfigure.scala#L77-L80">TracerProviderAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L307-L310">BatchSpanProcessor.scala</a></td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/autoconfigure/TracerProviderAutoConfigure.scala#L77-L80">TracerProviderAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L301-L304">BatchSpanProcessor.scala</a></td>
               <td>Processor lifecycles are Resource-managed; no explicit shutdown/forceFlush API on provider</td>
             </tr>
             <tr>
@@ -252,7 +252,7 @@
               <td>Id generator</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#idgenerator-randomness-1">IdGenerator randomness extension controls random flag</a></td>
               <td>Compliant</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/IdGenerator.scala#L46-L56">IdGenerator.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkSpanBuilder.scala#L156-L159">SdkSpanBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-contrib/aws/xray/src/main/scala/org/typelevel/otel4s/sdk/trace/contrib/aws/xray/AwsXRayIdGenerator.scala#L66-L82">AwsXRayIdGenerator.scala</a></td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/IdGenerator.scala#L46-L56">IdGenerator.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/SdkSpanBuilder.scala#L156-L159">SdkSpanBuilder.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-contrib/aws/xray/src/main/scala/org/typelevel/otel4s/sdk/trace/contrib/aws/xray/AwsXRayIdGenerator.scala#L66-L81">AwsXRayIdGenerator.scala</a></td>
               <td>Root span contexts set the random-trace-id flag based on <code>IdGenerator.generatesRandomTraceId</code>; child spans preserve the parent random bit.</td>
             </tr>
             <tr>
@@ -280,15 +280,15 @@
               <td>Span processor</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-processor">Shutdown support</a></td>
               <td>Partial</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L57-L60">BatchSpanProcessor.scala</a></td>
-              <td>Batch processor finalizer flushes (<code>exportAll</code>); no explicit shutdown/forceFlush API</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L89-L90">BatchSpanProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L301-L304">BatchSpanProcessor.scala</a></td>
+              <td>Batch processor finalization invokes serialized <code>forceFlush</code>; the processor API has no explicit <code>shutdown</code> operation.</td>
             </tr>
             <tr>
               <td>Span processor</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#span-processor">Simple + Batch processors</a></td>
               <td>Compliant</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/SimpleSpanProcessor.scala#L49-L56">SimpleSpanProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L75-L90">BatchSpanProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L167-L170">BatchSpanProcessor.scala</a></td>
-              <td>Both simple and batch processors are implemented and export ended spans.</td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/SimpleSpanProcessor.scala#L49-L56">SimpleSpanProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L76-L90">BatchSpanProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L95-L162">BatchSpanProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/test/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessorSuite.scala#L105-L198">BatchSpanProcessorSuite.scala</a></td>
+              <td>Both required processors export ended spans; tests cover prompt full and consecutive batches plus serialization when <code>forceFlush</code> overlaps a worker export.</td>
             </tr>
             <tr>
               <td>Span exporter</td>

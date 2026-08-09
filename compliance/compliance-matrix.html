@@ -534,9 +534,9 @@
             </tr>
             <tr>
               <td><strong><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#sampling">Sampling</a></strong> / <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#forceflush-1">Built-in <code>SpanProcessor</code>s implement <code>ForceFlush</code> spec</a></td>
-              <td><code>+</code></td>
+              <td><code>-</code></td>
               <td></td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/SpanProcessor.scala#L58-L71">SpanProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/processor/BatchSpanProcessor.scala#L96-L98">BatchSpanProcessor.scala</a></td>
+              <td></td>
             </tr>
             <tr>
               <td><strong><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/trace/sdk.md#sampling">Sampling</a></strong> / <a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/common/README.md#attribute-limits">Attribute Limits</a></td>
@@ -1184,7 +1184,7 @@
               <td>BatchLogRecordProcessor</td>
               <td><code>+</code></td>
               <td></td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/BatchLogRecordProcessor.scala#L76-L85">BatchLogRecordProcessor.scala</a></td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/main/scala/org/typelevel/otel4s/sdk/logs/processor/BatchLogRecordProcessor.scala#L69-L160">BatchLogRecordProcessor.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/logs/src/test/scala/org/typelevel/otel4s/sdk/logs/processor/BatchLogRecordProcessorSuite.scala#L93-L163">BatchLogRecordProcessorSuite.scala</a></td>
             </tr>
             <tr>
               <td>Can plug custom LogRecordProcessor</td>
@@ -1280,9 +1280,9 @@
             </tr>
             <tr>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/resource/sdk.md#detecting-resource-information-from-the-environment">Resource detectors populate Schema URL</a></td>
-              <td><code>-</code></td>
+              <td><code>+</code></td>
               <td></td>
-              <td></td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/test/scala/org/typelevel/otel4s/sdk/resource/TelemetryResourceDetectorSuite.scala#L30-L49">TelemetryResourceDetectorSuite.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/jvm/src/main/scala/org/typelevel/otel4s/sdk/resource/HostDetectorPlatform.scala#L45-L52">HostDetectorPlatform.scala</a></td>
             </tr>
           </tbody>
         </table>
@@ -1320,19 +1320,19 @@
               <td>Attach Context</td>
               <td><code>+</code></td>
               <td></td>
-              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/common/src/main/scala/org/typelevel/otel4s/context/LocalProvider.scala#L140-L142">LocalProvider.scala</a></td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceScope.scala#L295-L299">TraceScope.scala</a></td>
             </tr>
             <tr>
               <td>Detach Context</td>
               <td><code>+</code></td>
               <td></td>
-              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/common/src/main/scala/org/typelevel/otel4s/context/LocalProvider.scala#L140-L142">LocalProvider.scala</a></td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceScope.scala#L295-L299">TraceScope.scala</a></td>
             </tr>
             <tr>
               <td>Get current Context</td>
               <td><code>+</code></td>
               <td></td>
-              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/common/src/main/scala/org/typelevel/otel4s/context/LocalProvider.scala#L138-L139">LocalProvider.scala</a></td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceScope.scala#L301-L302">TraceScope.scala</a></td>
             </tr>
             <tr>
               <td>Composite Propagator</td>
@@ -1592,7 +1592,7 @@
               <td>OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION</td>
               <td><code>+</code></td>
               <td></td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/autoconfigure/OtlpMetricExporterAutoConfigure.scala#L120-L138">OtlpMetricExporterAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/test/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/autoconfigure/OtlpMetricExporterAutoConfigureSuite.scala#L209-L239">OtlpMetricExporterAutoConfigureSuite.scala</a></td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/autoconfigure/OtlpMetricExporterAutoConfigure.scala#L120-L138">OtlpMetricExporterAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/test/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/autoconfigure/OtlpMetricExporterAutoConfigureSuite.scala#L209-L230">OtlpMetricExporterAutoConfigureSuite.scala</a></td>
             </tr>
             <tr>
               <td>OTEL_EXPERIMENTAL_CONFIG_FILE</td>

@@ -195,8 +195,8 @@
               <td>Optional global operations</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/context/README.md#optional-global-operations">Get current Context + attach/detach for implicit context</a></td>
               <td>Partial</td>
-              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/common/src/main/scala/org/typelevel/otel4s/context/LocalProvider.scala#L138-L142">LocalProvider.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/package.scala#L26-L27">package.scala</a>, <a href="https://github.com/typelevel/otel4s/blob/main/core/common/src/test/scala/org/typelevel/otel4s/context/LocalProviderSuite.scala#L56-L60">LocalProviderSuite.scala</a></td>
-              <td><code>ask</code> + scoped <code>local</code> provide current/attach-restore semantics; explicit token API is not exposed directly by otel4s.</td>
+              <td><a href="https://github.com/typelevel/otel4s/blob/main/core/common/src/main/scala/org/typelevel/otel4s/context/LocalProvider.scala#L76-L79">LocalProvider.scala</a>, <a href="https://github.com/typelevel/otel4s/blob/main/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceScope.scala#L295-L307">TraceScope.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/package.scala#L26-L27">package.scala</a></td>
+              <td><code>reader</code>, <code>scope</code>, and scoped <code>local</code> provide current/attach-restore semantics; explicit token API is not exposed directly by otel4s.</td>
             </tr>
           </tbody>
         </table>

@@ -172,7 +172,7 @@
         <ul>
           <li>SDK core: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics">metrics</a></li>
           <li>SDK exporters: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics">metrics</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/prometheus">prometheus</a></li>
-          <li>SDK data model: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/data">data</a></li>
+          <li>SDK data model: <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk/metrics/src/main/scala/org/typelevel/otel4s/sdk/metrics/data">data</a></li>
         </ul>
         
         <h2 id="metrics-sdk-md-checklist" class="section"><a class="anchor-link left" href="#metrics-sdk-md-checklist"><i class="icofont-laika link">&#xef71;</i></a><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk.md">metrics/sdk.md</a> checklist</h2>
@@ -424,7 +424,7 @@
               <td>SDK Exporter</td>
               <td><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/v1.53.0/specification/metrics/sdk_exporters/otlp.md">otlp.md</a></td>
               <td>Partial</td>
-              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/OtlpMetricExporter.scala#L62-L68">OtlpMetricExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/autoconfigure/OtlpMetricExporterAutoConfigure.scala#L74-L150">OtlpMetricExporterAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/test/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/autoconfigure/OtlpMetricExporterAutoConfigureSuite.scala#L138-L239">OtlpMetricExporterAutoConfigureSuite.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/common/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/autoconfigure/OtlpClientAutoConfigure.scala#L82-L90">OtlpClientAutoConfigure.scala</a></td>
+              <td><a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/OtlpMetricExporter.scala#L62-L68">OtlpMetricExporter.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/autoconfigure/OtlpMetricExporterAutoConfigure.scala#L74-L150">OtlpMetricExporterAutoConfigure.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/metrics/src/test/scala/org/typelevel/otel4s/sdk/exporter/otlp/metrics/autoconfigure/OtlpMetricExporterAutoConfigureSuite.scala#L138-L230">OtlpMetricExporterAutoConfigureSuite.scala</a>, <a href="https://github.com/typelevel/otel4s-sdk/blob/main/sdk-exporter/common/src/main/scala/org/typelevel/otel4s/sdk/exporter/otlp/autoconfigure/OtlpClientAutoConfigure.scala#L82-L90">OtlpClientAutoConfigure.scala</a></td>
               <td>OTLP protocol config and env config for temporality/default histogram aggregation are wired. Both <code>explicit_bucket_histogram</code> and <code>base2_exponential_bucket_histogram</code> are supported.</td>
             </tr>
             <tr>
