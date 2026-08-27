@@ -683,6 +683,82 @@ class PrometheusWriterSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
     writeAndCompare(metrics, expected)
   }
 
+  test("group together explicit-bucket and exponential histograms with the same name") {
+    val expected =
+      s"""# HELP foo_bytes meter histogram foo
+         |# TYPE foo_bytes histogram
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="0"} 0
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="5"} 0
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="10"} 0
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="25"} 0
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="50"} 0
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="75"} 0
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="100"} 1
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="250"} 1
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="500"} 1
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="1000"} 1
+         |foo_bytes_bucket{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0",le="+Inf"} 1
+         |foo_bytes_count{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0"} 1
+         |foo_bytes_sum{A="B",otel_scope_name="ma",otel_scope_version="v0.1.0"} 100
+         |foo_bytes_bucket{A="B",otel_scope_name="mb",otel_scope_version="v0.1.0",le="0"} 1
+         |foo_bytes_bucket{A="B",otel_scope_name="mb",otel_scope_version="v0.1.0",le="2"} 4
+         |foo_bytes_bucket{A="B",otel_scope_name="mb",otel_scope_version="v0.1.0",le="4"} 5
+         |foo_bytes_bucket{A="B",otel_scope_name="mb",otel_scope_version="v0.1.0",le="+Inf"} 5
+         |foo_bytes_count{A="B",otel_scope_name="mb",otel_scope_version="v0.1.0"} 5
+         |foo_bytes_sum{A="B",otel_scope_name="mb",otel_scope_version="v0.1.0"} 10.5
+         |# HELP otel_scope_info Instrumentation Scope metadata
+         |# TYPE otel_scope_info gauge
+         |otel_scope_info{E="F",otel_scope_name="ma",otel_scope_version="v0.1.0"} 1
+         |otel_scope_info{E="F",otel_scope_name="mb",otel_scope_version="v0.1.0"} 1
+         |# HELP target_info Target metadata
+         |# TYPE target_info gauge
+         |target_info{service_name="unknown_service:scala",telemetry_sdk_language="scala",telemetry_sdk_name="otel4s",telemetry_sdk_version="${BuildInfo.version}"} 1
+         |""".stripMargin
+
+    // scale=0, base=2: bucket index i covers (2^i, 2^(i+1)]
+    // positive buckets: offset=0, counts=[3, 1] → upper boundaries 2.0, 4.0
+    val metrics = Vector(
+      mkHistogram(
+        "foo",
+        "meter histogram foo".some,
+        "By".some,
+        NonEmptyVector.of(
+          (
+            PointData.Histogram
+              .Stats(
+                sum = 100.0,
+                min = 100.0,
+                max = 100.0,
+                count = 1L
+              ),
+            Vector(0.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0, 250.0, 500.0, 1000.0),
+            Vector(0, 0, 0, 0, 0, 0, 1, 0, 0, 0),
+            Attributes(Attribute("A", "B"))
+          )
+        ),
+        scopeName = "ma"
+      ),
+      mkExponentialHistogram(
+        "foo",
+        "meter histogram foo".some,
+        "By".some,
+        NonEmptyVector.of(
+          (
+            PointData.ExponentialHistogram.Stats(sum = 10.5, min = 0.0, max = 3.5, count = 5L),
+            0,
+            1L,
+            PointData.ExponentialHistogram.Buckets(0, Vector(3L, 1L)),
+            PointData.ExponentialHistogram.Buckets.empty,
+            Attributes(Attribute("A", "B"))
+          )
+        ),
+        scopeName = "mb"
+      )
+    )
+
+    writeAndCompare(metrics, expected)
+  }
+
   test("group together counters with the same name and drop conflicting help") {
     val expected =
       s"""# HELP bar_bytes_total meter a bar

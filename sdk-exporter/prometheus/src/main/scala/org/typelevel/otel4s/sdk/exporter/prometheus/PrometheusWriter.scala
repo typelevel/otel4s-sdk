@@ -373,9 +373,8 @@ object PrometheusWriter {
             serializeGauges(metricGroup)
           }
 
-        case _: MetricPoints.Gauge                => serializeGauges(metricGroup)
-        case _: MetricPoints.Histogram            => serializeHistograms(metricGroup)
-        case _: MetricPoints.ExponentialHistogram => serializeExponentialHistograms(metricGroup)
+        case _: MetricPoints.Gauge                                            => serializeGauges(metricGroup)
+        case _: MetricPoints.Histogram | _: MetricPoints.ExponentialHistogram => serializeHistograms(metricGroup)
       }
     }
 
@@ -418,49 +417,55 @@ object PrometheusWriter {
       serializeSumsOrGauges(metricGroup)
     }
 
+    // a group may mix explicit-bucket and exponential histograms: both resolve to the same Prometheus type
     private def serializeHistograms(metricGroup: MetricGroup): Either[Throwable, String] =
       serializeHistogramPoints(metricGroup) { metric =>
-        metric.data.points.collect { case point: PointData.Histogram => point }.map { point =>
-          val buckets = point.boundaries.boundaries.toNev
-            .map2(point.counts.toNev) { case (boundaries, counts) =>
-              val boundariesWithInf = boundaries.map(formatDouble) :+ PosInf
-              val countsWithInf = if (counts.length > boundaries.length) {
-                counts
-              } else {
-                counts :+ 0L
-              }
-
-              boundariesWithInf.zipWith(countsWithInf)((_, _))
-            }
-            .getOrElse(NonEmptyVector.of((PosInf, point.counts.sum)))
-
-          (point.attributes, buckets, point.stats.map(s => (s.count, s.sum)))
+        metric.data.points.collect {
+          case point: PointData.Histogram            => histogramEntry(point)
+          case point: PointData.ExponentialHistogram => exponentialHistogramEntry(point)
         }
       }
 
-    private def serializeExponentialHistograms(metricGroup: MetricGroup): Either[Throwable, String] =
-      serializeHistogramPoints(metricGroup) { metric =>
-        metric.data.points.collect { case point: PointData.ExponentialHistogram => point }.map { point =>
-          val entries = exponentialBucketEntries(point)
-          val entriesWithInf = entries :+ (PosInf, 0L)
-          val buckets = NonEmptyVector.fromVectorUnsafe(entriesWithInf)
+    private def histogramEntry(
+        point: PointData.Histogram
+    ): (Attributes, NonEmptyVector[(String, Long)], Option[(Long, Double)]) = {
+      val buckets = point.boundaries.boundaries.toNev
+        .map2(point.counts.toNev) { case (boundaries, counts) =>
+          val boundariesWithInf = boundaries.map(formatDouble) :+ PosInf
+          val countsWithInf = if (counts.length > boundaries.length) {
+            counts
+          } else {
+            counts :+ 0L
+          }
 
-          (point.attributes, buckets, point.stats.map(s => (s.count, s.sum)))
+          boundariesWithInf.zipWith(countsWithInf)((_, _))
         }
-      }
+        .getOrElse(NonEmptyVector.of((PosInf, point.counts.sum)))
+
+      (point.attributes, buckets, point.stats.map(s => (s.count, s.sum)))
+    }
+
+    private def exponentialHistogramEntry(
+        point: PointData.ExponentialHistogram
+    ): (Attributes, NonEmptyVector[(String, Long)], Option[(Long, Double)]) = {
+      val entries = exponentialBucketEntries(point)
+      val entriesWithInf = entries :+ (PosInf, 0L)
+      val buckets = NonEmptyVector.fromVectorUnsafe(entriesWithInf)
+
+      (point.attributes, buckets, point.stats.map(s => (s.count, s.sum)))
+    }
 
     private def serializeHistogramPoints(metricGroup: MetricGroup)(
         extractPoints: MetricData => Vector[(Attributes, NonEmptyVector[(String, Long)], Option[(Long, Double)])]
     ): Either[Throwable, String] = {
       val typeLine = s"${metricGroup.prometheusName} $Histogram"
-      metricGroup.metrics
+      metricGroup.metrics.toVector
         .flatTraverse { metric =>
           val scopeLabels = prepareScopeLabels(metric.instrumentationScope)
-          NonEmptyVector
-            .fromVectorUnsafe(extractPoints(metric))
+          extractPoints(metric)
             .flatTraverse { case (attributes, buckets, stats) =>
               attributesToLabels(attributes).map(_ ++ scopeLabels).map { labels =>
-                buckets.tail
+                val bucketPoints = buckets.tail
                   .foldLeft((NonEmptyVector.one(buckets.head), buckets.head._2)) {
                     case ((res, countSoFar), (boundary, count)) =>
                       val cumulativeCount = countSoFar + count
@@ -473,16 +478,24 @@ object PrometheusWriter {
                       labels + ("le" -> boundary),
                       cumulativeCount.toString
                     )
-                  } ++ stats.map { case (count, sum) =>
+                  }
+
+                val statsPoints = stats.map { case (count, sum) =>
                   Vector(
                     PrometheusTextPoint(s"${metricGroup.prometheusName}_count", labels, count.toString),
                     PrometheusTextPoint(s"${metricGroup.prometheusName}_sum", labels, formatDouble(sum))
                   )
                 }.orEmpty
+
+                bucketPoints.toVector ++ statsPoints
               }
             }
         }
-        .map(PrometheusTextRecord(metricGroup.helpLine(metricGroup.prometheusName), typeLine, _).show)
+        .map { textPoints =>
+          textPoints.toNev.fold("") { points =>
+            PrometheusTextRecord(metricGroup.helpLine(metricGroup.prometheusName), typeLine, points).show
+          }
+        }
     }
 
     private def exponentialBucketEntries(point: PointData.ExponentialHistogram): Vector[(String, Long)] = {
