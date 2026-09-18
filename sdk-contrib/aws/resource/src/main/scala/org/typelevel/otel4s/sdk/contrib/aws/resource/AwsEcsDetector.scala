@@ -97,12 +97,16 @@ private class AwsEcsDetector[F[_]: Async: Network: Env: Diagnostic] private (
     builder.addAll(Keys.ContainerImageTags.maybe(imageTagOpt.map(Seq(_))))
 
     // aws
-    builder.addOne(Keys.AwsLogGroupNames, Seq(container.logOptions.group))
-    builder.addOne(Keys.AwsLogStreamNames, Seq(container.logOptions.stream))
+    container.logOptions.foreach { logOptions =>
+      builder.addOne(Keys.AwsLogGroupNames, Seq(logOptions.group))
+      builder.addOne(Keys.AwsLogStreamNames, Seq(logOptions.stream))
+    }
 
     accountIdOpt.foreach { accountId =>
-      builder.addOne(Keys.AwsLogGroupArns, Seq(container.logOptions.logGroupArn(accountId)))
-      builder.addOne(Keys.AwsLogStreamArns, Seq(container.logOptions.logStreamArn(accountId)))
+      container.logOptions.foreach { logOptions =>
+        builder.addOne(Keys.AwsLogGroupArns, Seq(logOptions.logGroupArn(accountId)))
+        builder.addOne(Keys.AwsLogStreamArns, Seq(logOptions.logStreamArn(accountId)))
+      }
     }
 
     builder.addOne(Keys.AwsEcsContainerArn, container.containerArn)
@@ -247,7 +251,7 @@ object AwsEcsDetector {
       image: String,
       imageId: String,
       containerArn: String,
-      logOptions: ContainerMetadata.LogOptions
+      logOptions: Option[ContainerMetadata.LogOptions]
   )
 
   private object ContainerMetadata {
@@ -269,6 +273,10 @@ object AwsEcsDetector {
         "awslogs-region",
         "awslogs-stream"
       )(LogOptions.apply)
+
+    // The awslogs options are missing when a different driver is used.
+    implicit val logOptionsOptionDecoder: Decoder[Option[LogOptions]] =
+      Decoder[LogOptions].attempt.map(_.toOption)
 
     implicit val containerMetadataDecoder: Decoder[ContainerMetadata] =
       Decoder.forProduct6(
