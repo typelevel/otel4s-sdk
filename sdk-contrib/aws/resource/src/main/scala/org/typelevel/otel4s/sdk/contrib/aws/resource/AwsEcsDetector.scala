@@ -116,7 +116,9 @@ private class AwsEcsDetector[F[_]: Async: Network: Env: Diagnostic] private (
     builder.addOne(Keys.AwsEcsContainerArn, container.containerArn)
     builder.addOne(Keys.AwsEcsContainerImageId, container.imageId)
     builder.addOne(Keys.AwsEcsTaskArn, task.taskArn)
-    builder.addOne(Keys.AwsEcsLaunchType, task.launchType)
+    task.launchType.foreach { launchType =>
+      builder.addOne(Keys.AwsEcsLaunchType, launchType)
+    }
     builder.addOne(Keys.AwsEcsTaskFamily, task.family)
     builder.addOne(Keys.AwsEcsTaskRevision, task.revision)
 
@@ -297,7 +299,7 @@ object AwsEcsDetector {
       availabilityZone: Option[String],
       cluster: String,
       taskArn: String,
-      launchType: String,
+      launchType: Option[String],
       family: String,
       revision: String,
   )

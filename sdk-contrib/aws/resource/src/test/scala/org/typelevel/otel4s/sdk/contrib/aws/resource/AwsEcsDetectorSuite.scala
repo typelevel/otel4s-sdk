@@ -187,6 +187,22 @@ class AwsEcsDetectorSuite extends CatsEffectSuite {
     AwsEcsDetector[IO](client).detect.assertEquals(Some(expected))
   }
 
+  test("parse metadata response and add attributes when missing launch type") {
+    implicit val env: Env[IO] = constEnv("ECS_CONTAINER_METADATA_URI_V4" -> containerMetadataUrl)
+
+    val taskNoLaunchType =
+      task.mapObject(_.remove("LaunchType"))
+
+    val client = Client.fromHttpApp(mockServer(container, taskNoLaunchType))
+
+    val expected = TelemetryResource(
+      attributes.filter(_.key.name != "aws.ecs.launchtype"),
+      Some(SchemaUrls.Current)
+    )
+
+    AwsEcsDetector[IO](client).detect.assertEquals(Some(expected))
+  }
+
   test("return None when metadata response is unparsable") {
     implicit val env: Env[IO] = constEnv("ECS_CONTAINER_METADATA_URI_V4" -> containerMetadataUrl)
     val client = Client.fromHttpApp(mockServer(Json.obj(), Json.obj()))
