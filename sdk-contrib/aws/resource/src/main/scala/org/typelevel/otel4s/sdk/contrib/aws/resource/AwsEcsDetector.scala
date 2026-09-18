@@ -86,7 +86,11 @@ private class AwsEcsDetector[F[_]: Async: Network: Env: Diagnostic] private (
     builder.addOne(Keys.CloudProvider, Const.CloudProvider)
     builder.addOne(Keys.CloudPlatform, Const.CloudPlatform)
     builder.addOne(Keys.CloudResourceId, container.containerArn)
-    builder.addOne(Keys.CloudAvailabilityZones, task.availabilityZone)
+
+    task.availabilityZone.foreach { availabilityZone =>
+      builder.addOne(Keys.CloudAvailabilityZones, availabilityZone)
+    }
+
     builder.addAll(Keys.CloudRegion.maybe(regionOpt))
     builder.addAll(Keys.CloudAccountId.maybe(accountIdOpt))
 
@@ -290,7 +294,7 @@ object AwsEcsDetector {
   }
 
   private final case class TaskMetadata(
-      availabilityZone: String,
+      availabilityZone: Option[String],
       cluster: String,
       taskArn: String,
       launchType: String,
