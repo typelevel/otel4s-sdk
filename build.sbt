@@ -608,6 +608,16 @@ lazy val `sdk-contrib-aws-resource` =
         "org.http4s" %%% "http4s-circe" % Http4sVersion,
         "org.http4s" %%% "http4s-dsl" % Http4sVersion % Test,
         "org.typelevel" %%% "otel4s-semconv-experimental" % Otel4sVersion % Test,
+      ),
+      mimaBinaryIssueFilters ++= Seq(
+        // AwsEcsDetector#ContainerMetadata is private
+        ProblemFilters.exclude[Problem](
+          "org.typelevel.otel4s.sdk.contrib.aws.resource.AwsEcsDetector#ContainerMetadata.*"
+        ),
+        // AwsEcsDetector#TaskMetadata is private
+        ProblemFilters.exclude[Problem](
+          "org.typelevel.otel4s.sdk.contrib.aws.resource.AwsEcsDetector#TaskMetadata.*"
+        )
       )
     )
     .settings(artifactUploadSettings)
