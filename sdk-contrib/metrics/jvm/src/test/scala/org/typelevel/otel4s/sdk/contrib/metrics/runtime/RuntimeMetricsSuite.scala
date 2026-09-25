@@ -20,12 +20,15 @@ import cats.effect.IO
 import munit.CatsEffectSuite
 import org.typelevel.otel4s.metrics.MeterProvider
 import org.typelevel.otel4s.sdk.metrics.data.MetricData
+import org.typelevel.otel4s.sdk.metrics.data.PointData
 import org.typelevel.otel4s.sdk.testkit.metrics.MetricsTestkit
 import org.typelevel.otel4s.semconv.MetricSpec
 import org.typelevel.otel4s.semconv.Requirement
 import org.typelevel.otel4s.semconv.metrics.JvmMetrics
 
+import java.lang.management.ManagementFactory
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
 
 class RuntimeMetricsSuite extends CatsEffectSuite {
 
@@ -63,6 +66,40 @@ class RuntimeMetricsSuite extends CatsEffectSuite {
       }
     }
   }
+
+  test("record GC durations in seconds") {
+    val config = RuntimeMetrics.Config.disabledAll.withGcMetricsEnabled
+
+    // the accumulated collection time reported by the JVM, in milliseconds
+    val collectionTime =
+      IO.delay(ManagementFactory.getGarbageCollectorMXBeans.asScala.map(_.getCollectionTime).sum)
+
+    MetricsTestkit.inMemory[IO]().use { testkit =>
+      implicit val meterProvider: MeterProvider[IO] = testkit.meterProvider
+      RuntimeMetrics.register[IO](config).surround {
+        for {
+          before <- collectionTime
+          _ <- IO.delay(System.gc())
+          _ <- IO.sleep(500.millis)
+          after <- collectionTime
+          metrics <- testkit.collectMetrics
+        } yield {
+          val expected = (after - before).toDouble / 1000
+          val recorded = histogramSum(metrics, JvmMetrics.GcDuration.name)
+
+          assume(expected > 0, "System.gc() did not add any collection time")
+          assert(recorded >= expected / 2, s"recorded [$recorded s], but the JVM reported [$expected s]")
+        }
+      }
+    }
+  }
+
+  private def histogramSum(metrics: List[MetricData], name: String): Double =
+    metrics
+      .filter(_.name == name)
+      .flatMap(_.data.points.toVector)
+      .collect { case point: PointData.Histogram => point.stats.fold(0.0)(_.sum) }
+      .sum
 
   private def specTest(metrics: List[MetricData], spec: MetricSpec): Unit = {
     val metric = metrics.find(_.name == spec.name)
