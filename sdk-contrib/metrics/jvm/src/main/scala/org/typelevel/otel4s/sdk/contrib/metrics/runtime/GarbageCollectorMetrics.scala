@@ -48,7 +48,7 @@ import scala.jdk.CollectionConverters._
   *   [[https://opentelemetry.io/docs/specs/semconv/runtime/jvm-metrics/#jvm-garbage-collection]]
   */
 private object GarbageCollectorMetrics {
-  private val MillisPerSecond = TimeUnit.MILLISECONDS.toNanos(1)
+  private val MillisPerSecond = TimeUnit.SECONDS.toMillis(1)
 
   def register[F[_]: Async: Meter: Diagnostic](
       bucketBoundaries: BucketBoundaries
