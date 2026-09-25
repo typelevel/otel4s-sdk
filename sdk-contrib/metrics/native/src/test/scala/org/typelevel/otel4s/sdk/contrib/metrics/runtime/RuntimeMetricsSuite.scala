@@ -20,12 +20,15 @@ import cats.effect.IO
 import munit.CatsEffectSuite
 import org.typelevel.otel4s.metrics.MeterProvider
 import org.typelevel.otel4s.sdk.metrics.data.MetricData
+import org.typelevel.otel4s.sdk.metrics.data.PointData
 import org.typelevel.otel4s.sdk.testkit.metrics.MetricsTestkit
 import org.typelevel.otel4s.semconv.MetricSpec
 import org.typelevel.otel4s.semconv.Requirement
 import org.typelevel.otel4s.semconv.metrics.JvmMetrics
 
+import java.lang.management.ManagementFactory
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
 
 class RuntimeMetricsSuite extends CatsEffectSuite {
 
@@ -57,6 +60,37 @@ class RuntimeMetricsSuite extends CatsEffectSuite {
       }
     }
   }
+
+  test("record GC collections since registration") {
+    val config = RuntimeMetrics.Config.disabledAll.withGcMetricsEnabled.withGcMetricsRefreshRate(100.millis)
+
+    // the accumulated number of collections reported by the process
+    val collections =
+      IO.delay(ManagementFactory.getGarbageCollectorMXBeans.asScala.map(_.getCollectionCount).sum)
+
+    MetricsTestkit.inMemory[IO]().use { testkit =>
+      implicit val meterProvider: MeterProvider[IO] = testkit.meterProvider
+      for {
+        before <- collections
+        metrics <- RuntimeMetrics.register[IO](config).surround {
+          IO.delay(System.gc()).replicateA_(3) >> IO.sleep(500.millis) >> testkit.collectMetrics
+        }
+        after <- collections
+      } yield {
+        val recorded = histogramCount(metrics, "scalanative.gc.duration")
+
+        assert(recorded >= 3L, s"recorded [$recorded] collections, but System.gc() was called 3 times")
+        assert(recorded <= after - before, s"recorded [$recorded] collections, but only [${after - before}] happened")
+      }
+    }
+  }
+
+  private def histogramCount(metrics: List[MetricData], name: String): Long =
+    metrics
+      .filter(_.name == name)
+      .flatMap(_.data.points.toVector)
+      .collect { case point: PointData.Histogram => point.stats.fold(0L)(_.count) }
+      .sum
 
   private def specTest(metrics: List[MetricData], spec: MetricSpec): Unit = {
     val specName = spec.name.replace("jvm.", "scalanative.")
