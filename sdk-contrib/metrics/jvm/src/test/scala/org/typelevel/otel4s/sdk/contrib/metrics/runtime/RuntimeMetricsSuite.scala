@@ -17,6 +17,7 @@
 package org.typelevel.otel4s.sdk.contrib.metrics.runtime
 
 import cats.effect.IO
+import cats.effect.Resource
 import munit.CatsEffectSuite
 import org.typelevel.otel4s.metrics.MeterProvider
 import org.typelevel.otel4s.sdk.metrics.data.MetricData
@@ -27,6 +28,7 @@ import org.typelevel.otel4s.semconv.Requirement
 import org.typelevel.otel4s.semconv.metrics.JvmMetrics
 
 import java.lang.management.ManagementFactory
+import java.net.URLClassLoader
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
 
@@ -94,6 +96,46 @@ class RuntimeMetricsSuite extends CatsEffectSuite {
     }
   }
 
+  test("record currently loaded classes and classes loaded since JVM start") {
+    val config = RuntimeMetrics.Config.disabledAll.withClassMetricsEnabled
+
+    MetricsTestkit.inMemory[IO]().use { testkit =>
+      implicit val meterProvider: MeterProvider[IO] = testkit.meterProvider
+      RuntimeMetrics.register[IO](config).surround {
+        for {
+          _ <- loadUnloadableClass
+          _ <- IO.delay(System.gc())
+          metrics <- testkit.collectMetrics
+        } yield {
+          val count = longValue(metrics, JvmMetrics.ClassCount.name)
+          val loaded = longValue(metrics, JvmMetrics.ClassLoaded.name)
+          val unloaded = longValue(metrics, JvmMetrics.ClassUnloaded.name)
+
+          assume(unloaded > 0, "no classes were unloaded")
+          assert(loaded > count, s"loaded since JVM start [$loaded] must exceed currently loaded [$count]")
+        }
+      }
+    }
+  }
+
+  // loads the class with a separate class loader, so the next collection can unload it
+  private val loadUnloadableClass: IO[Unit] = {
+    val unloadable = classOf[RuntimeMetricsSuite.Unloadable]
+    val location = unloadable.getProtectionDomain.getCodeSource.getLocation
+
+    Resource
+      .fromAutoCloseable(IO.delay(new URLClassLoader(Array(location), null)))
+      .use(loader => IO.delay(loader.loadClass(unloadable.getName)))
+      .void
+  }
+
+  private def longValue(metrics: List[MetricData], name: String): Long =
+    metrics
+      .filter(_.name == name)
+      .flatMap(_.data.points.toVector)
+      .collect { case point: PointData.LongNumber => point.value }
+      .sum
+
   private def histogramSum(metrics: List[MetricData], name: String): Double =
     metrics
       .filter(_.name == name)
@@ -128,5 +170,11 @@ class RuntimeMetricsSuite extends CatsEffectSuite {
       assertEquals(current, required, clue)
     }
   }
+
+}
+
+object RuntimeMetricsSuite {
+
+  final class Unloadable
 
 }

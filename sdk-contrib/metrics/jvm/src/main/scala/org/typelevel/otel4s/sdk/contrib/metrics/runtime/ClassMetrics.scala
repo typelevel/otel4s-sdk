@@ -39,11 +39,11 @@ private object ClassMetrics {
         JvmMetrics.ClassUnloaded.createObserver[F, Long]
       ) { (classCount, classLoaded, classUnloaded) =>
         for {
-          count <- Sync[F].delay(bean.getTotalLoadedClassCount)
-          loaded <- Sync[F].delay(bean.getLoadedClassCount)
+          count <- Sync[F].delay(bean.getLoadedClassCount)
+          loaded <- Sync[F].delay(bean.getTotalLoadedClassCount)
           unloaded <- Sync[F].delay(bean.getUnloadedClassCount)
-          _ <- classCount.record(count)
-          _ <- classLoaded.record(loaded.toLong)
+          _ <- classCount.record(count.toLong)
+          _ <- classLoaded.record(loaded)
           _ <- classUnloaded.record(unloaded)
         } yield ()
       }
