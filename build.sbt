@@ -100,7 +100,7 @@ val Http4sVersion = "0.23.38"
 val CirceVersion = "0.14.17"
 val ScalaPBCirceVersion = "0.16.0"
 val CaseInsensitiveVersion = "1.5.0"
-val ScalaJavaTimeVersion = "2.7.0"
+val ScalaJavaTimeVersion = "2.9.0"
 val ScribeVersion = "3.17.0"
 val Otel4sVersion = "1.1.0"
 
