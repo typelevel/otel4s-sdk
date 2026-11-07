@@ -18,9 +18,11 @@ package org.typelevel.otel4s.sdk
 
 import cats.Foldable
 import cats.effect.IO
+import cats.effect.Resource
 import munit.CatsEffectSuite
 import org.typelevel.otel4s.Attribute
 import org.typelevel.otel4s.Attributes
+import org.typelevel.otel4s.context.ContextManager
 import org.typelevel.otel4s.context.propagation.ContextPropagators
 import org.typelevel.otel4s.context.propagation.TextMapGetter
 import org.typelevel.otel4s.context.propagation.TextMapPropagator
@@ -29,6 +31,7 @@ import org.typelevel.otel4s.sdk.autoconfigure.AutoConfigure
 import org.typelevel.otel4s.sdk.autoconfigure.Config
 import org.typelevel.otel4s.sdk.common.Diagnostic
 import org.typelevel.otel4s.sdk.context.Context
+import org.typelevel.otel4s.sdk.context.LocalContext
 import org.typelevel.otel4s.sdk.logs.LogRecordLimits
 import org.typelevel.otel4s.sdk.logs.data.LogRecordData
 import org.typelevel.otel4s.sdk.logs.exporter.LogRecordExporter
@@ -39,6 +42,7 @@ import org.typelevel.otel4s.sdk.metrics.exporter.CardinalityLimitSelector
 import org.typelevel.otel4s.sdk.metrics.exporter.MetricExporter
 import org.typelevel.otel4s.sdk.metrics.view.InstrumentSelector
 import org.typelevel.otel4s.sdk.metrics.view.View
+import org.typelevel.otel4s.sdk.trace.SdkTraces
 import org.typelevel.otel4s.sdk.trace.SpanLimits
 import org.typelevel.otel4s.sdk.trace.context.propagation.W3CBaggagePropagator
 import org.typelevel.otel4s.sdk.trace.context.propagation.W3CTraceContextPropagator
@@ -54,6 +58,39 @@ import scodec.bits.ByteVector
 class OpenTelemetrySdkSuite extends CatsEffectSuite {
 
   private implicit val noopDiagnostic: Diagnostic[IO] = Diagnostic.noop
+
+  test("SDK and standalone traces managers share their local context, including no-op instances") {
+    val config = Config.ofProps(
+      Map(
+        "otel.otel4s.resource.detectors.enabled" -> "none",
+        "otel.logs.exporter" -> "none",
+        "otel.traces.exporter" -> "none",
+        "otel.metrics.exporter" -> "none"
+      )
+    )
+    val disabled = Config.ofProps(Map("otel.sdk.disabled" -> "true"))
+    val instances: List[Resource[IO, (ContextManager.Aux[IO, Context], LocalContext[IO])]] = List(
+      OpenTelemetrySdk.autoConfigured[IO](_.withConfig(config)).map(a => (a.sdk.contextManager, a.sdk.localContext)),
+      OpenTelemetrySdk.autoConfigured[IO](_.withConfig(disabled)).map(a => (a.sdk.contextManager, a.sdk.localContext)),
+      Resource.eval(OpenTelemetrySdk.noop[IO]).map(a => (a.contextManager, a.localContext)),
+      SdkTraces.autoConfigured[IO](_.withConfig(config)).map(a => (a.contextManager, a.localContext)),
+      SdkTraces.autoConfigured[IO](_.withConfig(disabled)).map(a => (a.contextManager, a.localContext))
+    )
+
+    instances.foldLeft(IO.unit) { (previous, instance) =>
+      previous *> instance.use { case (manager, local) =>
+        for {
+          key <- Context.Key.unique[IO, String]("custom")
+          expected = Context.root.updated(key, "value")
+          captured <- local.scope(manager.captureScope)(expected)
+          actual <- captured(local.ask)
+          _ = assertEquals(actual, expected)
+          restored <- manager.current
+          _ = assertEquals(restored.get(key), None)
+        } yield ()
+      }
+    }
+  }
 
   private val DefaultSdk =
     sdkToString(

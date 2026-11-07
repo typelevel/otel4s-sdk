@@ -28,6 +28,7 @@ import cats.mtl.Local
 import cats.syntax.apply._
 import cats.syntax.flatMap._
 import cats.syntax.functor._
+import org.typelevel.otel4s.context.ContextManager
 import org.typelevel.otel4s.context.LocalProvider
 import org.typelevel.otel4s.context.propagation.ContextPropagators
 import org.typelevel.otel4s.context.propagation.TextMapPropagator
@@ -53,6 +54,9 @@ import org.typelevel.otel4s.trace.TracerProvider
   *   the higher-kinded type of a polymorphic effect
   */
 sealed trait SdkTraces[F[_]] {
+
+  /** Captures and restores the complete context used by this tracing module. */
+  def contextManager: ContextManager.Aux[F, Context]
 
   /** The [[org.typelevel.otel4s.trace.TracerProvider TracerProvider]].
     */
@@ -340,6 +344,8 @@ object SdkTraces {
       val propagators: ContextPropagators[Context],
       val localContext: LocalContext[F]
   ) extends SdkTraces[F] {
+    val contextManager: ContextManager.Aux[F, Context] = ContextManager.fromLocal(localContext)
+
     override def toString: String =
       s"SdkTraces{tracerProvider=$tracerProvider, propagators=$propagators}"
   }

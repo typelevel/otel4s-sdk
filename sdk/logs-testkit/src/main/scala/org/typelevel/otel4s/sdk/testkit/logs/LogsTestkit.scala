@@ -19,17 +19,21 @@ package org.typelevel.otel4s.sdk.testkit.logs
 import cats.Parallel
 import cats.effect.Resource
 import cats.effect.Temporal
+import org.typelevel.otel4s.context.ContextManager
 import org.typelevel.otel4s.context.LocalProvider
 import org.typelevel.otel4s.logs.LoggerProvider
 import org.typelevel.otel4s.sdk.common.Diagnostic
-import org.typelevel.otel4s.sdk.context.AskContext
 import org.typelevel.otel4s.sdk.context.Context
+import org.typelevel.otel4s.sdk.context.LocalContext
 import org.typelevel.otel4s.sdk.context.LocalContextProvider
 import org.typelevel.otel4s.sdk.logs.SdkLoggerProvider
 import org.typelevel.otel4s.sdk.logs.data.LogRecordData
 import org.typelevel.otel4s.sdk.logs.processor.SimpleLogRecordProcessor
 
 sealed trait LogsTestkit[F[_]] {
+
+  /** Captures and restores the complete context used by this testkit. */
+  def contextManager: ContextManager.Aux[F, Context]
 
   /** The [[org.typelevel.otel4s.logs.LoggerProvider LoggerProvider]].
     */
@@ -78,7 +82,7 @@ object LogsTestkit {
   ): Resource[F, LogsTestkit[F]] =
     customize(builder[F]).build
 
-  private def create[F[_]: Temporal: Parallel: Diagnostic: AskContext](
+  private def create[F[_]: Temporal: Parallel: Diagnostic: LocalContext](
       customize: SdkLoggerProvider.Builder[F] => SdkLoggerProvider.Builder[F]
   ): Resource[F, LogsTestkit[F]] = {
     def createLoggerProvider(
@@ -92,12 +96,13 @@ object LogsTestkit {
     for {
       exporter <- Resource.eval(InMemoryLogRecordExporter.create[F](None))
       loggerProvider <- Resource.eval(createLoggerProvider(exporter))
-    } yield new Impl(loggerProvider, exporter)
+    } yield new Impl(loggerProvider, exporter, ContextManager.fromLocal)
   }
 
   private final class Impl[F[_]](
       val loggerProvider: LoggerProvider[F, Context],
-      exporter: InMemoryLogRecordExporter[F]
+      exporter: InMemoryLogRecordExporter[F],
+      val contextManager: ContextManager.Aux[F, Context]
   ) extends LogsTestkit[F] {
     def collectLogs: F[List[LogRecordData]] =
       exporter.exportedLogs

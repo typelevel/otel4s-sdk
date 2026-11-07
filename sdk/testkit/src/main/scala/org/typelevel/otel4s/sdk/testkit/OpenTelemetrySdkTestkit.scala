@@ -21,6 +21,7 @@ import cats.effect.Async
 import cats.effect.Resource
 import org.typelevel.otel4s.Otel4s
 import org.typelevel.otel4s.baggage.BaggageManager
+import org.typelevel.otel4s.context.ContextManager
 import org.typelevel.otel4s.context.LocalProvider
 import org.typelevel.otel4s.context.propagation.ContextPropagators
 import org.typelevel.otel4s.context.propagation.TextMapPropagator
@@ -55,6 +56,8 @@ sealed abstract class OpenTelemetrySdkTestkit[F[_]] private (implicit
     with LogsTestkit.Unsealed[F] {
 
   type Ctx = Context
+
+  val contextManager: ContextManager.Aux[F, Context] = ContextManager.fromLocal
 
   val baggageManager: BaggageManager[F] = SdkBaggageManager.fromLocal
 

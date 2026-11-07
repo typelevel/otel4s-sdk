@@ -209,9 +209,9 @@ The compliance matrix below is based on the [OpenTelemetry Specification](https:
 | Create Context Key | `+` |  | [Context.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/Context.scala#L95-L105) |
 | Get value from Context | `+` |  | [Context.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/Context.scala#L34-L40) |
 | Set value for Context | `+` |  | [Context.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/context/Context.scala#L44-L45) |
-| Attach Context | `+` |  | [TraceScope.scala](@OTEL4S_GITHUB_URL@/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceScope.scala#L295-L299) |
-| Detach Context | `+` |  | [TraceScope.scala](@OTEL4S_GITHUB_URL@/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceScope.scala#L295-L299) |
-| Get current Context | `+` |  | [TraceScope.scala](@OTEL4S_GITHUB_URL@/core/trace/src/main/scala/org/typelevel/otel4s/trace/TraceScope.scala#L301-L302) |
+| Attach Context | `+` |  | [ContextManager.scala](@OTEL4S_GITHUB_URL@/core/common/src/main/scala/org/typelevel/otel4s/context/ContextManager.scala#L78-L82) (scoped restoration via SDK and testkit `contextManager`; no explicit tokens) |
+| Detach Context | `+` |  | [ContextManager.scala](@OTEL4S_GITHUB_URL@/core/common/src/main/scala/org/typelevel/otel4s/context/ContextManager.scala#L78-L82) (scoped restoration via SDK and testkit `contextManager`; no explicit tokens) |
+| Get current Context | `+` |  | [ContextManager.scala](@OTEL4S_GITHUB_URL@/core/common/src/main/scala/org/typelevel/otel4s/context/ContextManager.scala#L75-L76) (scoped restoration via SDK and testkit `contextManager`; no explicit tokens) |
 | Composite Propagator | `+` |  | [TextMapPropagator.scala](@OTEL4S_GITHUB_URL@/core/common/src/main/scala/org/typelevel/otel4s/context/propagation/TextMapPropagator.scala#L93-L99) |
 | Global Propagator | `-` |  |  |
 | TraceContext Propagator | `+` |  | [W3CTraceContextPropagator.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/trace/src/main/scala/org/typelevel/otel4s/sdk/trace/context/propagation/W3CTraceContextPropagator.scala#L36-L43) |
@@ -229,7 +229,7 @@ The compliance matrix below is based on the [OpenTelemetry Specification](https:
 
 | Item | Status | Optional | Evidence |
 | --- | --- | --- | --- |
-| OTEL\\_SDK\\_DISABLED | `+` |  | [CommonConfigKeys.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/autoconfigure/CommonConfigKeys.scala#L20-L20), [OpenTelemetrySdk.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/all/src/main/scala/org/typelevel/otel4s/sdk/OpenTelemetrySdk.scala#L498-L505) |
+| OTEL\\_SDK\\_DISABLED | `+` |  | [CommonConfigKeys.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/autoconfigure/CommonConfigKeys.scala#L20-L20), [OpenTelemetrySdk.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/all/src/main/scala/org/typelevel/otel4s/sdk/OpenTelemetrySdk.scala#L501-L507) |
 | OTEL\\_RESOURCE\\_ATTRIBUTES | `+` |  | [TelemetryResourceAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/autoconfigure/TelemetryResourceAutoConfigure.scala#L110-L115) |
 | OTEL\\_SERVICE\\_NAME | `+` |  | [TelemetryResourceAutoConfigure.scala](@OTEL4S_SDK_GITHUB_URL@/sdk/common/shared/src/main/scala/org/typelevel/otel4s/sdk/autoconfigure/TelemetryResourceAutoConfigure.scala#L117-L124) |
 | OTEL\\_LOG\\_LEVEL | `-` |  |  |

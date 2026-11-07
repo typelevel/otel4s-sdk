@@ -22,11 +22,12 @@ import cats.effect.Resource
 import cats.effect.std.Random
 import cats.syntax.flatMap._
 import cats.syntax.functor._
+import org.typelevel.otel4s.context.ContextManager
 import org.typelevel.otel4s.context.LocalProvider
 import org.typelevel.otel4s.metrics.MeterProvider
 import org.typelevel.otel4s.sdk.common.Diagnostic
-import org.typelevel.otel4s.sdk.context.AskContext
 import org.typelevel.otel4s.sdk.context.Context
+import org.typelevel.otel4s.sdk.context.LocalContext
 import org.typelevel.otel4s.sdk.context.LocalContextProvider
 import org.typelevel.otel4s.sdk.metrics.SdkMeterProvider
 import org.typelevel.otel4s.sdk.metrics.data.MetricData
@@ -36,6 +37,9 @@ import org.typelevel.otel4s.sdk.metrics.exporter.CardinalityLimitSelector
 import org.typelevel.otel4s.sdk.metrics.exporter.MetricReader
 
 sealed trait MetricsTestkit[F[_]] {
+
+  /** Captures and restores the complete context used by this testkit. */
+  def contextManager: ContextManager.Aux[F, Context]
 
   /** The [[org.typelevel.otel4s.metrics.MeterProvider MeterProvider]].
     */
@@ -103,7 +107,7 @@ object MetricsTestkit {
   ): Resource[F, MetricsTestkit[F]] =
     customize(builder[F]).build
 
-  private def create[F[_]: Async: Diagnostic: AskContext](
+  private def create[F[_]: Async: Diagnostic: LocalContext](
       customize: SdkMeterProvider.Builder[F] => SdkMeterProvider.Builder[F],
       aggregationTemporalitySelector: AggregationTemporalitySelector,
       defaultAggregationSelector: AggregationSelector,
@@ -127,12 +131,13 @@ object MetricsTestkit {
           .build
       )
       meterProvider <- Resource.eval(createMeterProvider(reader))
-    } yield new Impl(meterProvider, reader)
+    } yield new Impl(meterProvider, reader, ContextManager.fromLocal)
   }
 
   private final class Impl[F[_]: FlatMap](
       val meterProvider: MeterProvider[F],
-      reader: MetricReader[F]
+      reader: MetricReader[F],
+      val contextManager: ContextManager.Aux[F, Context]
   ) extends MetricsTestkit[F] {
     def collectMetrics: F[List[MetricData]] =
       reader.collectAllMetrics.map(_.toList)

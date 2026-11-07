@@ -29,6 +29,7 @@ import cats.syntax.flatMap._
 import cats.syntax.functor._
 import org.typelevel.otel4s.Otel4s
 import org.typelevel.otel4s.baggage.BaggageManager
+import org.typelevel.otel4s.context.ContextManager
 import org.typelevel.otel4s.context.LocalProvider
 import org.typelevel.otel4s.context.propagation.ContextPropagators
 import org.typelevel.otel4s.context.propagation.TextMapPropagator
@@ -69,6 +70,8 @@ final class OpenTelemetrySdk[F[_]] private (
     extends Otel4s.Unsealed[F] {
 
   type Ctx = Context
+
+  val contextManager: ContextManager.Aux[F, Context] = ContextManager.fromLocal
 
   val baggageManager: BaggageManager[F] = SdkBaggageManager.fromLocal
 

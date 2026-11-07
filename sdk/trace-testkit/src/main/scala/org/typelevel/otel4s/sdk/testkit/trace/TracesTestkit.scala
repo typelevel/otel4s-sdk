@@ -22,6 +22,7 @@ import cats.effect.Async
 import cats.effect.Resource
 import cats.effect.std.Random
 import cats.syntax.flatMap._
+import org.typelevel.otel4s.context.ContextManager
 import org.typelevel.otel4s.context.LocalProvider
 import org.typelevel.otel4s.sdk.common.Diagnostic
 import org.typelevel.otel4s.sdk.context.Context
@@ -34,6 +35,9 @@ import org.typelevel.otel4s.sdk.trace.processor.SpanProcessor
 import org.typelevel.otel4s.trace.TracerProvider
 
 sealed trait TracesTestkit[F[_]] {
+
+  /** Captures and restores the complete context used by this testkit. */
+  def contextManager: ContextManager.Aux[F, Context]
 
   /** The [[org.typelevel.otel4s.trace.TracerProvider TracerProvider]].
     */
@@ -85,7 +89,8 @@ object TracesTestkit {
   private final class Impl[F[_]: FlatMap](
       val tracerProvider: TracerProvider[F],
       processor: SpanProcessor[F],
-      exporter: InMemorySpanExporter[F]
+      exporter: InMemorySpanExporter[F],
+      val contextManager: ContextManager.Aux[F, Context]
   ) extends TracesTestkit[F] {
     def finishedSpans: F[List[SpanData]] =
       processor.forceFlush >> exporter.finishedSpans
@@ -114,7 +119,7 @@ object TracesTestkit {
         exporter <- Resource.eval(InMemorySpanExporter.create[F](None))
         processor <- Resource.pure(SimpleSpanProcessor(exporter))
         tracerProvider <- Resource.eval(createTracerProvider(processor)(local))
-      } yield new Impl(tracerProvider, processor, exporter)
+      } yield new Impl(tracerProvider, processor, exporter, ContextManager.fromLocal(local))
     }
   }
 
