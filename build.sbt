@@ -102,7 +102,7 @@ val ScalaPBCirceVersion = "0.16.0"
 val CaseInsensitiveVersion = "1.5.0"
 val ScalaJavaTimeVersion = "2.7.0"
 val ScribeVersion = "3.17.0"
-val Otel4sVersion = "1.1.0"
+val Otel4sVersion = "1.2.0"
 
 lazy val scalaReflectDependency = Def.settings(
   libraryDependencies ++= {
@@ -329,6 +329,8 @@ lazy val `sdk-testkit` = crossProject(JVMPlatform, JSPlatform, NativePlatform)
       "org.typelevel" %%% "otel4s-core" % Otel4sVersion,
     )
   )
+  .settings(munitDependencies)
+  .jsSettings(scalaJSLinkerSettings)
 
 lazy val sdk = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Pure)
